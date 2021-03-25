@@ -66,6 +66,7 @@
 * [../uncategorized/project-export.md](../uncategorized/project-export.md)
 * [../uncategorized/ruby-profiling.md](../uncategorized/ruby-profiling.md)
 * [../uncategorized/setup-oauth2-proxy-protected-application.md](../uncategorized/setup-oauth2-proxy-protected-application.md)
+* [web-rotate-object-storage-service-key.md](web-rotate-object-storage-service-key.md)
 * [workhorse-image-scaler.md](workhorse-image-scaler.md)
 <!-- END_MARKER -->
 

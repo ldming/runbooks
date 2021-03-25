@@ -66,6 +66,7 @@
 * [../uncategorized/shared-configurations.md](../uncategorized/shared-configurations.md)
 * [../uncategorized/tracing-app-db-queries.md](../uncategorized/tracing-app-db-queries.md)
 * [../web/static-repository-objects-caching.md](../web/static-repository-objects-caching.md)
+* [../web/web-rotate-object-storage-service-key.md](../web/web-rotate-object-storage-service-key.md)
 <!-- END_MARKER -->
 
 

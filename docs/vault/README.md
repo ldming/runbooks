@@ -41,6 +41,7 @@
 * [../uncategorized/subnet-allocations.md](../uncategorized/subnet-allocations.md)
 * [../uncategorized/yubikey.md](../uncategorized/yubikey.md)
 * [vault.md](vault.md)
+* [../web/web-rotate-object-storage-service-key.md](../web/web-rotate-object-storage-service-key.md)
 <!-- END_MARKER -->
 
 

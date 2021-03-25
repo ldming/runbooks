@@ -91,6 +91,7 @@
 * [../uncategorized/workers-high-load.md](../uncategorized/workers-high-load.md)
 * [../vault/vault.md](../vault/vault.md)
 * [../version/version-gitlab-com.md](../version/version-gitlab-com.md)
+* [../web/web-rotate-object-storage-service-key.md](../web/web-rotate-object-storage-service-key.md)
 <!-- END_MARKER -->
 
 
