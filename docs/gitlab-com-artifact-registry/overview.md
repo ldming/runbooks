@@ -41,4 +41,5 @@ docker pull us-east1-docker.pkg.dev/gitlab-com-artifact-registry/images/gitlab-c
 
 #### Image cleanup
 
-We are evaluating different mechanisms to cleanup images on the Artifact Registry, tracked in [#17103](https://gitlab.com/gitlab-com/gl-infra/reliability/-/issues/17103) .
+[gcr-cleaner](https://github.com/GoogleCloudPlatform/gcr-cleaner) is running as cron-job in the Ops Kubernetes environment.
+It is configured to keep the latest 300 images and is configured in [gitlab-helmfiles](https://gitlab.com/gitlab-com/gl-infra/k8s-workloads/gitlab-helmfiles/-/tree/master/releases/gcr-cleaner).
