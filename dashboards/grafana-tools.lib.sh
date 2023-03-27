@@ -146,10 +146,17 @@ prepare_dashboard_requests() {
 }
 
 function jsonnet_compile() {
+  if [[ -f "$@.sha256sum" ]] && sha256sum --check --status <"$@.sha256sum"; then
+    return 0
+  fi
+
   jsonnet -J . -J ../libsonnet -J ../metrics-catalog/ -J ../vendor -J ../services "$@" || {
     echo >&2 "Failed to compile:" "$@"
     return 1
   }
+
+  jsonnet-tool checksum -J . -J ../libsonnet -J ../metrics-catalog/ -J ../vendor -J ../services "$@" >"$@.sha256sum"
+  sha256sum ../.tool-versions >>"$@.sha256sum"
 }
 
 # Returns a list of dashboard files

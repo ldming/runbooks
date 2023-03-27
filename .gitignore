@@ -13,3 +13,4 @@ alertmanager/alertmanager.yml
 alertmanager/k8s_alertmanager.yaml
 alertmanager/k8s_alertmanager_secret.yaml
 toolbelt/.env/*
+*.sha256sum
