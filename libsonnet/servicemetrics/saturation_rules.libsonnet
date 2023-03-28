@@ -4,7 +4,7 @@ local misc = import 'utils/misc.libsonnet';
 
 local getSelectorHash(
   includePrometheusEvaluated,
-  includeDangerouslyThanosEvaluated
+  includeDangerouslyThanosEvaluated,
       ) =
   if includeDangerouslyThanosEvaluated && !includePrometheusEvaluated then
     { monitor: 'global' }
@@ -74,30 +74,18 @@ local generateSaturationAuxRulesGroup(
   saturationResources,
   includePrometheusEvaluated,
   includeDangerouslyThanosEvaluated,
+  extraSelector={},
   thanosSelfMonitoring=false,  // Include Thanos self-monitor saturation rules in the alert groups
       ) =
-  local selectorHash = getSelectorHash(includePrometheusEvaluated, includeDangerouslyThanosEvaluated);
+  local selectorHash = getSelectorHash(includePrometheusEvaluated, includeDangerouslyThanosEvaluated) + extraSelector;
   local selector = selectors.serializeHash(selectorHash);
 
   local filtered = filterSaturationDefinitions(saturationResources, includePrometheusEvaluated, includeDangerouslyThanosEvaluated, thanosSelfMonitoring);
 
-  local sloThresholdRecordingRules = std.flatMap(function(key) saturationResources[key].getSLORecordingRuleDefinition(key), filtered);
-  local saturationMetadataRecordingRules = std.map(function(key) saturationResources[key].getMetadataRecordingRuleDefinition(key), filtered);
   local saturationAlerts = std.flatMap(function(key) saturationResources[key].getSaturationAlerts(key, selectorHash), filtered);
-
   local recordedQuantiles = [0.95, 0.99];
 
   prepareGroups([{
-    // Recording rules defining the soft and hard SLO thresholds
-    name: 'GitLab Component Saturation Max SLOs',
-    interval: '5m',
-    rules: sloThresholdRecordingRules,
-  }, {
-    // Metadata each of the saturation metrics
-    name: 'GitLab Component Saturation Metadata',
-    interval: '5m',
-    rules: saturationMetadataRecordingRules,
-  }, {
     // Alerts for saturation metrics being out of threshold
     name: 'GitLab Component Saturation Statistics',
     interval: '5m',
@@ -142,10 +130,33 @@ local generateSaturationAuxRulesGroup(
     rules: saturationAlerts,
   }], includePrometheusEvaluated, includeDangerouslyThanosEvaluated);
 
+local generateSaturationMetadataRulesGroup(
+  saturationResources,
+  includePrometheusEvaluated,
+  includeDangerouslyThanosEvaluated,
+  thanosSelfMonitoring=false,
+      ) =
+  local filtered = filterSaturationDefinitions(saturationResources, includePrometheusEvaluated, includeDangerouslyThanosEvaluated, thanosSelfMonitoring);
+  local sloThresholdRecordingRules = std.flatMap(function(key) saturationResources[key].getSLORecordingRuleDefinition(key), filtered);
+  local saturationMetadataRecordingRules = std.map(function(key) saturationResources[key].getMetadataRecordingRuleDefinition(key), filtered);
+
+  prepareGroups([{
+    // Recording rules defining the soft and hard SLO thresholds
+    name: 'GitLab Component Saturation Max SLOs',
+    interval: '5m',
+    rules: sloThresholdRecordingRules,
+  }, {
+    // Metadata each of the saturation metrics
+    name: 'GitLab Component Saturation Metadata',
+    interval: '5m',
+    rules: saturationMetadataRecordingRules,
+  }], includePrometheusEvaluated, includeDangerouslyThanosEvaluated);
+
 local generateSaturationRulesGroup(
   includePrometheusEvaluated,
   includeDangerouslyThanosEvaluated,
   saturationResources,
+  extraSourceSelector={},
   thanosSelfMonitoring=false,
   staticLabels={},
       ) =
@@ -164,7 +175,8 @@ local generateSaturationRulesGroup(
       saturationResources[key].getRecordingRuleDefinition(
         key,
         thanosSelfMonitoring=thanosSelfMonitoring,
-        staticLabels=staticLabels
+        staticLabels=staticLabels,
+        extraSelector=extraSourceSelector,
       ),
     filtered
   );
@@ -174,7 +186,8 @@ local generateSaturationRulesGroup(
       saturationResources[key].getResourceAutoscalingRecordingRuleDefinition(
         key,
         thanosSelfMonitoring=thanosSelfMonitoring,
-        staticLabels=staticLabels
+        staticLabels=staticLabels,
+        extraSelector=extraSourceSelector
       ),
     resourceAutoscalingRuleFiltered
   );
@@ -196,4 +209,5 @@ local generateSaturationRulesGroup(
 {
   generateSaturationRulesGroup:: generateSaturationRulesGroup,
   generateSaturationAuxRulesGroup:: generateSaturationAuxRulesGroup,
+  generateSaturationMetadataRulesGroup:: generateSaturationMetadataRulesGroup,
 }

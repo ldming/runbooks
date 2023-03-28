@@ -31,7 +31,7 @@ local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
     burnRatePeriod: '1d',
     query: |||
       sum by (%(aggregationLabels)s) (
-        rate(fluentd_pg_auto_vacuum_elapsed_seconds_total{env="gprd"}[1d])
+        rate(fluentd_pg_auto_vacuum_elapsed_seconds_total{%(selector)s}[1d])
         and on (fqdn) (pg_replication_is_replica{%(selector)s} == 0)
       )
       /

@@ -14,6 +14,12 @@ local includeDangerouslyThanosEvaluated = false;
           includeDangerouslyThanosEvaluated=includeDangerouslyThanosEvaluated,
         )
         +
+        saturationRules.generateSaturationMetadataRulesGroup(
+          saturationResources=saturationResources,
+          includePrometheusEvaluated=includePrometheusEvaluated,
+          includeDangerouslyThanosEvaluated=includeDangerouslyThanosEvaluated,
+        )
+        +
         // Metadata + Alerts
         saturationRules.generateSaturationAuxRulesGroup(
           saturationResources=saturationResources,

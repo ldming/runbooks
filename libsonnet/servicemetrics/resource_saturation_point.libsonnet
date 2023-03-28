@@ -147,13 +147,13 @@ local resourceSaturationPoint = function(options)
     getBurnRatePeriod()::
       ({ burnRatePeriod: '1m' } + self).burnRatePeriod,
 
-    getRecordingRuleDefinition(componentName, thanosSelfMonitoring, staticLabels)::
+    getRecordingRuleDefinition(componentName, thanosSelfMonitoring, staticLabels, extraSelector)::
       local definition = self;
 
       local services = filterServicesForResource(definition, thanosSelfMonitoring);
 
       if std.length(services) > 0 then
-        local selectorHash = oneOfType(services);
+        local selectorHash = oneOfType(services) + extraSelector;
         local query = definition.getQuery(selectorHash, definition.getBurnRatePeriod(), extraStaticLabels=staticLabels);
 
         {
@@ -167,12 +167,12 @@ local resourceSaturationPoint = function(options)
         }
       else null,
 
-    getResourceAutoscalingRecordingRuleDefinition(componentName, thanosSelfMonitoring, staticLabels)::
+    getResourceAutoscalingRecordingRuleDefinition(componentName, thanosSelfMonitoring, staticLabels, extraSelector)::
       local definition = self;
       local services = filterServicesForResource(definition, thanosSelfMonitoring);
 
       if std.length(services) > 0 then
-        local selectorHash = oneOfType(services);
+        local selectorHash = oneOfType(services) + extraSelector;
 
         local query = definition.getQuery(selectorHash, definition.getBurnRatePeriod(), definition.resourceLabels);
 

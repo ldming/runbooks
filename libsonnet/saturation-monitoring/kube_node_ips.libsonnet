@@ -23,10 +23,10 @@ local resourceSaturationPoint = (import 'servicemetrics/resource_saturation_poin
     },
     burnRatePeriod: '5m',
     query: |||
-      sum(:kube_pod_info_node_count:) by (%(aggregationLabels)s)
+      sum(:kube_pod_info_node_count:{%(selector)s}) by (%(aggregationLabels)s)
       /
       sum(
-        gitlab:gcp_subnet_max_ips * on (subnet) group_right gitlab:cluster:subnet:mapping
+        gitlab:gcp_subnet_max_ips{%(selector)s} * on (subnet) group_right gitlab:cluster:subnet:mapping{%(selector)s}
       ) by (%(aggregationLabels)s)
     |||,
     slos: {

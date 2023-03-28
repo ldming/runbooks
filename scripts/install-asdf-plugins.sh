@@ -16,7 +16,7 @@ update_ruby_build() {
     # Then so is rbenv and ruby-build
     echo "# Updating ruby-build"
     # Make sure ruby-build has the latest ruby versions releases list
-    asdf update ruby
+    asdf plugin update ruby
   fi
 }
 

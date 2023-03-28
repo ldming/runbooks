@@ -56,12 +56,17 @@ local saturationGroup = saturationRules.generateSaturationRulesGroup(
   thanosSelfMonitoring=false,
 );
 
+local saturationMetadataGroup = saturationRules.generateSaturationMetadataRulesGroup(
+  saturationResources=saturationResources,
+  includePrometheusEvaluated=true,
+  includeDangerouslyThanosEvaluated=true,
+);
+
 local saturationAuxGroup = saturationRules.generateSaturationAuxRulesGroup(
   includePrometheusEvaluated=true,
   includeDangerouslyThanosEvaluated=true,  // this environment has no thanos, so we evaluate these recording rules in Prometheus
   saturationResources=saturationResources,
 );
-
 
 {
   'prometheus-rules/rules.yml': {
@@ -74,6 +79,7 @@ local saturationAuxGroup = saturationRules.generateSaturationAuxRulesGroup(
       serviceSLISGroups +
       serviceSLOsGroups +
       saturationGroup +
+      saturationMetadataGroup +
       saturationAuxGroup +
       kubeStateMetricsGroups +
       sloAlertingRulesGroup +

@@ -67,8 +67,9 @@ local provisionerCreationTiming =
         )
       )
     |||,
-    color_cardColor='#00DD33',
-    color_exponent=0.1,
+    color_mode='spectrum',
+    color_colorScheme='Greens',
+    legend_show=true,
     intervalFactor=2,
   );
 
@@ -82,8 +83,9 @@ local provisionerIsRunningTiming =
         )
       )
     |||,
-    color_cardColor='#DDDD00',
-    color_exponent=0.1,
+    color_mode='spectrum',
+    color_colorScheme='Blues',
+    legend_show=true,
     intervalFactor=2,
   );
 
@@ -97,8 +99,9 @@ local provisionerDeletionTiming =
         )
       )
     |||,
-    color_cardColor='#DD0000',
-    color_exponent=0.1,
+    color_mode='spectrum',
+    color_colorScheme='Reds',
+    legend_show=true,
     intervalFactor=2,
   );
 
@@ -112,8 +115,9 @@ local provisionerInstanceLifeDuration =
         )
       )
     |||,
-    color_cardColor='#3333DD',
-    color_exponent=0.1,
+    color_mode='spectrum',
+    color_colorScheme='Purples',
+    legend_show=true,
     intervalFactor=2,
   );
 
@@ -171,8 +175,9 @@ local taskscalerInstanceReadinessTiming =
         )
       )
     |||,
-    color_cardColor='#DD33DD',
-    color_exponent=0.1,
+    color_mode='spectrum',
+    color_colorScheme='Oranges',
+    legend_show=true,
     intervalFactor=2,
   );
 
