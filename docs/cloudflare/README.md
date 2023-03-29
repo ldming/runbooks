@@ -100,6 +100,8 @@ Making manual changes via the Cloudflare UI can be read about [here](https://dev
 A good practice is to create a new rule, but save it as a draft. This will
 allow the rule to be turned on and off as part of a production change process.
 
+*Note:* For audit purposes, any manual changes in the UI **must** be documented in the associated incident or issue. Please note the ResourceID and add `~Cloudflare UI Change` label.
+
 ## Verifying WAF and Page Rules
 
 ### How cf_audit works

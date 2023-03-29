@@ -15,7 +15,9 @@
 
 <!-- END_MARKER -->
 
-<!-- ## Summary -->
+## Summary
+
+[Switchboard](https://gitlab.com/gitlab-com/gl-infra/gitlab-dedicated/switchboard) is managed by the [GitLab Dedicated Group](https://about.gitlab.com/handbook/engineering/infrastructure/team/gitlab-dedicated/). It is a portal for customers of Dedicated to manage their GitLab instances.
 
 <!-- ## Architecture -->
 

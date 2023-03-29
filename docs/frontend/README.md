@@ -25,6 +25,7 @@
 * [Gitaly latency is too high](../gitaly/gitaly-latency.md)
 * [Tuning and Modifying Alerts](../monitoring/alert_tuning.md)
 * [An impatient SRE's guide to deleting alerts](../monitoring/deleting-alerts.md)
+* [Thanos Query and Stores](../monitoring/thanos-query.md)
 * [Block specific pages domains through HAproxy](../pages/block-pages-domain.md)
 * [../pgbouncer/service-pgbouncer.md](../pgbouncer/service-pgbouncer.md)
 * [../registry/gitlab-registry.md](../registry/gitlab-registry.md)

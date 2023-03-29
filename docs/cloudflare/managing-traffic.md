@@ -220,6 +220,8 @@ Depending on the lifetime of the rule the process is different:
 
 `temporary`: Create the rule using the [Cloudflare UI](https://dash.cloudflare.com/852e9d53d0f8adbd9205389356f2303d/gitlab.com/firewall/firewall-rules) keeping in mind the layout of the rule description. For further detail refer to the [Cloudflare documentation on managing rules.](https://developers.cloudflare.com/firewall/cf-dashboard/create-edit-delete-rules/).
 
+*Note:* For audit purposes, any manual changes in the UI must be documented in the associated incident or issue. Please note the ResourceID and add `~Cloudflare UI Change` label.
+
 `long-term`: Create the rule in Terraform. For customer allowlists, follow the [instructions of the terraform module](https://ops.gitlab.net/gitlab-com/gl-infra/terraform-modules/cf_whitelists#whitelist-configuration). In other cases, refer to the [documentation of the Terraform provider.](https://www.terraform.io/docs/providers/cloudflare/r/firewall_rule.html)
 
 - When using the terraform module, please apply the labels `bypass-action:waf` and `bypass-action:rateLimit` for customers and all `bypass-action` labels for internal bypasses.
@@ -265,3 +267,5 @@ If automation is not working, or you need to remove a `long-term` rule, firstly 
 Next remove the role from Cloudflare. Refer to the issue labels to determine the origin. If the rule was created in Terraform refer to the issue on details where to find it. In other cases, the rule can be found in the Cloudflare Dashboard or the API.
 
 Once the rule is removed, mark the issue with `firewall-action::expired` and close the issue.
+
+*Note:* For audit purposes, any manual changes in the UI must be documented in the associated incident or issue. Please note the ResourceID and add `~Cloudflare UI Change` label.

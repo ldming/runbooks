@@ -31,7 +31,7 @@
 * [../kube/k8s-operations.md](../kube/k8s-operations.md)
 * [Kubernetes](../kube/kubernetes.md)
 * [Prometheus pod crashlooping](../monitoring/prometheus-pod-crashlooping.md)
-* [Thanos Query and Stores](../monitoring/thanos-query-no-storeapis.md)
+* [Thanos Query and Stores](../monitoring/thanos-query.md)
 * [GitLab Pages returning 404](../pages/gitlab-pages.md)
 * [Steps to Recreate/Rebuild the CI CLuster using a Snapshot from the Master cluster (instead of pg_basebackup)](../patroni-ci/rebuild_ci_cluster_from_prod.md)
 * [Recovering from CI Patroni cluster lagging too much or becoming completely broken](../patroni-ci/recovering_patroni_ci_intense_lagging_or_replication_stopped.md)

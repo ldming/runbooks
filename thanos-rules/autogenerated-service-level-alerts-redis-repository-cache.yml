@@ -77,13 +77,187 @@ groups:
       gitlab_component_ops:rate_5m{component="primary_server",monitor="global",stage="main",type="redis-repository-cache"} offset 1h
       unless
       gitlab_component_ops:rate_5m{component="primary_server",monitor="global",stage="main",type="redis-repository-cache"}
+  - alert: RedisRepositoryCacheServiceRailsCacheApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The rails_cache SLI of the redis-repository-cache service (`{{ $labels.stage
+        }}` stage) has an apdex violating SLO
+      description: |
+        Rails ActiveSupport Cache operations against the Redis Repository Cache
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: redis-repository-cache-main/redis-repository-cache-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/redis-repository-cache-main/redis-repository-cache-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "775121815"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(gitlab_cache_operation_duration_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",store="RedisRepositoryCache"}[5m])
+          )
+        )
+      runbook: docs/redis-repository-cache/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 1h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_1h{component="rails_cache",monitor="global",type="redis-repository-cache"}
+          < (1 - 14.4 * 0.000500)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_5m{component="rails_cache",monitor="global",type="redis-repository-cache"}
+          < (1 - 14.4 * 0.000500)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="rails_cache",monitor="global",type="redis-repository-cache"}) >= 1
+      )
+  - alert: RedisRepositoryCacheServiceRailsCacheApdexSLOViolation
+    for: 2m
+    annotations:
+      title: The rails_cache SLI of the redis-repository-cache service (`{{ $labels.stage
+        }}` stage) has an apdex violating SLO
+      description: |
+        Rails ActiveSupport Cache operations against the Redis Repository Cache
+
+        Currently the apdex value is {{ $value | humanizePercentage }}.
+      grafana_dashboard_id: redis-repository-cache-main/redis-repository-cache-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/redis-repository-cache-main/redis-repository-cache-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "775121815"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        histogram_quantile(
+          0.950000,
+          sum by (env,environment,tier,stage,le) (
+            rate(gitlab_cache_operation_duration_seconds_bucket{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",store="RedisRepositoryCache"}[5m])
+          )
+        )
+      runbook: docs/redis-repository-cache/README.md
+    labels:
+      aggregation: component
+      alert_class: slo_violation
+      alert_type: symptom
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: apdex
+      slo_alert: "yes"
+      user_impacting: "yes"
+      window: 6h
+    expr: |
+      (
+        (
+          gitlab_component_apdex:ratio_6h{component="rails_cache",monitor="global",type="redis-repository-cache"}
+          < (1 - 6 * 0.000500)
+        )
+        and
+        (
+          gitlab_component_apdex:ratio_30m{component="rails_cache",monitor="global",type="redis-repository-cache"}
+          < (1 - 6 * 0.000500)
+        )
+      )
+      and on(env,environment,tier,type,stage,component)
+      (
+        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="rails_cache",monitor="global",type="redis-repository-cache"}) >= 0.16667
+      )
+  - alert: RedisRepositoryCacheServiceRailsCacheTrafficCessation
+    for: 5m
+    annotations:
+      title: The rails_cache SLI of the redis-repository-cache service (`{{ $labels.stage
+        }}` stage) has not received any traffic in the past 30m
+      description: |
+        Rails ActiveSupport Cache operations against the Redis Repository Cache
+
+        This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
+      grafana_dashboard_id: redis-repository-cache-main/redis-repository-cache-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/redis-repository-cache-main/redis-repository-cache-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3061050995"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(gitlab_cache_operation_duration_seconds_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",store="RedisRepositoryCache"}[5m])
+        )
+      runbook: docs/redis-repository-cache/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_30m{component="rails_cache",monitor="global",stage="main",type="redis-repository-cache"} == 0
+      and
+      gitlab_component_ops:rate_30m{component="rails_cache",monitor="global",stage="main",type="redis-repository-cache"} offset 1h >= 0.16666666666666666
+  - alert: RedisRepositoryCacheServiceRailsCacheTrafficAbsent
+    for: 30m
+    annotations:
+      title: The rails_cache SLI of the redis-repository-cache service (`{{ $labels.stage
+        }}` stage) has not reported any traffic in the past 30m
+      description: |
+        Rails ActiveSupport Cache operations against the Redis Repository Cache
+
+        This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
+
+        This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+      grafana_dashboard_id: redis-repository-cache-main/redis-repository-cache-overview
+      grafana_dashboard_link: https://dashboards.gitlab.net/d/redis-repository-cache-main/redis-repository-cache-overview?from=now-6h/m&to=now-1m/m&var-environment={{
+        $labels.environment }}&var-stage={{ $labels.stage }}
+      grafana_min_zoom_hours: "6"
+      grafana_panel_id: "3061050995"
+      grafana_variables: environment,stage
+      promql_template_1: |
+        sum by (env,environment,tier,stage) (
+          rate(gitlab_cache_operation_duration_seconds_count{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",store="RedisRepositoryCache"}[5m])
+        )
+      runbook: docs/redis-repository-cache/README.md
+    labels:
+      aggregation: component
+      alert_class: traffic_cessation
+      alert_type: cause
+      feature_category: not_owned
+      pager: pagerduty
+      rules_domain: general
+      severity: s2
+      sli_type: ops
+      slo_alert: "no"
+      user_impacting: "yes"
+    expr: |
+      gitlab_component_ops:rate_5m{component="rails_cache",monitor="global",stage="main",type="redis-repository-cache"} offset 1h
+      unless
+      gitlab_component_ops:rate_5m{component="rails_cache",monitor="global",stage="main",type="redis-repository-cache"}
   - alert: RedisRepositoryCacheServiceRailsRedisClientApdexSLOViolation
     for: 2m
     annotations:
       title: The rails_redis_client SLI of the redis-repository-cache service (`{{
         $labels.stage }}` stage) has an apdex violating SLO
       description: |
-        Aggregation of all Redis Repository Cache operations issued from the Rails codebase.
+        Aggregation of all Redis Repository Cache operations issued from the Rails codebase through `Gitlab::Redis::Wrapper` subclasses.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: redis-repository-cache-main/redis-repository-cache-overview
@@ -134,7 +308,7 @@ groups:
       title: The rails_redis_client SLI of the redis-repository-cache service (`{{
         $labels.stage }}` stage) has an apdex violating SLO
       description: |
-        Aggregation of all Redis Repository Cache operations issued from the Rails codebase.
+        Aggregation of all Redis Repository Cache operations issued from the Rails codebase through `Gitlab::Redis::Wrapper` subclasses.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: redis-repository-cache-main/redis-repository-cache-overview
@@ -185,7 +359,7 @@ groups:
       title: The rails_redis_client SLI of the redis-repository-cache service (`{{
         $labels.stage }}` stage) has an error rate violating SLO
       description: |
-        Aggregation of all Redis Repository Cache operations issued from the Rails codebase.
+        Aggregation of all Redis Repository Cache operations issued from the Rails codebase through `Gitlab::Redis::Wrapper` subclasses.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: redis-repository-cache-main/redis-repository-cache-overview
@@ -233,7 +407,7 @@ groups:
       title: The rails_redis_client SLI of the redis-repository-cache service (`{{
         $labels.stage }}` stage) has an error rate violating SLO
       description: |
-        Aggregation of all Redis Repository Cache operations issued from the Rails codebase.
+        Aggregation of all Redis Repository Cache operations issued from the Rails codebase through `Gitlab::Redis::Wrapper` subclasses.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: redis-repository-cache-main/redis-repository-cache-overview
@@ -281,7 +455,7 @@ groups:
       title: The rails_redis_client SLI of the redis-repository-cache service (`{{
         $labels.stage }}` stage) has not received any traffic in the past 30m
       description: |
-        Aggregation of all Redis Repository Cache operations issued from the Rails codebase.
+        Aggregation of all Redis Repository Cache operations issued from the Rails codebase through `Gitlab::Redis::Wrapper` subclasses.
 
         This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
       grafana_dashboard_id: redis-repository-cache-main/redis-repository-cache-overview
@@ -316,7 +490,7 @@ groups:
       title: The rails_redis_client SLI of the redis-repository-cache service (`{{
         $labels.stage }}` stage) has not reported any traffic in the past 30m
       description: |
-        Aggregation of all Redis Repository Cache operations issued from the Rails codebase.
+        Aggregation of all Redis Repository Cache operations issued from the Rails codebase through `Gitlab::Redis::Wrapper` subclasses.
 
         This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
 

@@ -4,7 +4,12 @@ The approval process for Rails and Database Console access is the same.
 
 ## Approval Process
 
-As an approver, you should use your judgement to determine whether the access that they are asking for is appropriate for what they are trying to do in the linked issue or in the text of the `Reason` field.  If they are requesting write access, try to determine if they can accomplish their goal using read-only access instead.
+As an approver, you should use your judgement to determine whether the access that they are asking for is appropriate for what they are trying to do in the linked issue or in the text of the `Reason` field.
+
+There are two main areas to check in just a few minutes:
+
+1. Does the request line up with the person's role at GitLab? (Okta should enforce this too via groups)
+2. Is the issue a current and related item?
 
 Since all requests will already be authenticated via Okta, using 2FA and Company credentials, the approver does not need to do anything additional to validate their identity unless there is something suspicious about the request.
 

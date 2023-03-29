@@ -21,7 +21,7 @@ The criteria for what configuration may have high risk is still being developed,
 so
 
 - for any operational or incident related rules, follow the
-[manual process](cloudflare-managing-traffic.md#manually) and use confidential issues.
+[manual process](../cloudflare-managing-traffic.md#manually) and use confidential issues.
 - request review from other team members for any other new additions
 
 ## Managing Individual Rules

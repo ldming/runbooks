@@ -53,6 +53,7 @@
 * [Alertmanager Notification Failures](../monitoring/alertmanager-notification-failures.md)
 * [Alerting](../monitoring/alerts_manual.md)
 * [../monitoring/apdex-alerts-guide.md](../monitoring/apdex-alerts-guide.md)
+* [Thanos Query and Stores](../monitoring/thanos-query.md)
 * [Session: Application architecture](../onboarding/architecture.md)
 * [Gitlab.com on Kubernetes](../onboarding/gitlab.com_on_k8s.md)
 * [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)

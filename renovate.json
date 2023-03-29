@@ -3,17 +3,27 @@
   "extends": [
     "gitlab>gitlab-com/gl-infra/common-ci-tasks:renovate-common",
     "gitlab>gitlab-com/gl-infra/common-ci-tasks:renovate-automerge",
-    "gitlab>gitlab-com/gl-infra/common-ci-tasks:renovate-versions-gitlab-com"
+    "gitlab>gitlab-com/gl-infra/common-ci-tasks:renovate-versions-gitlab-com",
+    ":semanticCommitTypeAll(fix)"
   ],
   "reviewersSampleSize": 3,
   "additionalReviewers": [
     "andrewn",
     "f_santos",
     "jarv",
-    "mwasilewski-gitlab",
     "pguinoiseau",
     "reprazent",
     "smcgivern",
     "steveazz"
+  ],
+  "packageRules": [
+    {
+      "matchPackagePatterns": ["*"],
+      "semanticCommitType": "chore"
+    },
+    {
+      "matchFiles": [".tool-versions"],
+      "semanticCommitType": "feat"
+    }
   ]
 }

@@ -18,6 +18,8 @@ is expected. But be certain you follow proper process afterwards to make
 certain that the changes are reflected in the right locations and follow the
 Cloudflare rules management processes.**
 
+*Note:* For audit purposes, any manual changes in the UI must be documented in the associated incident or issue. Please note the ResourceID and add `~Cloudflare UI Change` label.
+
 ### Adding firewall rules
 
 A firewall rule should be used for the following types of actions:
@@ -29,6 +31,8 @@ A firewall rule should be used for the following types of actions:
 Firewall rules can match against many types of request attributes.
 
 The rule **must adhere to the description format of Cloudflare rules** described in [managing traffic](managing-traffic.md)
+
+*Note:* For audit purposes, any manual changes in the UI must be documented in the associated incident or issue. Please note the ResourceID and add `~Cloudflare UI Change` label.
 
 - [Manage firewall rules in the Cloudflare UI](https://developers.cloudflare.com/firewall/cf-dashboard)
 
