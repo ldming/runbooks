@@ -321,6 +321,7 @@ update-alertmanager:
     REGION: us-east1
 
 prepare-service-health-dashboard-json:
+  <<: *jsonnet-cache
   rules:
     - *avoid-stage-group-check-rule
     - *avoid-schedule-rule
