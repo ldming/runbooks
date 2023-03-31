@@ -146,20 +146,21 @@ prepare_dashboard_requests() {
 }
 
 function jsonnet_compile() {
-  local sha256sum_file="checksum/$@.sha256sum"
+  local source_file="$1"
+  local sha256sum_file="checksum/$source_file.sha256sum"
 
   if [[ -f "$sha256sum_file" ]] && sha256sum --check --status <"$sha256sum_file"; then
     return 0
   fi
 
-  jsonnet -J . -J ../libsonnet -J ../metrics-catalog/ -J ../vendor -J ../services "$@" || {
+  jsonnet -J . -J ../libsonnet -J ../metrics-catalog/ -J ../vendor -J ../services "$source_file" || {
     echo >&2 "Failed to compile:" "$@"
     return 1
   }
 
   mkdir -p "$(dirname "$sha256sum_file")"
   jsonnet-tool checksum -J . -J ../libsonnet -J ../metrics-catalog/ -J ../vendor -J ../services "$@" >"$sha256sum_file"
-  sha256sum ../.tool-versions >>"$sha256sum_file"
+  sha256sum ../.tool-versions grafana-tools.lib.sh >>"$sha256sum_file"
 }
 
 # Returns a list of dashboard files
