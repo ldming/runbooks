@@ -186,6 +186,7 @@ workflow:
         files:
           - jsonnetfile.lock.json
       paths:
+        - dashboards/checksum
         - vendor
 
 .dashboards:
