@@ -146,7 +146,9 @@ prepare_dashboard_requests() {
 }
 
 function jsonnet_compile() {
-  if [[ -f "$@.sha256sum" ]] && sha256sum --check --status <"$@.sha256sum"; then
+  local sha256sum_file="checksum/$@.sha256sum"
+
+  if [[ -f "$sha256sum_file" ]] && sha256sum --check --status <"$sha256sum_file"; then
     return 0
   fi
 
@@ -155,8 +157,9 @@ function jsonnet_compile() {
     return 1
   }
 
-  jsonnet-tool checksum -J . -J ../libsonnet -J ../metrics-catalog/ -J ../vendor -J ../services "$@" >"$@.sha256sum"
-  sha256sum ../.tool-versions >>"$@.sha256sum"
+  mkdir -p "$(dirname "$sha256sum_file")"
+  jsonnet-tool checksum -J . -J ../libsonnet -J ../metrics-catalog/ -J ../vendor -J ../services "$@" >"$sha256sum_file"
+  sha256sum ../.tool-versions >>"$sha256sum_file"
 }
 
 # Returns a list of dashboard files
