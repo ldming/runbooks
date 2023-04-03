@@ -60,12 +60,10 @@ teams:
   oncall_schedule:    # Link to pagerduty oncall schedule
 
 - name: release
-  url: https://about.gitlab.com/handbook/engineering/dev-backend/
-  manager_slug: darby-frey
   slack_channel: g_release
-  engagement_policy:  # Link to doc that talks about engagement and escalation policy
-  oncall_schedule:    # Link to pagerduty oncall schedule
-  product_stage_group: release
+  slack_alerts_channel: feed_alerts_configure
+  product_stage_group: environments
+  send_slo_alerts_to_team_slack_channel: true
   send_error_budget_weekly_to_slack: true
   slack_error_budget_channel: ops-section
   ignored_components:
@@ -160,15 +158,6 @@ teams:
   slack_alerts_channel: subtransaction_troubleshooting
   send_slo_alerts_to_team_slack_channel: true
 
-- name: configure
-  product_stage_group: configure
-  slack_alerts_channel: feed_alerts_configure
-  send_slo_alerts_to_team_slack_channel: true
-  send_error_budget_weekly_to_slack: true
-  slack_error_budget_channel: ops-section
-  ignored_components:
-  - graphql_query
-
 - name: authentication_and_authorization
   slack_alerts_channel: feed_alerts_access
   product_stage_group: authentication_and_authorization
@@ -192,13 +181,6 @@ teams:
   - graphql_query
 - name: ai_assisted
   product_stage_group: ai_assisted
-  ignored_components:
-  - graphql_query
-- name: certify
-  url: https://about.gitlab.com/handbook/engineering/development/dev/plan-product-planning-certify-be/
-  product_stage_group: certify
-  slack_channel: s_plan-be
-  slack_alerts_channel: s_plan-be
   ignored_components:
   - graphql_query
 - name: code_review
@@ -309,6 +291,7 @@ teams:
   - graphql_query
 - name: product_planning
   product_stage_group: product_planning
+  slack_alerts_channel: s_plan-be
   ignored_components:
   - graphql_query
 - name: project_management
@@ -319,8 +302,8 @@ teams:
   product_stage_group: purchase
   ignored_components:
   - graphql_query
-- name: pods
-  product_stage_group: pods
+- name: tenant_scale
+  product_stage_group: tenant_scale
   ignored_components:
   - graphql_query
 - name: source_code
@@ -355,10 +338,6 @@ teams:
   - graphql_query
 - name: vulnerability_research
   product_stage_group: vulnerability_research
-  ignored_components:
-  - graphql_query
-- name: organization
-  product_stage_group: organization
   ignored_components:
   - graphql_query
 - name: fulfillment_platform

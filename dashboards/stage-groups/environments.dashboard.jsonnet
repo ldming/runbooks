@@ -2,5 +2,5 @@
 // Please feel free to customize this file.
 local stageGroupDashboards = import './stage-group-dashboards.libsonnet';
 
-stageGroupDashboards.dashboard('release')
+stageGroupDashboards.dashboard('environments')
 .stageGroupDashboardTrailer()

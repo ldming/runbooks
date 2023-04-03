@@ -278,6 +278,12 @@
         db_cached_count: {
           type: 'long',
         },
+        db_ci_duration_s: {
+          type: 'float',
+        },
+        db_ci_replica_duration_s: {
+          type: 'float',
+        },
         db_count: {
           type: 'long',
         },
@@ -292,6 +298,12 @@
               ignore_above: 256,
             },
           },
+        },
+        db_main_duration_s: {
+          type: 'float',
+        },
+        db_main_replica_duration_s: {
+          type: 'float',
         },
         db_port: {
           type: 'long',
@@ -1701,6 +1713,9 @@
               ignore_above: 256,
             },
           },
+        },
+        sleep_time_in_seconds: {
+          type: 'float',
         },
         stage: {
           type: 'text',

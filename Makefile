@@ -119,10 +119,19 @@ ensure-generated-content-up-to-date: generate
 
 .PHONY: .update-feature-categories
 .update-feature-categories:
-	./scripts/update_stage_groups_feature_categories.rb && ./scripts/update_stage_groups_dashboards.rb && ./scripts/update_stage_error_budget_dashboards.rb && ./scripts/generate_crossover_stage_group_mappings.rb
+	./scripts/update_stage_groups_feature_categories.rb && ./scripts/update_stage_groups_dashboards.rb && ./scripts/update_stage_error_budget_dashboards.rb
+
+.PHONY: generate-crossover-mappings
+generate-crossover-mappings:
+	./scripts/generate_crossover_stage_group_mappings.rb
 
 .PHONY: update-feature-categories
-update-feature-categories: .update-feature-categories generate
+update-feature-categories: .update-feature-categories generate-crossover-mappings generate
+
+# In CI, we don't want to generate crossover mappings, as those depend on a git
+# diff compared to the previous HEAD.
+.PHONY: update-feature-categories-ci
+update-feature-categories-ci: .update-feature-categories generate
 
 # Ensure that you have Graphviz and Python installed
 # Instructions at https://diagrams.mingrammer.com/docs/getting-started/installation

@@ -17,7 +17,7 @@ test.suite({
     actual: panelTitles(errorBudgetsDashboards.dashboard('plan').trailer()),
     expect: [
       'Info',
-      "Certify's Error Budgets (From ${__from:date:YYYY-MM-DD HHːmm} to ${__to:date:YYYY-MM-DD HHːmm})",
+      "Knowledge's Error Budgets (From ${__from:date:YYYY-MM-DD HHːmm} to ${__to:date:YYYY-MM-DD HHːmm})",
       'Availability',
       'Budget remaining',
       'Budget spent',
@@ -41,15 +41,10 @@ test.suite({
     ],
   },
   testErrorPanelsSelectiveGeneration: {
-    actual: panelTitles(errorBudgetsDashboards.dashboard('plan', groups=['product_planning', 'certify']).trailer()),
+    actual: panelTitles(errorBudgetsDashboards.dashboard('plan', groups=['product_planning']).trailer()),
     expect: [
       'Info',
       "Product Planning's Error Budgets (From ${__from:date:YYYY-MM-DD HHːmm} to ${__to:date:YYYY-MM-DD HHːmm})",
-      'Availability',
-      'Budget remaining',
-      'Budget spent',
-      'Extra links',
-      "Certify's Error Budgets (From ${__from:date:YYYY-MM-DD HHːmm} to ${__to:date:YYYY-MM-DD HHːmm})",
       'Availability',
       'Budget remaining',
       'Budget spent',

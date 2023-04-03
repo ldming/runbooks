@@ -36,6 +36,7 @@
 ## How To
 
 * [Add and remove file storages to praefect](praefect-file-storages.md)
+* [Upgrade OS for praefect servers](https://gitlab.com/gitlab-com/gl-infra/ansible-workloads/praefect-ansible-scripts/-/blob/main/playbooks/praefect-os-upgrade/README.md#change-management-plan)
 
 <!-- ## Summary -->
 

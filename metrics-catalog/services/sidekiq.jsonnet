@@ -173,7 +173,7 @@ metricsCatalog.serviceDefinition({
       userImpacting: true,
       severity: 's3',
       featureCategory: 'service_desk',
-      team: 'certify',
+      team: 'product_planning',
       description: |||
         Monitors ratio between all received emails and received emails which
         could not be processed for some reason.

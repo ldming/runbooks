@@ -4,37 +4,37 @@ include:
 
   # variables needed for other tasks
   - project: "gitlab-com/gl-infra/common-ci-tasks"
-    ref: v1.65.0
+    ref: v1.66.0
     file: ".gitlab-ci-other-versions.yml"
 
   # automatically tag releases using semantic-releases, based on conventional commit messages
   - project: "gitlab-com/gl-infra/common-ci-tasks"
-    ref: v1.65.0
+    ref: v1.66.0
     file: "semantic-release.yml"
 
   # Checks that the `.tool-versions` file is synced with .gitlab-ci-asdf-versions.yml,
   # that all the plugins are declared in `./scripts/install-asdf-plugins.sh`
   # and that ASDF is generally working
   - project: "gitlab-com/gl-infra/common-ci-tasks"
-    ref: v1.65.0
+    ref: v1.66.0
     file: asdf-tool-versions.yml
 
   # Upgrades dependencies on a schedule
   # see https://gitlab.com/gitlab-com/gl-infra/common-ci-tasks/-/blob/main/renovate-bot.md
   - project: "gitlab-com/gl-infra/common-ci-tasks"
-    ref: v1.65.0  # renovate:managed
+    ref: v1.66.0  # renovate:managed
     file: renovate-bot.yml
 
   # validate .editorconfig
   # see https://gitlab.com/gitlab-com/gl-infra/common-ci-tasks/-/blob/main/editorconfig-check.md
   - project: "gitlab-com/gl-infra/common-ci-tasks"
-    ref: v1.65.0  # renovate:managed
+    ref: v1.66.0  # renovate:managed
     file: "editorconfig-check.yml"
 
   # validate YAML files
   # see https://gitlab.com/gitlab-com/gl-infra/common-ci-tasks/-/blob/main/yamllint.md
   - project: "gitlab-com/gl-infra/common-ci-tasks"
-    ref: v1.65.0  # renovate:managed
+    ref: v1.66.0  # renovate:managed
     file: "yamllint.yml"
 
   # Import the danger-review job
@@ -666,11 +666,11 @@ deploy_dashboards:
     - dashboards/tag-unmanaged-dashboards.sh
 
 .docker_image_template:
-  image: docker:23.0.1
+  image: docker:23.0.2
   tags:
     - gitlab-org-docker
   services:
-    - docker:23.0.1-dind
+    - docker:23.0.2-dind
   retry: 2
   variables:
     DOCKER_TLS_CERTDIR: ""
@@ -754,7 +754,7 @@ check-stage-groups:
     - .jsonnet-cache
   script:
     - ./scripts/bundler.sh  # Install jsonnet bundles, required for make generate
-    - make update-feature-categories
+    - make update-feature-categories-ci
     - git diff --exit-code
 
 generate_service_maturity_manifest:

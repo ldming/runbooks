@@ -9,15 +9,6 @@
       'system_access',
     ],
   },
-  organization: {
-    name: 'Organization',
-    stage: 'manage',
-    feature_categories: [
-      'subgroups',
-      'user_profile',
-      'projects',
-    ],
-  },
   'import': {
     name: 'Import',
     stage: 'manage',
@@ -58,14 +49,16 @@
     feature_categories: [
       'portfolio_management',
       'design_management',
-    ],
-  },
-  certify: {
-    name: 'Certify',
-    stage: 'plan',
-    feature_categories: [
       'requirements_management',
       'quality_management',
+    ],
+  },
+  knowledge: {
+    name: 'Knowledge',
+    stage: 'plan',
+    feature_categories: [
+      'wiki',
+      'pages',
     ],
   },
   optimize: {
@@ -97,8 +90,6 @@
     stage: 'create',
     feature_categories: [
       'web_ide',
-      'wiki',
-      'pages',
       'remote_development',
     ],
   },
@@ -204,9 +195,9 @@
       'insider_threat',
     ],
   },
-  release: {
-    name: 'Release',
-    stage: 'release',
+  environments: {
+    name: 'Environments',
+    stage: 'deploy',
     feature_categories: [
       'continuous_delivery',
       'advanced_deployments',
@@ -214,16 +205,9 @@
       'release_orchestration',
       'release_evidence',
       'environment_management',
-    ],
-  },
-  configure: {
-    name: 'Configure',
-    stage: 'configure',
-    feature_categories: [
       'auto_devops',
       'infrastructure_as_code',
       'kubernetes_management',
-      'cluster_cost_management',
       'deployment_management',
     ],
   },
@@ -234,7 +218,6 @@
       'incident_management',
       'on_call_schedule_management',
       'runbooks',
-      'continuous_verification',
       'service_desk',
     ],
   },
@@ -292,6 +275,7 @@
     stage: 'fulfillment',
     feature_categories: [
       'purchase',
+      'seat_cost_management',
     ],
   },
   provision: {
@@ -307,7 +291,7 @@
     name: 'Utilization',
     stage: 'fulfillment',
     feature_categories: [
-      'subscription_cost_management',
+      'consumables_cost_management',
     ],
   },
   fulfillment_platform: {
@@ -406,11 +390,14 @@
       'database',
     ],
   },
-  pods: {
-    name: 'Pods',
+  tenant_scale: {
+    name: 'Tenant Scale',
     stage: 'data_stores',
     feature_categories: [
-      'pods',
+      'cell',
+      'subgroups',
+      'projects',
+      'user_profile',
     ],
   },
   delivery: {
@@ -476,7 +463,7 @@
   },
   '5-min-app': {
     name: 'Five Minute Production App',
-    stage: 'deploy',
+    stage: '5-min-app',
     feature_categories: [
       'five_minute_production_app',
     ],

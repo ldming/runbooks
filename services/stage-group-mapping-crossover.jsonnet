@@ -6,5 +6,8 @@
 //
 // Blank values will be ignored.
 {
-  authentication_and_authorization: 'system_access',
+  cluster_cost_management: '',
+  pods: 'cells',
+  continuous_verification: '',
+  subscription_cost_management: 'consumables_cost_management',
 }

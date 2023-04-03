@@ -153,7 +153,22 @@
             },
           },
         },
+        db_ci_duration_s: {
+          type: 'float',
+        },
+        db_ci_replica_duration_s: {
+          type: 'float',
+        },
         db_duration_s: {
+          type: 'float',
+        },
+        db_main_duration_s: {
+          type: 'float',
+        },
+        db_main_replica_duration_s: {
+          type: 'float',
+        },
+        db_replica_duration_s: {
           type: 'float',
         },
         dead: {
@@ -608,6 +623,9 @@
               ignore_above: 256,
             },
           },
+        },
+        sleep_time_in_seconds: {
+          type: 'float',
         },
         signal: {
           type: 'text',
