@@ -149,7 +149,7 @@ function jsonnet_compile() {
   local source_file="$1"
   local sha256sum_file="checksum/$source_file.sha256sum"
 
-  if [[ -f "$sha256sum_file" ]] && sha256sum -cs <"$sha256sum_file"; then
+  if [[ -f "$sha256sum_file" ]] && sha256sum --check --status <"$sha256sum_file"; then
     return 0
   fi
 
