@@ -155,6 +155,65 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
   }),
 
   /**
+   * promSourceShardComponentSLIs is an source recording rule representing
+   * the "start" of the aggregation pipeline for per-shard aggregations,
+   * used by Sidekiq execution and queueing SLIs.
+   *
+   * It collects "raw" source metrics in a prometheus instance and
+   * aggregates them, reducing cardinality, before
+   * these values are used downstream in Thanos.
+   *
+   * Should not be used directly for alerting or visualization as it
+   * only represents the view from a single prometheus instance,
+   * not globally across all shards.
+   */
+  promSourceShardComponentSLIs: aggregationSet.AggregationSet({
+    id: 'source_shard',
+    name: 'Prometheus Source Shard-Aggregated SLI Metrics',
+    intermediateSource: true,  // Not intended for consumption in dashboards or alerts
+    selector: { monitor: { ne: 'global' } },  // Not Thanos Ruler
+    labels: ['environment', 'tier', 'type', 'stage', 'shard', 'component'],
+    supportedBurnRates: ['5m', '30m', '1h', '6h'],  // Including 6h
+    metricFormats: {
+      apdexSuccessRate: 'gitlab_component_shard_apdex:success:rate_%s',
+      apdexWeight: 'gitlab_component_shard_apdex:weight:score_%s',
+      opsRate: 'gitlab_component_shard_ops:rate_%s',
+      errorRate: 'gitlab_component_shard_errors:rate_%s',
+    },
+  }),
+
+
+  /**
+   * shardComponentSLIs consumes promSourceSLIs and is
+   * used for per-shard monitoring, alerting, visualzation for Sidekiq.
+   */
+  shardComponentSLIs: aggregationSet.AggregationSet({
+    id: 'component_shard',
+    name: 'Global Shard-Aggregated SLI Metrics',
+    intermediateSource: false,  // Used in dashboards and alerts
+    selector: { monitor: 'global' },  // Thanos Ruler
+    labels: ['env', 'environment', 'tier', 'type', 'stage', 'shard', 'component'],
+    metricFormats: {
+      apdexRatio: 'gitlab_component_shard_apdex:ratio_%s',
+      opsRate: 'gitlab_component_shard_ops:rate_%s',
+      errorRate: 'gitlab_component_shard_errors:rate_%s',
+      errorRatio: 'gitlab_component_shard_errors:ratio_%s',
+    },
+    burnRates: {
+      '6h': {
+        apdexRatio: 'gitlab_component_shard_apdex:ratio_6h',
+        opsRate: 'gitlab_component_shard_ops:rate_6h',
+        errorRatio: 'gitlab_component_shard_errors:ratio_6h',
+      },
+      '3d': {
+        apdexRatio: 'gitlab_component_shard_apdex:ratio_3d',
+        opsRate: 'gitlab_component_shard_ops:rate_3d',
+        errorRatio: 'gitlab_component_shard_errors:ratio_3d',
+      },
+    },
+  }),
+
+  /**
    * serviceSLIs consumes promSourceSLIs and aggregates
    * all the SLIs in a service up to the service level.
    * This is primarily used for visualizations, to give an

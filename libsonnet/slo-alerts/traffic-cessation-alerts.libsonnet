@@ -5,6 +5,7 @@ local labelsForSLIAlert = import './slo-alert-labels.libsonnet';
 local selectors = import 'promql/selectors.libsonnet';
 local durationParser = import 'utils/duration-parser.libsonnet';
 local strings = import 'utils/strings.libsonnet';
+local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSets;
 
 // This function is used to generate the SLI alert annotations.
 local annotationsForTrafficAlert(service, sli, alertDescriptor, aggregationSet, partialTitle, description) =
@@ -13,10 +14,16 @@ local annotationsForTrafficAlert(service, sli, alertDescriptor, aggregationSet, 
     serviceType: service.type,
   };
 
+  local title = (alertDescriptor.alertTitleTemplate % formatConfig) + ' ' + partialTitle;
+  local finalTitle = if sli.hasShardLevelMonitoring() then
+    title + ' (shard `{{ $labels.shard }})`'
+  else
+    title;
+
   serviceLevelAlerts.commonAnnotations(service.type, aggregationSet, 'ops') +
   sloAlertAnnotations(service.type, sli, aggregationSet, 'ops') +
   {
-    title: (alertDescriptor.alertTitleTemplate % formatConfig) + ' ' + partialTitle,
+    title: finalTitle,
     description: strings.markdownParagraphs(
       [
         strings.chomp(sli.description),
@@ -61,7 +68,11 @@ local getTrafficCessationAlertSelector(service, sli, alertDescriptor) =
 
 // Generates traffic cessation alerts for a service/sli/alertDescriptor combination
 local generateTrafficCessationAlerts(service, sli, alertDescriptor, trafficCessationAlertSelector) =
-  local aggregationSet = alertDescriptor.aggregationSet;
+  local shardLevelMonitoring = sli.hasShardLevelMonitoring();
+  local aggregationSet = if shardLevelMonitoring then
+    aggregationSets.shardComponentSLIs
+  else
+    alertDescriptor.aggregationSet;
 
   // Returns burn rate periods, in order of ascending duration
   // Exclude the legacy 1m period

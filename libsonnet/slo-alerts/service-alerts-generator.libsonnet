@@ -3,6 +3,7 @@ local sloAlertAnnotations = import './slo-alert-annotations.libsonnet';
 local labelsForSLIAlert = import './slo-alert-labels.libsonnet';
 local trafficCessationAlertForSLIForAlertDescriptor = import './traffic-cessation-alerts.libsonnet';
 local alerts = import 'alerts/alerts.libsonnet';
+local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSets;
 
 local apdexAlertForSLIForAlertDescriptor(service, sli, alertDescriptor, extraSelector) =
   local apdexScoreSLO = sli.monitoringThresholds.apdexScore;
@@ -11,14 +12,21 @@ local apdexAlertForSLIForAlertDescriptor(service, sli, alertDescriptor, extraSel
     serviceType: service.type,
   };
 
+  local shardLevelMonitoring = sli.hasShardLevelMonitoring();
+  local finalAggSet = if shardLevelMonitoring then aggregationSets.shardComponentSLIs else alertDescriptor.aggregationSet;
+  local alertTitle = if shardLevelMonitoring then
+    'The %(sliName)s SLI of the %(serviceType)s service on shard `{{ $labels.shard }}` (`{{ $labels.stage }}` stage)'
+  else
+    alertDescriptor.alertTitleTemplate;
+
   serviceLevelAlerts.apdexAlertsForSLI(
     alertName=serviceLevelAlerts.nameSLOViolationAlert(service.type, sli.name, 'ApdexSLOViolation' + alertDescriptor.alertSuffix),
-    alertTitle=(alertDescriptor.alertTitleTemplate + ' has an apdex violating SLO') % formatConfig,
+    alertTitle=(alertTitle + ' has an apdex violating SLO') % formatConfig,
     alertDescriptionLines=[sli.description] + if alertDescriptor.alertExtraDetail != null then [alertDescriptor.alertExtraDetail] else [],
     serviceType=service.type,
     severity=sli.severity,
     thresholdSLOValue=apdexScoreSLO,
-    aggregationSet=alertDescriptor.aggregationSet,
+    aggregationSet=finalAggSet,
     windows=service.alertWindows,
     metricSelectorHash={ type: service.type, component: sli.name } + extraSelector,
     minimumSamplesForMonitoring=alertDescriptor.minimumSamplesForMonitoring,
@@ -34,9 +42,16 @@ local errorAlertForSLIForAlertDescriptor(service, sli, alertDescriptor, extraSel
     serviceType: service.type,
   };
 
+  local shardLevelMonitoring = sli.hasShardLevelMonitoring();
+  local finalAggSet = if shardLevelMonitoring then aggregationSets.shardComponentSLIs else alertDescriptor.aggregationSet;
+  local alertTitle = if shardLevelMonitoring then
+    'The %(sliName)s SLI of the %(serviceType)s service on shard `{{ $labels.shard }}` (`{{ $labels.stage }}` stage)'
+  else
+    alertDescriptor.alertTitleTemplate;
+
   serviceLevelAlerts.errorAlertsForSLI(
     alertName=serviceLevelAlerts.nameSLOViolationAlert(service.type, sli.name, 'ErrorSLOViolation' + alertDescriptor.alertSuffix),
-    alertTitle=(alertDescriptor.alertTitleTemplate + ' has an error rate violating SLO') % formatConfig,
+    alertTitle=(alertTitle + ' has an error rate violating SLO') % formatConfig,
     alertDescriptionLines=[sli.description] + if alertDescriptor.alertExtraDetail != null then [alertDescriptor.alertExtraDetail] else [],
     serviceType=service.type,
     severity=sli.severity,

@@ -8,7 +8,7 @@ local outputPromYaml(groups, groupExtras) =
     ],
   });
 
-local filesForService(service, componentAggregationSet, nodeAggregationSet, featureCategoryAggregationSet, groupExtras) =
+local filesForService(service, componentAggregationSet, nodeAggregationSet, featureCategoryAggregationSet, shardAggregationSet, groupExtras) =
   {
     ['key-metrics-%s.yml' % [service.type]]:
       outputPromYaml(
@@ -16,6 +16,7 @@ local filesForService(service, componentAggregationSet, nodeAggregationSet, feat
           service,
           componentAggregationSet=componentAggregationSet,
           nodeAggregationSet=nodeAggregationSet,
+          shardAggregationSet=shardAggregationSet
         ),
         groupExtras
       ),
@@ -33,10 +34,10 @@ local filesForService(service, componentAggregationSet, nodeAggregationSet, feat
   else {};
 
 
-local filesForServices(services, componentAggregationSet, nodeAggregationSet, featureCategoryAggregationSet, groupExtras={}) =
+local filesForServices(services, componentAggregationSet, nodeAggregationSet, featureCategoryAggregationSet, shardAggregationSet, groupExtras={}) =
   std.foldl(
     function(memo, service)
-      memo + filesForService(service, componentAggregationSet, nodeAggregationSet, featureCategoryAggregationSet, groupExtras),
+      memo + filesForService(service, componentAggregationSet, nodeAggregationSet, featureCategoryAggregationSet, shardAggregationSet, groupExtras),
     services,
     {}
   );

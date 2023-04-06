@@ -79,6 +79,16 @@ local list = [
       https://gitlab.com/gitlab-org/gitlab/-/blob/master/ee/lib/gitlab/metrics/global_search_indexing_slis.rb#L14-L15
     |||,
   }),
+  sliDefinition.new({
+    name: 'sidekiq_execution',
+    significantLabels: ['worker', 'feature_category', 'urgency'],
+    kinds: [sliDefinition.apdexKind, sliDefinition.errorRateKind],
+    description: |||
+      The number of Sidekiq jobs meeting their execution duration target based on the urgency of the worker.
+      By default, execution of a job should take no more than 300 seconds. But this can be adjusted by the
+      urgency of the worker.
+    |||,
+  }),
 ];
 
 local definitionsByName = std.foldl(

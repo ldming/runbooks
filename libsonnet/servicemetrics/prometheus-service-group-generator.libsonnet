@@ -8,7 +8,8 @@ local recordingRuleGroupsForServiceForBurnRate(serviceDefinition, componentAggre
       recordingRules.sliRecordingRulesSetGenerator(burnRate, recordingRuleRegistry),
       recordingRules.componentMetricsRuleSetGenerator(
         burnRate=burnRate,
-        aggregationSet=componentAggregationSet
+        aggregationSet=componentAggregationSet,
+        respectShardLevelMonitoring=true,
       ),
       recordingRules.extraRecordingRuleSetGenerator(burnRate),
     ]
@@ -19,6 +20,7 @@ local recordingRuleGroupsForServiceForBurnRate(serviceDefinition, componentAggre
           recordingRules.componentMetricsRuleSetGenerator(
             burnRate=burnRate,
             aggregationSet=nodeAggregationSet,
+            respectShardLevelMonitoring=false,
           ),
         ]
       else
@@ -36,7 +38,7 @@ local recordingRuleGroupsForServiceForBurnRate(serviceDefinition, componentAggre
   };
 
 local featureCategoryRecordingRuleGroupsForService(serviceDefinition, aggregationSet, burnRate) =
-  local generator = recordingRules.componentMetricsRuleSetGenerator(burnRate, aggregationSet);
+  local generator = recordingRules.componentMetricsRuleSetGenerator(burnRate, aggregationSet, respectShardLevelMonitoring=false);
   local indicators = std.filter(function(indicator) indicator.hasFeatureCategory(), serviceDefinition.listServiceLevelIndicators());
   {
     name: 'Prometheus Intermediate Metrics per feature: %s - burn-rate %s' % [serviceDefinition.type, burnRate],

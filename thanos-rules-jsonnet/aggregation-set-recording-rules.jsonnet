@@ -64,6 +64,18 @@ local filesForSeparateSelector(selector) = {
     ),
 
   /**
+   * Aggregates from multiple "split-brain" prometheus per-shard SLIs to a global/single-view SLI-shard-level aggregated metrics
+   */
+  'aggregated-sli-shard-metrics':
+    outputPromYaml(
+      transformRuleGroups(
+        sourceAggregationSet=aggregationSets.promSourceShardComponentSLIs,
+        targetAggregationSet=aggregationSets.shardComponentSLIs,
+        extraSourceSelector=selector,
+      ),
+    ),
+
+  /**
    * Aggregates from multiple "split-brain" prometheus SLIs to a global/single-view service-node-level aggregated metrics
    * TODO: consider whether this aggregation is neccessary and useful.
    */

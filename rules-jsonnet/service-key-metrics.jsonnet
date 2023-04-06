@@ -12,4 +12,5 @@ filesForServices(
   componentAggregationSet=aggregationSets.promSourceSLIs,
   nodeAggregationSet=aggregationSets.promSourceNodeComponentSLIs,
   featureCategoryAggregationSet=aggregationSets.featureCategorySourceSLIs,
+  shardAggregationSet=aggregationSets.promSourceShardComponentSLIs,
 )

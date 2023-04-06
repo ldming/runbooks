@@ -71,6 +71,8 @@ local combinedServiceLevelIndicatorDefinition(
         hasToolingLinks()::
           std.length(self.getToolingLinks()) > 0,
 
+        hasShardLevelMonitoring():: false,
+
         getToolingLinks()::
           std.flatMap(function(c) c.getToolingLinks(), componentsInitialised),
 

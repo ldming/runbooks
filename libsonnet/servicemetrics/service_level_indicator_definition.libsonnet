@@ -152,6 +152,9 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
       std.objectHas(serviceLevelIndicator, 'dashboardFeatureCategories') &&
       std.length(serviceLevelIndicator.dashboardFeatureCategories) > 0,
 
+    hasShardLevelMonitoring()::
+      std.get(serviceLevelIndicator, 'shardLevelMonitoring', default=false),
+
     // Generate recording rules for apdex
     generateApdexRecordingRules(burnRate, aggregationSet, aggregationLabels, recordingRuleStaticLabels)::
       if self.hasApdex() && !isUpscalingTarget(self, burnRate) then

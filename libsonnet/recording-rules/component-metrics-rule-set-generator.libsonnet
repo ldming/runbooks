@@ -1,3 +1,5 @@
+local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSets;
+
 // Get the set of static labels for an aggregation
 // The feature category will be included if the aggregation needs it and the SLI has
 // a feature category
@@ -52,11 +54,17 @@ local generateErrorRateRules(burnRate, aggregationSet, aggregationLabels, sliDef
     [];
 
 // Generates the recording rules given a component definition
-local generateRecordingRulesForComponent(burnRate, aggregationSet, serviceDefinition, sliDefinition, aggregationLabels) =
+local generateRecordingRulesForComponent(burnRate, aggregationSet, serviceDefinition, sliDefinition, respectShardLevelMonitoring) =
+  local finalAggSet = if respectShardLevelMonitoring && sliDefinition.hasShardLevelMonitoring() then
+    aggregationSets.promSourceShardComponentSLIs
+  else
+    aggregationSet;
+
+  local aggregationLabels = finalAggSet.labels;
   local recordingRuleStaticLabels = staticLabelsForAggregation(serviceDefinition, sliDefinition, aggregationLabels);
 
   std.flatMap(
-    function(generator) generator(burnRate=burnRate, aggregationSet=aggregationSet, aggregationLabels=aggregationLabels, sliDefinition=sliDefinition, recordingRuleStaticLabels=recordingRuleStaticLabels),
+    function(generator) generator(burnRate=burnRate, aggregationSet=finalAggSet, aggregationLabels=aggregationLabels, sliDefinition=sliDefinition, recordingRuleStaticLabels=recordingRuleStaticLabels),
     [
       generateApdexRules,
       generateRequestRateRules,
@@ -70,6 +78,7 @@ local generateRecordingRulesForComponent(burnRate, aggregationSet, serviceDefini
   componentMetricsRuleSetGenerator(
     burnRate,
     aggregationSet,
+    respectShardLevelMonitoring=false,
   )::
     {
       // Generates the recording rules given a service definition
@@ -80,7 +89,7 @@ local generateRecordingRulesForComponent(burnRate, aggregationSet, serviceDefini
             aggregationSet=aggregationSet,
             serviceDefinition=serviceDefinition,
             sliDefinition=sliDefinition,
-            aggregationLabels=aggregationSet.labels,
+            respectShardLevelMonitoring=respectShardLevelMonitoring
           ),
           serviceLevelIndicators,
         ),
