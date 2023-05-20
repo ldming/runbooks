@@ -3,7 +3,7 @@ module gitlab.com/gitlab-com/runbooks/pingdom
 go 1.20
 
 require (
-	github.com/russellcardullo/go-pingdom v0.0.0-20190223184354-017c8281f6d1
+	github.com/russellcardullo/go-pingdom v1.3.0
 	gopkg.in/yaml.v3 v3.0.1
 )
 
