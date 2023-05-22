@@ -8,7 +8,6 @@ import (
 	"net/url"
 	"os"
 	"regexp"
-	"strconv"
 	"strings"
 
 	pingdom "github.com/russellcardullo/go-pingdom/pingdom"
@@ -97,12 +96,8 @@ func (c PingdomCheck) getCheck(config PingdomChecks, teamMap map[string]pingdom.
 		if !ok {
 			log.Fatalf("Unable to find team %v", v)
 		}
-		teamID, err := strconv.Atoi(team.ID)
-		if err != nil {
-			log.Fatalf("TeamID is not an integer: %s", team.ID)
-		}
 
-		teamIds = append(teamIds, teamID)
+		teamIds = append(teamIds, team.ID)
 	}
 
 	integrationIDs := []int{}
