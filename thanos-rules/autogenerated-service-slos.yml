@@ -709,7 +709,7 @@ groups:
     labels:
       tier: stor
       type: gitaly
-    expr: "0.970000"
+    expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       tier: stor
@@ -720,7 +720,7 @@ groups:
       component: goserver
       tier: stor
       type: gitaly
-    expr: "0.970000"
+    expr: "0.999000"
   - record: slo:max:events:gitlab_service_errors:ratio
     labels:
       component: goserver

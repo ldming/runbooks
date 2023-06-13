@@ -4,8 +4,27 @@ local labelsForSLIAlert = import './slo-alert-labels.libsonnet';
 local trafficCessationAlertForSLIForAlertDescriptor = import './traffic-cessation-alerts.libsonnet';
 local alerts = import 'alerts/alerts.libsonnet';
 
+local apdexScoreThreshold(sli, alertDescriptor) =
+  if alertDescriptor.alertSuffix == 'SingleNode' &&
+     std.objectHas(sli.monitoringThresholds, 'nodeLevel') &&
+     std.objectHas(sli.monitoringThresholds.nodeLevel, 'apdexScore')
+  then
+    sli.monitoringThresholds.nodeLevel.apdexScore
+  else
+    sli.monitoringThresholds.apdexScore;
+
+local errorRatioThreshold(sli, alertDescriptor) =
+  if alertDescriptor.alertSuffix == 'SingleNode' &&
+     std.objectHas(sli.monitoringThresholds, 'nodeLevel') &&
+     std.objectHas(sli.monitoringThresholds.nodeLevel, 'errorRatio')
+  then
+    sli.monitoringThresholds.nodeLevel.errorRatio
+  else
+    sli.monitoringThresholds.errorRatio;
+
 local apdexAlertForSLIForAlertDescriptor(service, sli, alertDescriptor, extraSelector) =
-  local apdexScoreSLO = sli.monitoringThresholds.apdexScore;
+  local apdexScoreSLO = apdexScoreThreshold(sli, alertDescriptor);
+
   local formatConfig = {
     sliName: sli.name,
     serviceType: service.type,
@@ -28,7 +47,7 @@ local apdexAlertForSLIForAlertDescriptor(service, sli, alertDescriptor, extraSel
   );
 
 local errorAlertForSLIForAlertDescriptor(service, sli, alertDescriptor, extraSelector) =
-  local errorRateSLO = sli.monitoringThresholds.errorRatio;
+  local errorRateSLO = errorRatioThreshold(sli, alertDescriptor);
   local formatConfig = {
     sliName: sli.name,
     serviceType: service.type,

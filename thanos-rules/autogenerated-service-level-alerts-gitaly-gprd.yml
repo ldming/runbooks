@@ -48,12 +48,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_1h{component="goserver",env="gprd",monitor="global",type="gitaly"}
-          < (1 - 14.4 * 0.030000)
+          < (1 - 14.4 * 0.001000)
         )
         and
         (
           gitlab_component_apdex:ratio_5m{component="goserver",env="gprd",monitor="global",type="gitaly"}
-          < (1 - 14.4 * 0.030000)
+          < (1 - 14.4 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)
@@ -103,12 +103,12 @@ groups:
       (
         (
           gitlab_component_apdex:ratio_6h{component="goserver",env="gprd",monitor="global",type="gitaly"}
-          < (1 - 6 * 0.030000)
+          < (1 - 6 * 0.001000)
         )
         and
         (
           gitlab_component_apdex:ratio_30m{component="goserver",env="gprd",monitor="global",type="gitaly"}
-          < (1 - 6 * 0.030000)
+          < (1 - 6 * 0.001000)
         )
       )
       and on(env,environment,tier,type,stage,component)

@@ -19,8 +19,11 @@ metricsCatalog.serviceDefinition({
   // we have node-level monitoring on these hosts
   nodeLevelMonitoring: true,
   monitoringThresholds: {
-    apdexScore: 0.97,  // Orignally 0.999 reducing temporarly https://gitlab.com/groups/gitlab-com/gl-infra/-/epics/991
+    apdexScore: 0.999,
     errorRatio: 0.9995,
+    nodeLevel: {
+      apdexScore: 0.97,
+    },
   },
   otherThresholds: {
     // Deployment thresholds are optional, and when they are specified, they are
