@@ -3,7 +3,6 @@ local sloAlertAnnotations = import './slo-alert-annotations.libsonnet';
 local labelsForSLIAlert = import './slo-alert-labels.libsonnet';
 local trafficCessationAlertForSLIForAlertDescriptor = import './traffic-cessation-alerts.libsonnet';
 local alerts = import 'alerts/alerts.libsonnet';
-local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSets;
 
 local apdexAlertForSLIForAlertDescriptor(service, sli, alertDescriptor, extraSelector) =
   local apdexScoreSLO = sli.monitoringThresholds.apdexScore;
@@ -12,21 +11,14 @@ local apdexAlertForSLIForAlertDescriptor(service, sli, alertDescriptor, extraSel
     serviceType: service.type,
   };
 
-  local shardLevelMonitoring = sli.hasShardLevelMonitoring();
-  local finalAggSet = if shardLevelMonitoring then aggregationSets.shardComponentSLIs else alertDescriptor.aggregationSet;
-  local alertTitle = if shardLevelMonitoring then
-    'The %(sliName)s SLI of the %(serviceType)s service on shard `{{ $labels.shard }}` (`{{ $labels.stage }}` stage)'
-  else
-    alertDescriptor.alertTitleTemplate;
-
   serviceLevelAlerts.apdexAlertsForSLI(
     alertName=serviceLevelAlerts.nameSLOViolationAlert(service.type, sli.name, 'ApdexSLOViolation' + alertDescriptor.alertSuffix),
-    alertTitle=(alertTitle + ' has an apdex violating SLO') % formatConfig,
+    alertTitle=(alertDescriptor.alertTitleTemplate + ' has an apdex violating SLO') % formatConfig,
     alertDescriptionLines=[sli.description] + if alertDescriptor.alertExtraDetail != null then [alertDescriptor.alertExtraDetail] else [],
     serviceType=service.type,
     severity=sli.severity,
     thresholdSLOValue=apdexScoreSLO,
-    aggregationSet=finalAggSet,
+    aggregationSet=alertDescriptor.aggregationSet,
     windows=service.alertWindows,
     metricSelectorHash={ type: service.type, component: sli.name } + extraSelector,
     minimumSamplesForMonitoring=alertDescriptor.minimumSamplesForMonitoring,
@@ -42,16 +34,9 @@ local errorAlertForSLIForAlertDescriptor(service, sli, alertDescriptor, extraSel
     serviceType: service.type,
   };
 
-  local shardLevelMonitoring = sli.hasShardLevelMonitoring();
-  local finalAggSet = if shardLevelMonitoring then aggregationSets.shardComponentSLIs else alertDescriptor.aggregationSet;
-  local alertTitle = if shardLevelMonitoring then
-    'The %(sliName)s SLI of the %(serviceType)s service on shard `{{ $labels.shard }}` (`{{ $labels.stage }}` stage)'
-  else
-    alertDescriptor.alertTitleTemplate;
-
   serviceLevelAlerts.errorAlertsForSLI(
     alertName=serviceLevelAlerts.nameSLOViolationAlert(service.type, sli.name, 'ErrorSLOViolation' + alertDescriptor.alertSuffix),
-    alertTitle=(alertTitle + ' has an error rate violating SLO') % formatConfig,
+    alertTitle=(alertDescriptor.alertTitleTemplate + ' has an error rate violating SLO') % formatConfig,
     alertDescriptionLines=[sli.description] + if alertDescriptor.alertExtraDetail != null then [alertDescriptor.alertExtraDetail] else [],
     serviceType=service.type,
     severity=sli.severity,
@@ -69,7 +54,7 @@ local errorAlertForSLIForAlertDescriptor(service, sli, alertDescriptor, extraSel
 local apdexAlertForSLI(service, sli, alertDescriptors, extraSelector) =
   std.flatMap(
     function(descriptor)
-      if descriptor.predicate(service) then
+      if descriptor.predicate(service, sli) then
         apdexAlertForSLIForAlertDescriptor(service, sli, descriptor, extraSelector)
       else
         [],
@@ -80,7 +65,7 @@ local apdexAlertForSLI(service, sli, alertDescriptors, extraSelector) =
 local errorRateAlertsForSLI(service, sli, alertDescriptors, extraSelector) =
   std.flatMap(
     function(descriptor)
-      if descriptor.predicate(service) then
+      if descriptor.predicate(service, sli) then
         errorAlertForSLIForAlertDescriptor(service, sli, descriptor, extraSelector)
       else
         [],
@@ -90,7 +75,7 @@ local errorRateAlertsForSLI(service, sli, alertDescriptors, extraSelector) =
 local trafficCessationAlertsForSLI(service, sli, alertDescriptors, extraSelector) =
   std.flatMap(
     function(descriptor)
-      if descriptor.predicate(service) then
+      if descriptor.predicate(service, sli) then
         trafficCessationAlertForSLIForAlertDescriptor(service, sli, descriptor, extraSelector)
       else
         [],

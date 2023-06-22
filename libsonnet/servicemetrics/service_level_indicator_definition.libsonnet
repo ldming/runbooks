@@ -28,6 +28,7 @@ local serviceLevelIndicatorDefaults = {
   upscaleLongerBurnRates: false,  // When true, long-term burn rates will be upscaled from shorter burn rates, to optimize for high cardinality metrics
   severity: 's2',
   dependsOn: [],  // When an sli depends on another component, don't alert on this SLI if the downstream service is already firing. This is meant for hard dependencies managed by GitLab.
+  shardLevelMonitoring: false,
 };
 
 local validateHasField(object, field, message) =
@@ -151,9 +152,6 @@ local serviceLevelIndicatorDefinition(sliName, serviceLevelIndicator) =
     hasDashboardFeatureCategories()::
       std.objectHas(serviceLevelIndicator, 'dashboardFeatureCategories') &&
       std.length(serviceLevelIndicator.dashboardFeatureCategories) > 0,
-
-    hasShardLevelMonitoring()::
-      std.get(serviceLevelIndicator, 'shardLevelMonitoring', default=false),
 
     // Generate recording rules for apdex
     generateApdexRecordingRules(burnRate, aggregationSet, aggregationLabels, recordingRuleStaticLabels)::

@@ -10,7 +10,7 @@ local minimumSamplesForMonitoring = 3600;
 local minimumSamplesForTrafficCessation = 300;
 
 local alertDescriptors = [{
-  predicate: function(service) true,
+  predicate: function(service, sli) true,
   alertSuffix: '',
   alertTitleTemplate: 'The %(sliName)s SLI of the %(serviceType)s service',
   alertExtraDetail: null,

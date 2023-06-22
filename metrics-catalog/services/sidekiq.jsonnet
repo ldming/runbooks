@@ -17,6 +17,7 @@ metricsCatalog.serviceDefinition({
   type: 'sidekiq',
   tier: 'sv',
   tags: ['rails'],
+  shardLevelMonitoring: true,  // SLIs will inherit shard-level monitoring by default
 
   contractualThresholds: {
     apdexRatio: 0.9,
@@ -96,6 +97,7 @@ metricsCatalog.serviceDefinition({
       trafficCessationAlertConfig: shard.trafficCessationAlertConfig,
       upscaleLongerBurnRates: true,
       monitoringThresholds+: shard.monitoringThresholds,
+      shardLevelMonitoring: false,
 
       description: |||
         Aggregation of all jobs for the %(shard)s Sidekiq shard.
@@ -184,6 +186,7 @@ metricsCatalog.serviceDefinition({
       description: |||
         Jobs with external dependencies across all shards.
       |||,
+      shardLevelMonitoring: false,
 
       apdex: combined(
         [
@@ -242,6 +245,7 @@ metricsCatalog.serviceDefinition({
         Monitors ratio between all received emails and received emails which
         could not be processed for some reason.
       |||,
+      shardLevelMonitoring: false,
 
       requestRate: rateMetric(
         counter='sidekiq_jobs_completion_seconds_count',
@@ -266,10 +270,11 @@ metricsCatalog.serviceDefinition({
   } + sliLibrary.get('global_search_indexing').generateServiceLevelIndicator(baseSelector, {
     serviceAggregation: false,  // Don't add this to the request rate of the service
     severity: 's3',  // Don't page SREs for this SLI
-  }) + sliLibrary.get('sidekiq_execution').generateServiceLevelIndicator(baseSelector, {
+    shardLevelMonitoring: false,
+  }) + sliLibrary.get('sidekiq_execution').generateServiceLevelIndicator(baseSelector { external_dependencies: { ne: 'yes' } }, {
+    // TODO: change serviceAggregation to true and increase severity to s2 once the SLI per shard has been removed
     serviceAggregation: false,  // Don't add this to the request rate of the service
-    severity: 's2',  // page SREs for this SLI
-    shardLevelMonitoring: true,  // Aggregated by shard level
+    severity: 's4',  // Don't page SREs for this SLI
   }),
 
   // Special per-worker recording rules

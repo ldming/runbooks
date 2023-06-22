@@ -28,5 +28,6 @@ filesForServices(
   componentAggregationSet=aggregationSets.promSourceSLIs,
   nodeAggregationSet=aggregationSets.promSourceNodeComponentSLIs,
   featureCategoryAggregationSet=aggregationSets.featureCategorySLIs,
+  shardAggregationSet=aggregationSets.promSourceShardComponentSLIs,
   groupExtras={ partial_response_strategy: 'warn' }
 )

@@ -71,8 +71,6 @@ local combinedServiceLevelIndicatorDefinition(
         hasToolingLinks()::
           std.length(self.getToolingLinks()) > 0,
 
-        hasShardLevelMonitoring():: false,
-
         getToolingLinks()::
           std.flatMap(function(c) c.getToolingLinks(), componentsInitialised),
 
@@ -94,6 +92,8 @@ local combinedServiceLevelIndicatorDefinition(
         // Significant labels are the union of all significantLabels from the components
         significantLabels:
           std.set(std.flatMap(function(c) c.significantLabels, componentsInitialised)),
+
+        shardLevelMonitoring: false,
       },
   };
 

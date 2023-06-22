@@ -3041,13 +3041,15 @@ groups:
       gitlab_component_ops:rate_5m{component="shard_urgent_other",env!~"gprd|ops",monitor="global",stage="main",type="sidekiq"} offset 1h
       unless
       gitlab_component_ops:rate_5m{component="shard_urgent_other",env!~"gprd|ops",monitor="global",stage="main",type="sidekiq"}
-  - alert: SidekiqServiceSidekiqExecutionApdexSLOViolation
-    for: 2m
+  - alert: SidekiqServiceSidekiqExecutionApdexSLOViolationSingleShard
+    for: 10m
     annotations:
       title: The sidekiq_execution SLI of the sidekiq service on shard `{{ $labels.shard
-        }}` (`{{ $labels.stage }}` stage) has an apdex violating SLO
+        }}` has an apdex violating SLO
       description: |
         The number of Sidekiq jobs meeting their execution duration target based on the urgency of the worker. By default, execution of a job should take no more than 300 seconds. But this can be adjusted by the urgency of the worker.
+
+        Since the `{{ $labels.type }}` service is not fully redundant, SLI violations on a single shard may represent a user-impacting service degradation.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
@@ -3062,9 +3064,8 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: in_source_metrics
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s4
       sli_type: apdex
       slo_alert: "yes"
       user_impacting: "yes"
@@ -3085,13 +3086,15 @@ groups:
       (
         sum by(env,environment,tier,type,stage,shard,component) (gitlab_component_shard_ops:rate_1h{component="sidekiq_execution",env!~"gprd|ops",monitor="global",type="sidekiq"}) >= 1
       )
-  - alert: SidekiqServiceSidekiqExecutionApdexSLOViolation
-    for: 2m
+  - alert: SidekiqServiceSidekiqExecutionApdexSLOViolationSingleShard
+    for: 10m
     annotations:
       title: The sidekiq_execution SLI of the sidekiq service on shard `{{ $labels.shard
-        }}` (`{{ $labels.stage }}` stage) has an apdex violating SLO
+        }}` has an apdex violating SLO
       description: |
         The number of Sidekiq jobs meeting their execution duration target based on the urgency of the worker. By default, execution of a job should take no more than 300 seconds. But this can be adjusted by the urgency of the worker.
+
+        Since the `{{ $labels.type }}` service is not fully redundant, SLI violations on a single shard may represent a user-impacting service degradation.
 
         Currently the apdex value is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
@@ -3106,9 +3109,8 @@ groups:
       alert_class: slo_violation
       alert_type: symptom
       feature_category: in_source_metrics
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s4
       sli_type: apdex
       slo_alert: "yes"
       user_impacting: "yes"
@@ -3129,13 +3131,15 @@ groups:
       (
         sum by(env,environment,tier,type,stage,shard,component) (gitlab_component_shard_ops:rate_6h{component="sidekiq_execution",env!~"gprd|ops",monitor="global",type="sidekiq"}) >= 0.16667
       )
-  - alert: SidekiqServiceSidekiqExecutionErrorSLOViolation
-    for: 2m
+  - alert: SidekiqServiceSidekiqExecutionErrorSLOViolationSingleShard
+    for: 10m
     annotations:
       title: The sidekiq_execution SLI of the sidekiq service on shard `{{ $labels.shard
-        }}` (`{{ $labels.stage }}` stage) has an error rate violating SLO
+        }}` has an error rate violating SLO
       description: |
         The number of Sidekiq jobs meeting their execution duration target based on the urgency of the worker. By default, execution of a job should take no more than 300 seconds. But this can be adjusted by the urgency of the worker.
+
+        Since the `{{ $labels.type }}` service is not fully redundant, SLI violations on a single shard may represent a user-impacting service degradation.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
@@ -3145,18 +3149,17 @@ groups:
       grafana_panel_id: "4267233911"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage) (
-          sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate5m{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="sidekiq"}
+        sum by (env,environment,tier,stage,shard) (
+          sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate5m{environment="{{ $labels.environment }}",external_dependencies!="yes",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}",type="sidekiq"}
         )
       runbook: docs/sidekiq/README.md
     labels:
-      aggregation: component
+      aggregation: component_shard
       alert_class: slo_violation
       alert_type: symptom
       feature_category: in_source_metrics
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s4
       sli_type: error
       slo_alert: "yes"
       user_impacting: "yes"
@@ -3164,26 +3167,28 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_1h{component="sidekiq_execution",env!~"gprd|ops",monitor="global",type="sidekiq"}
+          gitlab_component_shard_errors:ratio_1h{component="sidekiq_execution",env!~"gprd|ops",monitor="global",type="sidekiq"}
           > (14.4 * 0.005000)
         )
         and
         (
-          gitlab_component_errors:ratio_5m{component="sidekiq_execution",env!~"gprd|ops",monitor="global",type="sidekiq"}
+          gitlab_component_shard_errors:ratio_5m{component="sidekiq_execution",env!~"gprd|ops",monitor="global",type="sidekiq"}
           > (14.4 * 0.005000)
         )
       )
-      and on(env,environment,tier,type,stage,component)
+      and on(env,environment,tier,type,stage,shard,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_1h{component="sidekiq_execution",env!~"gprd|ops",monitor="global",type="sidekiq"}) >= 1
+        sum by(env,environment,tier,type,stage,shard,component) (gitlab_component_shard_ops:rate_1h{component="sidekiq_execution",env!~"gprd|ops",monitor="global",type="sidekiq"}) >= 1
       )
-  - alert: SidekiqServiceSidekiqExecutionErrorSLOViolation
-    for: 2m
+  - alert: SidekiqServiceSidekiqExecutionErrorSLOViolationSingleShard
+    for: 10m
     annotations:
       title: The sidekiq_execution SLI of the sidekiq service on shard `{{ $labels.shard
-        }}` (`{{ $labels.stage }}` stage) has an error rate violating SLO
+        }}` has an error rate violating SLO
       description: |
         The number of Sidekiq jobs meeting their execution duration target based on the urgency of the worker. By default, execution of a job should take no more than 300 seconds. But this can be adjusted by the urgency of the worker.
+
+        Since the `{{ $labels.type }}` service is not fully redundant, SLI violations on a single shard may represent a user-impacting service degradation.
 
         Currently the error-rate is {{ $value | humanizePercentage }}.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
@@ -3193,18 +3198,17 @@ groups:
       grafana_panel_id: "4267233911"
       grafana_variables: environment,stage
       promql_template_1: |
-        sum by (env,environment,tier,stage) (
-          sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate5m{environment="{{ $labels.environment }}",stage="{{ $labels.stage }}",type="sidekiq"}
+        sum by (env,environment,tier,stage,shard) (
+          sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate5m{environment="{{ $labels.environment }}",external_dependencies!="yes",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}",type="sidekiq"}
         )
       runbook: docs/sidekiq/README.md
     labels:
-      aggregation: component
+      aggregation: component_shard
       alert_class: slo_violation
       alert_type: symptom
       feature_category: in_source_metrics
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s4
       sli_type: error
       slo_alert: "yes"
       user_impacting: "yes"
@@ -3212,29 +3216,30 @@ groups:
     expr: |
       (
         (
-          gitlab_component_errors:ratio_6h{component="sidekiq_execution",env!~"gprd|ops",monitor="global",type="sidekiq"}
+          gitlab_component_shard_errors:ratio_6h{component="sidekiq_execution",env!~"gprd|ops",monitor="global",type="sidekiq"}
           > (6 * 0.005000)
         )
         and
         (
-          gitlab_component_errors:ratio_30m{component="sidekiq_execution",env!~"gprd|ops",monitor="global",type="sidekiq"}
+          gitlab_component_shard_errors:ratio_30m{component="sidekiq_execution",env!~"gprd|ops",monitor="global",type="sidekiq"}
           > (6 * 0.005000)
         )
       )
-      and on(env,environment,tier,type,stage,component)
+      and on(env,environment,tier,type,stage,shard,component)
       (
-        sum by(env,environment,tier,type,stage,component) (gitlab_component_ops:rate_6h{component="sidekiq_execution",env!~"gprd|ops",monitor="global",type="sidekiq"}) >= 0.16667
+        sum by(env,environment,tier,type,stage,shard,component) (gitlab_component_shard_ops:rate_6h{component="sidekiq_execution",env!~"gprd|ops",monitor="global",type="sidekiq"}) >= 0.16667
       )
-  - alert: SidekiqServiceSidekiqExecutionTrafficCessation
+  - alert: SidekiqServiceSidekiqExecutionTrafficCessationSingleShard
     for: 5m
     annotations:
-      title: The sidekiq_execution SLI of the sidekiq service (`{{ $labels.stage }}`
-        stage) has not received any traffic in the past 30m (shard `{{ $labels.shard
-        }})`
+      title: The sidekiq_execution SLI of the sidekiq service on shard `{{ $labels.shard
+        }}` has not received any traffic in the past 30m
       description: |
         The number of Sidekiq jobs meeting their execution duration target based on the urgency of the worker. By default, execution of a job should take no more than 300 seconds. But this can be adjusted by the urgency of the worker.
 
         This alert signifies that the SLI is reporting a cessation of traffic; the signal is present, but is zero.
+
+        Since the `{{ $labels.type }}` service is not fully redundant, SLI violations on a single shard may represent a user-impacting service degradation.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -3243,7 +3248,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,shard) (
-          sli_aggregations:gitlab_sli_sidekiq_execution_total_rate5m{environment="{{ $labels.environment }}",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}",type="sidekiq"}
+          sli_aggregations:gitlab_sli_sidekiq_execution_total_rate5m{environment="{{ $labels.environment }}",external_dependencies!="yes",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}",type="sidekiq"}
         )
       runbook: docs/sidekiq/README.md
     labels:
@@ -3251,28 +3256,28 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: in_source_metrics
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s4
       sli_type: ops
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_shard_ops:rate_30m{component="sidekiq_execution",env!~"gprd|ops",monitor="global",stage="main",type="sidekiq"} == 0
+      gitlab_component_shard_ops:rate_30m{component="sidekiq_execution",env!~"gprd|ops",monitor="global",type="sidekiq"} == 0
       and
-      gitlab_component_shard_ops:rate_30m{component="sidekiq_execution",env!~"gprd|ops",monitor="global",stage="main",type="sidekiq"} offset 1h >= 0.16666666666666666
-  - alert: SidekiqServiceSidekiqExecutionTrafficAbsent
+      gitlab_component_shard_ops:rate_30m{component="sidekiq_execution",env!~"gprd|ops",monitor="global",type="sidekiq"} offset 1h >= 0.16666666666666666
+  - alert: SidekiqServiceSidekiqExecutionTrafficAbsentSingleShard
     for: 30m
     annotations:
-      title: The sidekiq_execution SLI of the sidekiq service (`{{ $labels.stage }}`
-        stage) has not reported any traffic in the past 30m (shard `{{ $labels.shard
-        }})`
+      title: The sidekiq_execution SLI of the sidekiq service on shard `{{ $labels.shard
+        }}` has not reported any traffic in the past 30m
       description: |
         The number of Sidekiq jobs meeting their execution duration target based on the urgency of the worker. By default, execution of a job should take no more than 300 seconds. But this can be adjusted by the urgency of the worker.
 
         This alert signifies that the SLI was previously reporting traffic, but is no longer - the signal is absent.
 
         This could be caused by a change to the metrics used in the SLI, or by the service not receiving traffic.
+
+        Since the `{{ $labels.type }}` service is not fully redundant, SLI violations on a single shard may represent a user-impacting service degradation.
       grafana_dashboard_id: sidekiq-main/sidekiq-overview
       grafana_dashboard_link: https://dashboards.gitlab.net/d/sidekiq-main/sidekiq-overview?from=now-6h/m&to=now-1m/m&var-environment={{
         $labels.environment }}&var-stage={{ $labels.stage }}
@@ -3281,7 +3286,7 @@ groups:
       grafana_variables: environment,stage
       promql_template_1: |
         sum by (env,environment,tier,stage,shard) (
-          sli_aggregations:gitlab_sli_sidekiq_execution_total_rate5m{environment="{{ $labels.environment }}",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}",type="sidekiq"}
+          sli_aggregations:gitlab_sli_sidekiq_execution_total_rate5m{environment="{{ $labels.environment }}",external_dependencies!="yes",shard="{{ $labels.shard }}",stage="{{ $labels.stage }}",type="sidekiq"}
         )
       runbook: docs/sidekiq/README.md
     labels:
@@ -3289,13 +3294,12 @@ groups:
       alert_class: traffic_cessation
       alert_type: cause
       feature_category: in_source_metrics
-      pager: pagerduty
       rules_domain: general
-      severity: s2
+      severity: s4
       sli_type: ops
       slo_alert: "no"
       user_impacting: "yes"
     expr: |
-      gitlab_component_shard_ops:rate_5m{component="sidekiq_execution",env!~"gprd|ops",monitor="global",stage="main",type="sidekiq"} offset 1h
+      gitlab_component_shard_ops:rate_5m{component="sidekiq_execution",env!~"gprd|ops",monitor="global",type="sidekiq"} offset 1h
       unless
-      gitlab_component_shard_ops:rate_5m{component="sidekiq_execution",env!~"gprd|ops",monitor="global",stage="main",type="sidekiq"}
+      gitlab_component_shard_ops:rate_5m{component="sidekiq_execution",env!~"gprd|ops",monitor="global",type="sidekiq"}

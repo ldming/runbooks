@@ -6,7 +6,7 @@ groups:
   rules:
   - record: gitlab:component:feature_category:execution:apdex:success:rate_5m
     labels:
-      component: sidekiq_execution
+      component: sidekiq_execution_per_shard
     expr: |
       sum by (env,environment,tier,type,stage,feature_category) (
         label_replace(sum by (env,environment,tier,type,stage,feature_category) (
@@ -26,7 +26,7 @@ groups:
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_5m
     labels:
-      component: sidekiq_execution
+      component: sidekiq_execution_per_shard
     expr: |
       sum by (env,environment,tier,type,stage,feature_category) (
         label_replace(sum by (env,environment,tier,type,stage,feature_category) (
@@ -46,14 +46,14 @@ groups:
       )
   - record: gitlab:component:feature_category:execution:ops:rate_5m
     labels:
-      component: sidekiq_execution
+      component: sidekiq_execution_per_shard
     expr: |
       sum by (env,environment,tier,type,stage,feature_category) (
         sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate5m{le="+Inf"}
       )
   - record: gitlab:component:feature_category:execution:error:rate_5m
     labels:
-      component: sidekiq_execution
+      component: sidekiq_execution_per_shard
     expr: |
       sum by (env,environment,tier,type,stage,feature_category) (
         sli_aggregations:sidekiq_jobs_failed_total_rate5m{}
@@ -61,12 +61,12 @@ groups:
       or
       (
         0 * group by (env,environment,tier,type,stage,feature_category) (
-          gitlab:component:feature_category:execution:ops:rate_5m{component="sidekiq_execution"}
+          gitlab:component:feature_category:execution:ops:rate_5m{component="sidekiq_execution_per_shard"}
         )
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_30m
     labels:
-      component: sidekiq_execution
+      component: sidekiq_execution_per_shard
     expr: |
       sum by (env,environment,tier,type,stage,feature_category) (
         label_replace(sum by (env,environment,tier,type,stage,feature_category) (
@@ -86,7 +86,7 @@ groups:
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_30m
     labels:
-      component: sidekiq_execution
+      component: sidekiq_execution_per_shard
     expr: |
       sum by (env,environment,tier,type,stage,feature_category) (
         label_replace(sum by (env,environment,tier,type,stage,feature_category) (
@@ -106,14 +106,14 @@ groups:
       )
   - record: gitlab:component:feature_category:execution:ops:rate_30m
     labels:
-      component: sidekiq_execution
+      component: sidekiq_execution_per_shard
     expr: |
       sum by (env,environment,tier,type,stage,feature_category) (
         sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate30m{le="+Inf"}
       )
   - record: gitlab:component:feature_category:execution:error:rate_30m
     labels:
-      component: sidekiq_execution
+      component: sidekiq_execution_per_shard
     expr: |
       sum by (env,environment,tier,type,stage,feature_category) (
         sli_aggregations:sidekiq_jobs_failed_total_rate30m{}
@@ -121,12 +121,12 @@ groups:
       or
       (
         0 * group by (env,environment,tier,type,stage,feature_category) (
-          gitlab:component:feature_category:execution:ops:rate_30m{component="sidekiq_execution"}
+          gitlab:component:feature_category:execution:ops:rate_30m{component="sidekiq_execution_per_shard"}
         )
       )
   - record: gitlab:component:feature_category:execution:apdex:success:rate_1h
     labels:
-      component: sidekiq_execution
+      component: sidekiq_execution_per_shard
     expr: |
       sum by (env,environment,tier,type,stage,feature_category) (
         label_replace(sum by (env,environment,tier,type,stage,feature_category) (
@@ -146,7 +146,7 @@ groups:
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_1h
     labels:
-      component: sidekiq_execution
+      component: sidekiq_execution_per_shard
     expr: |
       sum by (env,environment,tier,type,stage,feature_category) (
         label_replace(sum by (env,environment,tier,type,stage,feature_category) (
@@ -166,14 +166,14 @@ groups:
       )
   - record: gitlab:component:feature_category:execution:ops:rate_1h
     labels:
-      component: sidekiq_execution
+      component: sidekiq_execution_per_shard
     expr: |
       sum by (env,environment,tier,type,stage,feature_category) (
         sli_aggregations:sidekiq_jobs_completion_seconds_bucket_rate1h{le="+Inf"}
       )
   - record: gitlab:component:feature_category:execution:error:rate_1h
     labels:
-      component: sidekiq_execution
+      component: sidekiq_execution_per_shard
     expr: |
       sum by (env,environment,tier,type,stage,feature_category) (
         sli_aggregations:sidekiq_jobs_failed_total_rate1h{}
@@ -181,6 +181,6 @@ groups:
       or
       (
         0 * group by (env,environment,tier,type,stage,feature_category) (
-          gitlab:component:feature_category:execution:ops:rate_1h{component="sidekiq_execution"}
+          gitlab:component:feature_category:execution:ops:rate_1h{component="sidekiq_execution_per_shard"}
         )
       )

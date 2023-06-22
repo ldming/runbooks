@@ -22,7 +22,7 @@ local minimumSamplesForTrafficCessation = 300;
 local nodeAlertWaitPeriod = '10m';
 
 local alertDescriptors = [{
-  predicate: function(service) true,
+  predicate: function(service, sli) !sli.shardLevelMonitoring,
   alertSuffix: '',
   alertTitleTemplate: 'The %(sliName)s SLI of the %(serviceType)s service (`{{ $labels.stage }}` stage)',
   alertExtraDetail: null,
@@ -32,7 +32,7 @@ local alertDescriptors = [{
   trafficCessationSelector: { stage: 'main' },  // Don't alert on cny stage traffic cessation for now
   minimumSamplesForTrafficCessation: minimumSamplesForTrafficCessation,
 }, {
-  predicate: function(service) service.nodeLevelMonitoring,
+  predicate: function(service, sli) service.nodeLevelMonitoring,
   alertSuffix: 'SingleNode',
   alertTitleTemplate: 'The %(sliName)s SLI of the %(serviceType)s service on node `{{ $labels.fqdn }}`',
   alertExtraDetail: 'Since the `{{ $labels.type }}` service is not fully redundant, SLI violations on a single node may represent a user-impacting service degradation.',
@@ -42,7 +42,7 @@ local alertDescriptors = [{
   trafficCessationSelector: {},
   minimumSamplesForTrafficCessation: minimumSamplesForTrafficCessation,
 }, {
-  predicate: function(service) service.regional,
+  predicate: function(service, sli) service.regional,
   alertSuffix: 'Regional',
   alertTitleTemplate: 'The %(sliName)s SLI of the %(serviceType)s service in region `{{ $labels.region }}`',
   alertExtraDetail: 'Note that this alert is specific to the `{{ $labels.region }}` region.',
@@ -50,6 +50,16 @@ local alertDescriptors = [{
   minimumSamplesForMonitoring: minimumSamplesForMonitoring,
   alertForDuration: null,  // Use default for window...
   trafficCessationSelector: { stage: 'main' },  // Don't alert on cny stage traffic cessation for now
+  minimumSamplesForTrafficCessation: minimumSamplesForTrafficCessation,
+}, {
+  predicate: function(service, sli) sli.shardLevelMonitoring,
+  alertSuffix: 'SingleShard',
+  alertTitleTemplate: 'The %(sliName)s SLI of the %(serviceType)s service on shard `{{ $labels.shard }}`',
+  alertExtraDetail: 'Since the `{{ $labels.type }}` service is not fully redundant, SLI violations on a single shard may represent a user-impacting service degradation.',
+  aggregationSet: aggregationSets.shardComponentSLIs,
+  minimumSamplesForMonitoring: minimumSamplesForMonitoring,
+  alertForDuration: nodeAlertWaitPeriod,
+  trafficCessationSelector: {},
   minimumSamplesForTrafficCessation: minimumSamplesForTrafficCessation,
 }];
 

@@ -173,7 +173,6 @@ local aggregationSet = import 'servicemetrics/aggregation-set.libsonnet';
     intermediateSource: true,  // Not intended for consumption in dashboards or alerts
     selector: { monitor: { ne: 'global' } },  // Not Thanos Ruler
     labels: ['environment', 'tier', 'type', 'stage', 'shard', 'component'],
-    supportedBurnRates: ['5m', '30m', '1h', '6h'],  // Including 6h
     metricFormats: {
       apdexSuccessRate: 'gitlab_component_shard_apdex:success:rate_%s',
       apdexWeight: 'gitlab_component_shard_apdex:weight:score_%s',

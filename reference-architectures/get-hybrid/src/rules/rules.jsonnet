@@ -19,6 +19,7 @@ local groupsForService(service) =
     service,
     componentAggregationSet=aggregationSets.componentSLIs,
     nodeAggregationSet=aggregationSets.nodeComponentSLIs,
+    shardAggregationSet=aggregationSets.shardComponentSLIs
   );
 
 local serviceSLISGroups =

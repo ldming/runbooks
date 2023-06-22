@@ -81,7 +81,7 @@ local list = [
   }),
   sliDefinition.new({
     name: 'sidekiq_execution',
-    significantLabels: ['worker', 'feature_category', 'urgency'],
+    significantLabels: ['worker', 'feature_category', 'urgency', 'external_dependencies'],
     kinds: [sliDefinition.apdexKind, sliDefinition.errorRateKind],
     description: |||
       The number of Sidekiq jobs meeting their execution duration target based on the urgency of the worker.

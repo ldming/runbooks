@@ -101,62 +101,28 @@ groups:
       )
   - record: gitlab_component_shard_ops:rate_6h
     expr: |
-      (
-        sum by (env,environment,tier,type,stage,shard,component) (
-          (gitlab_component_shard_ops:rate_6h{env!~"gprd|ops",monitor!="global"} >= 0)
-        )
-      )
-      or
-      (
-        sum by (env,environment,tier,type,stage,shard,component) (
-          avg_over_time(gitlab_component_shard_ops:rate_1h{env!~"gprd|ops",monitor!="global",upscale_source="yes"}[6h])
-        )
+      sum by (env,environment,tier,type,stage,shard,component) (
+        avg_over_time(gitlab_component_shard_ops:rate_1h{env!~"gprd|ops",monitor!="global"}[6h])
       )
   - record: gitlab_component_shard_errors:ratio_6h
     expr: |
-      (
-        sum by (env,environment,tier,type,stage,shard,component)(
-          (gitlab_component_shard_errors:rate_6h{env!~"gprd|ops",monitor!="global"} >= 0)
-        )
-        /
-        sum by (env,environment,tier,type,stage,shard,component)(
-          (gitlab_component_shard_ops:rate_6h{env!~"gprd|ops",monitor!="global"} >= 0)
-          and
-          (gitlab_component_shard_errors:rate_6h{env!~"gprd|ops",monitor!="global"} >= 0)
-        )
+      sum by (env,environment,tier,type,stage,shard,component) (
+        sum_over_time(gitlab_component_shard_errors:rate_1h{env!~"gprd|ops",monitor!="global"}[6h])
       )
-      or
-      (
-        sum by (env,environment,tier,type,stage,shard,component) (
-          sum_over_time(gitlab_component_shard_errors:rate_1h{env!~"gprd|ops",monitor!="global",upscale_source="yes"}[6h])
-        )
-        /
-        sum by (env,environment,tier,type,stage,shard,component) (
-          sum_over_time(gitlab_component_shard_ops:rate_1h{env!~"gprd|ops",monitor!="global",upscale_source="yes"}[6h])
-          and
-          gitlab_component_shard_errors:rate_1h{env!~"gprd|ops",monitor!="global",upscale_source="yes"} >= 0
-        )
+      /
+      sum by (env,environment,tier,type,stage,shard,component) (
+        sum_over_time(gitlab_component_shard_ops:rate_1h{env!~"gprd|ops",monitor!="global"}[6h])
+        and
+        gitlab_component_shard_errors:rate_1h{env!~"gprd|ops",monitor!="global"} >= 0
       )
   - record: gitlab_component_shard_apdex:ratio_6h
     expr: |
-      (
-        sum by (env,environment,tier,type,stage,shard,component) (
-          (gitlab_component_shard_apdex:success:rate_6h{env!~"gprd|ops",monitor!="global"} >= 0)
-        )
-        /
-        sum by (env,environment,tier,type,stage,shard,component) (
-          (gitlab_component_shard_apdex:weight:score_6h{env!~"gprd|ops",monitor!="global"} >= 0)
-        )
+      sum by (env,environment,tier,type,stage,shard,component) (
+        sum_over_time(gitlab_component_shard_apdex:success:rate_1h{env!~"gprd|ops",monitor!="global"}[6h])
       )
-      or
-      (
-        sum by (env,environment,tier,type,stage,shard,component) (
-          sum_over_time(gitlab_component_shard_apdex:success:rate_1h{env!~"gprd|ops",monitor!="global",upscale_source="yes"}[6h])
-        )
-        /
-        sum by (env,environment,tier,type,stage,shard,component) (
-          sum_over_time(gitlab_component_shard_apdex:weight:score_1h{env!~"gprd|ops",monitor!="global",upscale_source="yes"}[6h])
-        )
+      /
+      sum by (env,environment,tier,type,stage,shard,component) (
+        sum_over_time(gitlab_component_shard_apdex:weight:score_1h{env!~"gprd|ops",monitor!="global"}[6h])
       )
   - record: gitlab_component_shard_ops:rate_3d
     expr: |

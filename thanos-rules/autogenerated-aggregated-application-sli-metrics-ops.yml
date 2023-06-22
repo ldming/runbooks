@@ -232,41 +232,41 @@ groups:
   rules:
   - record: application_sli_aggregation:sidekiq_execution:error:rate_5m
     expr: |
-      sum by (env,environment,tier,type,stage,worker,feature_category,urgency) (
+      sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies) (
         (sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate5m{env="ops",monitor!="global"} >= 0)
       )
   - record: application_sli_aggregation:sidekiq_execution:ops:rate_5m
     expr: |
-      sum by (env,environment,tier,type,stage,worker,feature_category,urgency) (
+      sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies) (
         (sli_aggregations:gitlab_sli_sidekiq_execution_total_rate5m{env="ops",monitor!="global"} >= 0)
       )
   - record: application_sli_aggregation:sidekiq_execution:apdex:weight:score_5m
     expr: |
-      sum by (env,environment,tier,type,stage,worker,feature_category,urgency) (
+      sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies) (
         (sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total_rate5m{env="ops",monitor!="global"} >= 0)
       )
   - record: application_sli_aggregation:sidekiq_execution:apdex:success:rate_5m
     expr: |
-      sum by (env,environment,tier,type,stage,worker,feature_category,urgency) (
+      sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies) (
         (sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total_rate5m{env="ops",monitor!="global"} >= 0)
       )
   - record: application_sli_aggregation:sidekiq_execution:error:rate_1h
     expr: |
-      sum by (env,environment,tier,type,stage,worker,feature_category,urgency) (
+      sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies) (
         (sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate1h{env="ops",monitor!="global"} >= 0)
       )
   - record: application_sli_aggregation:sidekiq_execution:ops:rate_1h
     expr: |
-      sum by (env,environment,tier,type,stage,worker,feature_category,urgency) (
+      sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies) (
         (sli_aggregations:gitlab_sli_sidekiq_execution_total_rate1h{env="ops",monitor!="global"} >= 0)
       )
   - record: application_sli_aggregation:sidekiq_execution:apdex:weight:score_1h
     expr: |
-      sum by (env,environment,tier,type,stage,worker,feature_category,urgency) (
+      sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies) (
         (sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total_rate1h{env="ops",monitor!="global"} >= 0)
       )
   - record: application_sli_aggregation:sidekiq_execution:apdex:success:rate_1h
     expr: |
-      sum by (env,environment,tier,type,stage,worker,feature_category,urgency) (
+      sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies) (
         (sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total_rate1h{env="ops",monitor!="global"} >= 0)
       )

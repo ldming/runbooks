@@ -19,6 +19,7 @@ teams:
   product_stage_group: distribution_deploy
   ignored_components:
   - graphql_query
+  - sidekiq_execution
 - name: geo
   url: https://about.gitlab.com/handbook/engineering/dev-backend/geo/
   slack_channel: g_geo
@@ -27,6 +28,7 @@ teams:
   product_stage_group: geo
   ignored_components:
   - graphql_query
+  - sidekiq_execution
 
 - name: gitaly
   url: https://about.gitlab.com/handbook/engineering/dev-backend/gitaly/
@@ -34,6 +36,7 @@ teams:
   product_stage_group: gitaly
   ignored_components:
   - graphql_query
+  - sidekiq_execution
 
 - name: manage
   url: https://about.gitlab.com/handbook/engineering/dev-backend/manage/
@@ -56,6 +59,7 @@ teams:
   slack_error_budget_channel: cd-section
   ignored_components:
   - graphql_query
+  - sidekiq_execution
 
 - name: release-management
   url: https://about.gitlab.com/handbook/engineering/development/ci-cd/release/release-management/
@@ -79,6 +83,7 @@ teams:
   slack_error_budget_channel: ci-section
   ignored_components:
   - graphql_query
+  - sidekiq_execution
 
 - name: package_registry
   url: https://about.gitlab.com/handbook/engineering/development/ops/package/package-registry/
@@ -90,6 +95,7 @@ teams:
   slack_error_budget_channel: ci-section
   ignored_components:
   - graphql_query
+  - sidekiq_execution
 
 - name: runner
   product_stage_group: runner
@@ -98,6 +104,7 @@ teams:
   slack_error_budget_channel: ci-section
   ignored_components:
   - graphql_query
+  - sidekiq_execution
 
 # From https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/344
 - name: gitlab-pages
@@ -114,6 +121,7 @@ teams:
   product_stage_group: delivery
   ignored_components:
   - graphql_query
+  - sidekiq_execution
 
 - name: scalability
   url: https://about.gitlab.com/handbook/engineering/infrastructure/team/scalability/
@@ -123,6 +131,7 @@ teams:
   product_stage_group: scalability
   ignored_components:
   - graphql_query
+  - sidekiq_execution
 
 - name: scalability-619-redis-k8s
   slack_alerts_channel: scalability-619-redis-k8s
@@ -154,6 +163,7 @@ teams:
   send_slo_alerts_to_team_slack_channel: true
   ignored_components:
   - graphql_query
+  - sidekiq_execution
 
 - name: global_search
   manager: changzhengliu
@@ -162,15 +172,18 @@ teams:
   product_stage_group: global_search
   ignored_components:
   - graphql_query
+  - sidekiq_execution
 
 - name: 5-min-app
   product_stage_group: 5-min-app
   ignored_components:
   - graphql_query
+  - sidekiq_execution
 - name: activation
   product_stage_group: activation
   ignored_components:
   - graphql_query
+  - sidekiq_execution
 
 - name: ai_assisted
   url: https://about.gitlab.com/handbook/engineering/development/data-science/ai-assisted/
@@ -182,6 +195,7 @@ teams:
   product_stage_group: ai_assisted
   ignored_components:
   - graphql_query
+  - sidekiq_execution
   slack_error_budget_channel: g_mlops-alerts
   send_error_budget_weekly_to_slack: true
 
@@ -189,72 +203,88 @@ teams:
   product_stage_group: code_review
   ignored_components:
   - graphql_query
+  - sidekiq_execution
 - name: compliance
   product_stage_group: compliance
   slack_error_budget_channel: g_govern_compliance
   send_error_budget_weekly_to_slack: true
   ignored_components:
   - graphql_query
+  - sidekiq_execution
 - name: composition_analysis
   product_stage_group: composition_analysis
   ignored_components:
   - graphql_query
+  - sidekiq_execution
 - name: acquisition
   product_stage_group: acquisition
   ignored_components:
   - graphql_query
+  - sidekiq_execution
 - name: database
   product_stage_group: database
   ignored_components:
   - graphql_query
+  - sidekiq_execution
 - name: dataops
   product_stage_group: dataops
   ignored_components:
   - graphql_query
+  - sidekiq_execution
 - name: dynamic_analysis
   product_stage_group: dynamic_analysis
   slack_error_budget_channel: g_secure-dynamic-analysis
   send_error_budget_weekly_to_slack: true
   ignored_components:
   - graphql_query
+  - sidekiq_execution
 - name: ide
   product_stage_group: ide
   ignored_components:
   - graphql_query
+  - sidekiq_execution
 - name: foundations
   product_stage_group: foundations
   ignored_components:
   - graphql_query
+  - sidekiq_execution
 - name: dedicated
   product_stage_group: dedicated
   ignored_components:
   - graphql_query
+  - sidekiq_execution
 - name: import_and_integrate
   product_stage_group: import_and_integrate
   ignored_components:
   - graphql_query
+  - sidekiq_execution
 - name: provision
   product_stage_group: provision
   ignored_components:
   - graphql_query
+  - sidekiq_execution
 - name: application_performance
   product_stage_group: application_performance
   ignored_components:
   - graphql_query
+  - sidekiq_execution
 - name: mlops
   product_stage_group: mlops
   ignored_components:
   - graphql_query
+  - sidekiq_execution
 - name: mobile_devops
   product_stage_group: mobile_devops
   ignored_components:
   - graphql_query
+  - sidekiq_execution
 - name: respond
   product_stage_group: respond
   send_error_budget_weekly_to_slack: true
   slack_error_budget_channel: s_monitor
   ignored_components:
   - graphql_query
+  - sidekiq_execution
 - name: observability
   product_stage_group: observability
   slack_alerts_channel: g_observability_alerts
@@ -264,10 +294,12 @@ teams:
   - gstg
   ignored_components:
   - graphql_query
+  - sidekiq_execution
 - name: optimize
   product_stage_group: optimize
   ignored_components:
   - graphql_query
+  - sidekiq_execution
 - name: pipeline_authoring
   product_stage_group: pipeline_authoring
   send_slo_alerts_to_team_slack_channel: true
@@ -276,6 +308,7 @@ teams:
   slack_error_budget_channel: ci-section
   ignored_components:
   - graphql_query
+  - sidekiq_execution
 - name: pipeline_execution
   product_stage_group: pipeline_execution
   slack_channel: g_pipeline-execution
@@ -285,33 +318,42 @@ teams:
   send_error_budget_weekly_to_slack: true
   ignored_components:
   - graphql_query
+  - sidekiq_execution
 - name: analytics_instrumentation
   product_stage_group: analytics_instrumentation
   ignored_components:
   - graphql_query
+  - sidekiq_execution
 - name: product_planning
   product_stage_group: product_planning
   slack_alerts_channel: s_plan-be
   ignored_components:
   - graphql_query
+  - sidekiq_execution
 - name: project_management
   product_stage_group: project_management
   ignored_components:
   - graphql_query
+  - sidekiq_execution
 - name: purchase
   product_stage_group: purchase
   ignored_components:
   - graphql_query
+  - sidekiq_execution
 - name: tenant_scale
   product_stage_group: tenant_scale
   ignored_components:
   - graphql_query
+  - sidekiq_execution
 - name: source_code
   product_stage_group: source_code
   ignored_components:
   - graphql_query
+  - sidekiq_execution
 - name: static_analysis
   product_stage_group: static_analysis
+  ignored_components:
+  - sidekiq_execution
   slack_error_budget_channel: g_secure-static-analysis
   send_error_budget_weekly_to_slack: true
 - name: pipeline_security
@@ -324,32 +366,40 @@ teams:
   send_error_budget_weekly_to_slack: true
   ignored_components:
   - graphql_query
+  - sidekiq_execution
 - name: threat_insights
   product_stage_group: threat_insights
   ignored_components:
   - graphql_query
+  - sidekiq_execution
   slack_error_budget_channel: g_govern_threat_insights
   send_error_budget_weekly_to_slack: true
 - name: billing_and_subscription_management
   product_stage_group: billing_and_subscription_management
   ignored_components:
   - graphql_query
+  - sidekiq_execution
 - name: utilization
   product_stage_group: utilization
   ignored_components:
   - graphql_query
+  - sidekiq_execution
 - name: vulnerability_research
   product_stage_group: vulnerability_research
   ignored_components:
   - graphql_query
+  - sidekiq_execution
 - name: fulfillment_platform
   product_stage_group: fulfillment_platform
   slack_alerts_channel: s_fulfillment_status
   send_slo_alerts_to_team_slack_channel: true
   ignored_components:
   - graphql_query
+  - sidekiq_execution
 - name: security_policies
   product_stage_group: security_policies
+  ignored_components:
+  - sidekiq_execution
   slack_error_budget_channel: g_govern_security_policies
   send_error_budget_weekly_to_slack: true
 
@@ -397,5 +447,7 @@ teams:
 
 - name: anti-abuse
   product_stage_group: anti-abuse
+  ignored_components:
+  - sidekiq_execution
   slack_error_budget_channel: g_anti-abuse
   send_error_budget_weekly_to_slack: true

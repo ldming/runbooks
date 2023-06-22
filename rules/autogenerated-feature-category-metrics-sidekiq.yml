@@ -69,7 +69,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (env,environment,stage,feature_category) (
-        sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total_rate5m{type="sidekiq"}
+        sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total_rate5m{external_dependencies!="yes",type="sidekiq"}
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_5m
     labels:
@@ -78,7 +78,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (env,environment,stage,feature_category) (
-        sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total_rate5m{type="sidekiq"}
+        sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total_rate5m{external_dependencies!="yes",type="sidekiq"}
       )
   - record: gitlab:component:feature_category:execution:ops:rate_5m
     labels:
@@ -87,7 +87,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (env,environment,stage,feature_category) (
-        sli_aggregations:gitlab_sli_sidekiq_execution_total_rate5m{type="sidekiq"}
+        sli_aggregations:gitlab_sli_sidekiq_execution_total_rate5m{external_dependencies!="yes",type="sidekiq"}
       )
   - record: gitlab:component:feature_category:execution:error:rate_5m
     labels:
@@ -97,7 +97,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage,feature_category) (
-          sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate5m{type="sidekiq"}
+          sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate5m{external_dependencies!="yes",type="sidekiq"}
         )
       )
       or
@@ -174,7 +174,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (env,environment,stage,feature_category) (
-        sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total_rate30m{type="sidekiq"}
+        sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total_rate30m{external_dependencies!="yes",type="sidekiq"}
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_30m
     labels:
@@ -183,7 +183,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (env,environment,stage,feature_category) (
-        sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total_rate30m{type="sidekiq"}
+        sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total_rate30m{external_dependencies!="yes",type="sidekiq"}
       )
   - record: gitlab:component:feature_category:execution:ops:rate_30m
     labels:
@@ -192,7 +192,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (env,environment,stage,feature_category) (
-        sli_aggregations:gitlab_sli_sidekiq_execution_total_rate30m{type="sidekiq"}
+        sli_aggregations:gitlab_sli_sidekiq_execution_total_rate30m{external_dependencies!="yes",type="sidekiq"}
       )
   - record: gitlab:component:feature_category:execution:error:rate_30m
     labels:
@@ -202,7 +202,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage,feature_category) (
-          sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate30m{type="sidekiq"}
+          sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate30m{external_dependencies!="yes",type="sidekiq"}
         )
       )
       or
@@ -279,7 +279,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (env,environment,stage,feature_category) (
-        sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total_rate1h{type="sidekiq"}
+        sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total_rate1h{external_dependencies!="yes",type="sidekiq"}
       )
   - record: gitlab:component:feature_category:execution:apdex:weight:score_1h
     labels:
@@ -288,7 +288,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (env,environment,stage,feature_category) (
-        sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total_rate1h{type="sidekiq"}
+        sli_aggregations:gitlab_sli_sidekiq_execution_apdex_total_rate1h{external_dependencies!="yes",type="sidekiq"}
       )
   - record: gitlab:component:feature_category:execution:ops:rate_1h
     labels:
@@ -297,7 +297,7 @@ groups:
       type: sidekiq
     expr: |
       sum by (env,environment,stage,feature_category) (
-        sli_aggregations:gitlab_sli_sidekiq_execution_total_rate1h{type="sidekiq"}
+        sli_aggregations:gitlab_sli_sidekiq_execution_total_rate1h{external_dependencies!="yes",type="sidekiq"}
       )
   - record: gitlab:component:feature_category:execution:error:rate_1h
     labels:
@@ -307,7 +307,7 @@ groups:
     expr: |
       (
         sum by (env,environment,stage,feature_category) (
-          sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate1h{type="sidekiq"}
+          sli_aggregations:gitlab_sli_sidekiq_execution_error_total_rate1h{external_dependencies!="yes",type="sidekiq"}
         )
       )
       or
