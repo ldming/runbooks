@@ -19,13 +19,13 @@ VM_NAME="bkp${RESTORE}" # How the VM should be named
 
 # Main flow
 # Check what we're restoring
-if [[ ! "${RESTORE}" =~ ^(license|version|customers)$ ]]; then
+if [[ ! ${RESTORE} =~ ^(license|version|customers)$ ]]; then
   echo "Box to test restore should be one of: license, version, customers"
   exit 1
 else
   RESTORE_IMAGE='ubuntu-14-04-x64'
   RESTORE_PG_VER='9.3'
-  if [[ "${RESTORE}" == 'customers' ]]; then
+  if [[ ${RESTORE} == 'customers' ]]; then
     RESTORE_IMAGE='ubuntu-16-04-x64'
     RESTORE_PG_VER='9.5'
   fi

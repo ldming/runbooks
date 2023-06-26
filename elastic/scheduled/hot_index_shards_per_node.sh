@@ -17,11 +17,11 @@ set -euo pipefail
 dry_run=0
 while getopts 'n' opt; do
   case "$opt" in
-    n) dry_run=1 ;;
-    *)
-      echo 'error in command line parsing' >&2
-      exit 1
-      ;;
+  n) dry_run=1 ;;
+  *)
+    echo 'error in command line parsing' >&2
+    exit 1
+    ;;
   esac
 done
 
@@ -57,7 +57,7 @@ echo '{}' |
 # apply settings to all indices
 while IFS= read -r index; do
   echo "applying ${index}"
-  if [[ "$dry_run" -eq 0 ]]; then
+  if [[ $dry_run -eq 0 ]]; then
     curl -s -XPUT "$ELASTICSEARCH_URL/${index}/_settings" -H 'Content-Type: application/json' -d "$(cat "${TMPDIR}/settings.txt")"
     echo
   fi

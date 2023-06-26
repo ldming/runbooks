@@ -13,7 +13,7 @@ promtool 2.34.0 # datasource=github-releases depName=prometheus/prometheus
 python system
 ruby 3.2.2 # datasource=ruby-version depName=ruby/ruby
 shellcheck 0.9.0 # datasource=github-releases depName=koalaman/shellcheck
-shfmt 3.6.0 # datasource=github-releases depName=mvdan/sh
+shfmt 3.7.0 # datasource=github-releases depName=mvdan/sh
 terraform 1.5.1 # datasource=github-releases depName=hashicorp/terraform
 thanos 0.26.0 # datasource=github-releases depName=thanos-io/thanos
 vault 1.14.0 # datasource=github-releases depName=hashicorp/vault

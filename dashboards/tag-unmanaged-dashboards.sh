@@ -29,14 +29,14 @@ EOF
 
 while getopts ":Dh" o; do
   case "${o}" in
-    D)
-      dry_run="true"
-      ;;
-    h)
-      usage
-      exit 0
-      ;;
-    *) ;;
+  D)
+    dry_run="true"
+    ;;
+  h)
+    usage
+    exit 0
+    ;;
+  *) ;;
 
   esac
 done
@@ -45,7 +45,7 @@ shift $((OPTIND - 1))
 
 dry_run="${dry_run:-}"
 
-if [[ -z "${GRAFANA_API_TOKEN:-}" ]]; then
+if [[ -z ${GRAFANA_API_TOKEN:-} ]]; then
   echo "You must set GRAFANA_API_TOKEN to use this script, or run in dry run mode"
   usage
   exit 1
@@ -67,7 +67,7 @@ add_tag() {
   '
 }
 
-if [[ -n "${dry_run}" ]]; then
+if [[ -n ${dry_run} ]]; then
   find_unmanaged_dashboards | jq -r '.[] | [.id, .uid, .url, .title]|@csv'
 else
   find_unmanaged_dashboards | jq -rcM '.[].uid' | while read -r dashboard_uid; do

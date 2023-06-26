@@ -1,6 +1,6 @@
 #!/bin/sh
 
-ROOT_DIR="$( cd "$( dirname "$0" )/.." && pwd )"
+ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 
 BAD_URLS=$(find "${ROOT_DIR}" -type f -name '*.md' -print0 | xargs -0 grep -Eo 'log.gprd.gitlab.net/app/kibana\S*_g=\S+_a=\S+')
 

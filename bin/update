@@ -7,7 +7,7 @@ cd "$(dirname "$0")/.."
 DEFAULT_BRANCH="master"
 CURRENT_BRANCH=$(git branch --show-current)
 
-if [[ ! "$CURRENT_BRANCH" = "$DEFAULT_BRANCH" ]]; then
+if [[ ! $CURRENT_BRANCH == "$DEFAULT_BRANCH" ]]; then
   echo >&2 "glsh: Not on default branch, default branch: \"$DEFAULT_BRANCH\" current branch: \"$CURRENT_BRANCH\""
   exit 1
 fi

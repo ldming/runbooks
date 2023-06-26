@@ -2,14 +2,14 @@
 
 set -euf -o pipefail
 
-_BRED="\\033[1;31m"
-_NORM="\\033[0m"
-_CYN="\\033[0;36m"
-_BCYN="\\033[1;36m"
-_YEL="\\033[0;33m"
-_WHT="\\033[0;37m"
-_BBLK="\\033[1;30m"
-_BWHT="\\033[1;37m"
+_BRED='\033[1;31m'
+_NORM='\033[0m'
+_CYN='\033[0;36m'
+_BCYN='\033[1;36m'
+_YEL='\033[0;33m'
+_WHT='\033[0;37m'
+_BBLK='\033[1;30m'
+_BWHT='\033[1;37m'
 
 # check if gcloud is installed
 command -v gcloud >/dev/null 2>&1 || {
@@ -103,16 +103,16 @@ onInstances() {
     fi
 
     case "${instanceAction:-}" in
-      addTag)
-        networkTag "$instanceName" "$instanceZone" "add-tags"
-        ;;
-      removeTag)
-        networkTag "$instanceName" "$instanceZone" "remove-tags"
-        ;;
-      *)
-        echo "Invalid action: $instanceAction"
-        exit 1
-        ;;
+    addTag)
+      networkTag "$instanceName" "$instanceZone" "add-tags"
+      ;;
+    removeTag)
+      networkTag "$instanceName" "$instanceZone" "remove-tags"
+      ;;
+    *)
+      echo "Invalid action: $instanceAction"
+      exit 1
+      ;;
     esac
   done
 }
@@ -123,20 +123,20 @@ networkTag() {
   local action="$3"
 
   case "${action:-}" in
-    add-tags)
-      if networkTagExists "$instanceName"; then
-        return
-      fi
-      ;;
-    remove-tags)
-      if ! networkTagExists "$instanceName"; then
-        return
-      fi
-      ;;
-    *)
-      echo -e "${_BRED}Invalid action: $action!${_NORM}"
-      exit 1
-      ;;
+  add-tags)
+    if networkTagExists "$instanceName"; then
+      return
+    fi
+    ;;
+  remove-tags)
+    if ! networkTagExists "$instanceName"; then
+      return
+    fi
+    ;;
+  *)
+    echo -e "${_BRED}Invalid action: $action!${_NORM}"
+    exit 1
+    ;;
   esac
 
   echo -e "${_WHT}--> Running ${_BCYN}$action${_WHT} '$networkTag' on ${instanceName}${_NORM}"
@@ -157,47 +157,47 @@ allow() {
 
 main() {
   case "${env:-}" in
-    gstg)
-      project="gitlab-staging-1"
-      prefixExclusions=(
-        "blackbox-"
-        "console-"
-        "deploy-"
-        "file-"
-        "geo-secondary-"
-        "packer-gitaly-"
-        "packer-verify-"
-        "qa-tests-runner-"
-        "runner-"
-        "sd-exporter-"
-        "teleport-"
-        "thanos-compact-"
-        "ubuntu"
-      )
-      networkName="gstg"
-      ;;
-    pre)
-      project="gitlab-pre"
-      prefixExclusions=(
-        "bastion-"
-        "console-"
-        "consul-"
-        "deploy-"
-        "fe-"
-        "gitaly-"
-        "praefect-"
-        "prometheus-"
-        "sd-exporter-"
-        "thanos-compact-"
-      )
-      networkName="pre"
-      ;;
-    *)
-      echo -e "${_BRED}Invalid env: ${env:-not set}!${_NORM}"
-      echo ""
-      usage
-      exit 1
-      ;;
+  gstg)
+    project="gitlab-staging-1"
+    prefixExclusions=(
+      "blackbox-"
+      "console-"
+      "deploy-"
+      "file-"
+      "geo-secondary-"
+      "packer-gitaly-"
+      "packer-verify-"
+      "qa-tests-runner-"
+      "runner-"
+      "sd-exporter-"
+      "teleport-"
+      "thanos-compact-"
+      "ubuntu"
+    )
+    networkName="gstg"
+    ;;
+  pre)
+    project="gitlab-pre"
+    prefixExclusions=(
+      "bastion-"
+      "console-"
+      "consul-"
+      "deploy-"
+      "fe-"
+      "gitaly-"
+      "praefect-"
+      "prometheus-"
+      "sd-exporter-"
+      "thanos-compact-"
+    )
+    networkName="pre"
+    ;;
+  *)
+    echo -e "${_BRED}Invalid env: ${env:-not set}!${_NORM}"
+    echo ""
+    usage
+    exit 1
+    ;;
   esac
 
   if ! [[ ${zone:-} =~ us-east1-[bcd] ]]; then
@@ -219,44 +219,44 @@ main() {
   fi
 
   case "${action:-}" in
-    deny)
-      if ! [[ ${dryRun:-} == true ]]; then
-        echo -e "${_CYN}You are about to run the zone denier on $project for zone $zone${_NORM}"
-        echo "Press any key to continue ..."
-        read -rp ""
-      fi
-      deny
-      ;;
-    allow)
-      allow
-      ;;
-    *)
-      echo -e "${_BRED}Invalid action: ${action:-not set}!${_NORM}"
-      echo ""
-      usage
-      exit 1
-      ;;
+  deny)
+    if ! [[ ${dryRun:-} == true ]]; then
+      echo -e "${_CYN}You are about to run the zone denier on $project for zone $zone${_NORM}"
+      echo "Press any key to continue ..."
+      read -rp ""
+    fi
+    deny
+    ;;
+  allow)
+    allow
+    ;;
+  *)
+    echo -e "${_BRED}Invalid action: ${action:-not set}!${_NORM}"
+    echo ""
+    usage
+    exit 1
+    ;;
   esac
 }
 
 while getopts "h?a:e:z:d" opt; do
   case "$opt" in
-    h | \?)
-      usage
-      exit 0
-      ;;
-    a)
-      action=${OPTARG}
-      ;;
-    e)
-      env=${OPTARG}
-      ;;
-    z)
-      zone=${OPTARG}
-      ;;
-    d)
-      dryRun=true
-      ;;
+  h | \?)
+    usage
+    exit 0
+    ;;
+  a)
+    action=${OPTARG}
+    ;;
+  e)
+    env=${OPTARG}
+    ;;
+  z)
+    zone=${OPTARG}
+    ;;
+  d)
+    dryRun=true
+    ;;
   esac
 done
 shift $((OPTIND - 1))

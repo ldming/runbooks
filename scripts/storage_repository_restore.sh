@@ -40,10 +40,10 @@ function storage_repository_restore() {
   set +e
   moved_git_path=$(find "${dir_path}" -maxdepth 1 -name "${repo_name}+*+moved+*.git" | grep -v wiki)
   set -e
-  if [[ -z "${moved_git_path}" || ! -d "${moved_git_path}" ]]; then
+  if [[ -z ${moved_git_path} || ! -d ${moved_git_path} ]]; then
     echo "Error: No moved git repository found at given disk path: \
 ${REPOSITORIES_DIR_PATH}/${disk_path}+*+moved+*.git"
-    if [[ "${dry_run}" != "no" && ! -d "${REPOSITORIES_DIR_PATH}/${disk_path}.git" ]]; then
+    if [[ ${dry_run} != "no" && ! -d "${REPOSITORIES_DIR_PATH}/${disk_path}.git" ]]; then
       exit 1
     fi
     echo "Warning: The repository may have already been restored"
@@ -53,13 +53,13 @@ ${REPOSITORIES_DIR_PATH}/${disk_path}+*+moved+*.git"
   set +e
   moved_wiki_git_path=$(find "${dir_path}" -maxdepth 1 -name "${repo_name}+*+moved+*.wiki.git")
   set -e
-  if [[ ! -d "${moved_wiki_git_path}" ]]; then
+  if [[ ! -d ${moved_wiki_git_path} ]]; then
     echo "Warning: No moved wiki repository found at given disk path: \
 ${REPOSITORIES_DIR_PATH}/${disk_path}+*+moved+*.wiki.git"
   fi
 
-  if [[ "${dry_run}" != "no" ]]; then
-    if [[ -z "${moved_git_path}" || -z "${moved_wiki_git_path}" ]]; then
+  if [[ ${dry_run} != "no" ]]; then
+    if [[ -z ${moved_git_path} || -z ${moved_wiki_git_path} ]]; then
       exit 1
     fi
   fi
@@ -72,7 +72,7 @@ ${REPOSITORIES_DIR_PATH}/${disk_path}+*+moved+*.wiki.git"
   dry_run_cmd="ls -ld \"${moved_git_path}\" \"${moved_wiki_git_path}\"; \
   ls -ld \"${original_git_path}\" \"${original_wiki_git_path}\""
 
-  if [[ "${dry_run}" == "no" ]]; then
+  if [[ ${dry_run} == "no" ]]; then
     echo "Executing command: ${cmd}"
     eval "${cmd}"
   else
@@ -88,20 +88,20 @@ function main() {
 
 while [ $# -gt 0 ]; do
   case "$1" in
-    --dry-run*)
-      if [[ "$1" != *=* ]]; then
-        shift
-      fi
-      dry_run="${1#*=}"
-      ;;
-    --help | -h | -?)
-      usage
-      ;;
-    *)
-      # >&2 printf "Error: Invalid argument\n"
-      # exit 1
-      disk_path=${1}
-      ;;
+  --dry-run*)
+    if [[ $1 != *=* ]]; then
+      shift
+    fi
+    dry_run="${1#*=}"
+    ;;
+  --help | -h | -?)
+    usage
+    ;;
+  *)
+    # >&2 printf "Error: Invalid argument\n"
+    # exit 1
+    disk_path=${1}
+    ;;
   esac
   shift
 done

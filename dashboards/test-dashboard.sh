@@ -35,14 +35,14 @@ EOF
 
 while getopts ":Dh" o; do
   case "${o}" in
-    D)
-      dry_run="true"
-      ;;
-    h)
-      usage
-      exit 0
-      ;;
-    *) ;;
+  D)
+    dry_run="true"
+    ;;
+  h)
+    usage
+    exit 0
+    ;;
+  *) ;;
 
   esac
 done
@@ -70,7 +70,7 @@ else
   fi
 
   dashboard_json=$(generate_dashboards_for_file "${dashboard_file}")
-  if [[ -z "$dashboard_json" ]]; then
+  if [[ -z $dashboard_json ]]; then
     echo 'Empty dashboard. Ignored!'
     exit 0
   fi

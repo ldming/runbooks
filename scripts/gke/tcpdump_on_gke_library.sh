@@ -38,34 +38,34 @@ function make_output_dir_in_toolbox() {
 
 function find_default_net_iface_for_host() {
   NET_IFACE=$(ip route | awk '/^default/ { print $5 }')
-  [[ -n "$NET_IFACE" ]] || die "Could not identify default network interface for host."
+  [[ -n $NET_IFACE ]] || die "Could not identify default network interface for host."
 }
 
 function find_net_iface_for_pod_id() {
   assert_is_pod_id "${POD_ID}"
   NET_IFACE=$(crictl inspectp "${POD_ID}" | toolbox jq -r '.info.cniResult.Interfaces | with_entries(select(.value.IPConfigs | not)) | keys[0]' 2>/dev/null)
-  [[ -n "${NET_IFACE}" ]] || die "Could not identify virtual network interface for pod."
+  [[ -n ${NET_IFACE} ]] || die "Could not identify virtual network interface for pod."
 }
 
 function find_netns_for_pod_id() {
   assert_is_pod_id "${POD_ID}"
   NET_NS_PATH=$(crictl inspectp "${POD_ID}" | toolbox jq -r '.info.runtimeSpec.linux.namespaces[] | select(.type == "network") | .path' 2>/dev/null)
-  [[ -n "${NET_NS_PATH}" ]] || die "Could not identify network namespace for pod."
+  [[ -n ${NET_NS_PATH} ]] || die "Could not identify network namespace for pod."
 }
 
 function run_tcpdump_in_toolbox_for_iface() {
-  [[ -n "${MAX_DURATION_SECONDS}" ]] || die "Max capture duration is not defined."
-  [[ -n "${NET_IFACE}" ]] || die "Network interface to capture is not defined."
-  [[ -n "${PCAP_FILENAME}" ]] || die "Pcap filename pattern is not defined."
+  [[ -n ${MAX_DURATION_SECONDS} ]] || die "Max capture duration is not defined."
+  [[ -n ${NET_IFACE} ]] || die "Network interface to capture is not defined."
+  [[ -n ${PCAP_FILENAME} ]] || die "Pcap filename pattern is not defined."
   echo "Capturing to pcap file: ${PCAP_FILENAME}"
   toolbox timeout --preserve-status --signal INT "${MAX_DURATION_SECONDS}" \
     tcpdump -v -i "${NET_IFACE}" -w "${OUTPUT_DIR_INSIDE_TOOLBOX}/${PCAP_FILENAME}" "${EXTRA_TCPDUMP_ARGS[@]}"
 }
 
 function run_tcpdump_in_toolbox_for_netns() {
-  [[ -n "${MAX_DURATION_SECONDS}" ]] || die "Max capture duration is not defined."
-  [[ -n "${NET_NS_PATH}" ]] || die "Network namespace path to enter for capture is not defined."
-  [[ -n "${PCAP_FILENAME}" ]] || die "Pcap filename pattern is not defined."
+  [[ -n ${MAX_DURATION_SECONDS} ]] || die "Max capture duration is not defined."
+  [[ -n ${NET_NS_PATH} ]] || die "Network namespace path to enter for capture is not defined."
+  [[ -n ${PCAP_FILENAME} ]] || die "Pcap filename pattern is not defined."
   echo "Capturing to pcap file: ${PCAP_FILENAME}"
   toolbox --network-namespace-path="${NET_NS_PATH}" \
     timeout --preserve-status --signal INT "${MAX_DURATION_SECONDS}" \
@@ -74,7 +74,7 @@ function run_tcpdump_in_toolbox_for_netns() {
 
 function compress_pcap_file() {
   echo "Compressing pcap file."
-  [[ -n "${PCAP_FILENAME}" ]] || die "Pcap filename pattern is not defined."
+  [[ -n ${PCAP_FILENAME} ]] || die "Pcap filename pattern is not defined."
   # We use a wildcard suffix here in case the caller configured tcpdump to do a rotating capture.
   # In that special case, tcpdump appends a counter or timestamp suffix to the filename pattern.
   toolbox find "${OUTPUT_DIR_INSIDE_TOOLBOX}" -name "${PCAP_FILENAME}*" -type f -exec gzip -v {} \; 2>/dev/null
@@ -87,7 +87,7 @@ function show_pcap_file() {
 
 function assert_is_pod_id() {
   local POD_ID=$1
-  [[ "$POD_ID" =~ ^[0-9a-f]{10,64}$ ]] || die "Invalid pod id: '$POD_ID'"
+  [[ $POD_ID =~ ^[0-9a-f]{10,64}$ ]] || die "Invalid pod id: '$POD_ID'"
 }
 
 function die() {

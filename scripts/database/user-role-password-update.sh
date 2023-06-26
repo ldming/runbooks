@@ -67,7 +67,7 @@ function psql_command() {
 
 function update_user_password() {
   echo "Updating password for user: ${username}"
-  if [[ "${run_mode}" == "--wet-run" ]]; then
+  if [[ ${run_mode} == "--wet-run" ]]; then
     echo "Executing psql command: ${update_user_password_redacted_command}"
     # Ensure that the following command invocation is not displayed
     set +x
@@ -91,7 +91,7 @@ function exit_unless_running_on_patroni_leader() {
   is_patroni_leader
   local is_leader=$?
   set -e
-  if [[ "${is_leader}" != '0' ]]; then
+  if [[ ${is_leader} != '0' ]]; then
     echo "FATAL: The current host ${current_host} is NOT the patroni leader; aborting"
     exit
   fi
@@ -120,7 +120,7 @@ function list_all_connections_except_my_session() {
 
 function terminate_database_connection_session() {
   echo "Terminating database session connection(s) for user role ${username}"
-  if [[ "${run_mode}" == "--wet-run" ]]; then
+  if [[ ${run_mode} == "--wet-run" ]]; then
     echo "Executing psql command: ${terminate_database_connection_session_command}"
     set -x
     psql_command "${terminate_database_connection_session_command}"

@@ -21,7 +21,7 @@ dir_path=$(dirname "${REPOSITORIES_DIR_PATH}/${disk_path}")
 repo_name=$(basename "${disk_path}")
 repository_path=$(find "${dir_path}" -maxdepth 1 -name "${repo_name}*.git" | grep -v wiki)
 
-if [[ -z "${repository_path}" ]]; then
+if [[ -z ${repository_path} ]]; then
   echo "Error: Given disk path seems invalid: ${disk_path}"
   exit 1
 fi

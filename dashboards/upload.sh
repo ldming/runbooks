@@ -38,14 +38,14 @@ EOF
 
 while getopts ":Dh" o; do
   case "${o}" in
-    D)
-      dry_run="true"
-      ;;
-    h)
-      usage
-      exit 0
-      ;;
-    *) ;;
+  D)
+    dry_run="true"
+    ;;
+  h)
+    usage
+    exit 0
+    ;;
+  *) ;;
 
   esac
 done
@@ -94,7 +94,7 @@ function generate_dashboard_requests() {
     fi
 
     dashboard_json=$(cat "generated/$line")
-    if [[ -z "$dashboard_json" ]]; then
+    if [[ -z $dashboard_json ]]; then
       if [[ -n $dry_run ]]; then
         echo "Running in dry run mode, ignored empty dashboard $line!"
       else
@@ -120,7 +120,7 @@ else
   trap 'rm -rf "${tmpfile}"' EXIT
 
   generate_dashboard_requests "$@" | while IFS= read -r request; do
-    if [[ -n "$request" ]]; then
+    if [[ -n $request ]]; then
       uid=$(echo "${request}" | jq -r '.dashboard.uid')
       # Use http1.1 and gzip compression to workaround unexplainable random errors that
       # occur when uploading some dashboards

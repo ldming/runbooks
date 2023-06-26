@@ -13,7 +13,7 @@ function main() {
 
 function usage() {
   local ERROR_MESSAGE=$1
-  [[ -n "$ERROR_MESSAGE" ]] && echo "Error: $ERROR_MESSAGE" && echo
+  [[ -n $ERROR_MESSAGE ]] && echo "Error: $ERROR_MESSAGE" && echo
 
   cat <<'HERE'
 Usage: ip_addr_for_pod_id.sh [pod id]

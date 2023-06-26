@@ -16,7 +16,7 @@ fi
 project="$1"
 storage_target="$2"
 
-if [[ -z "${GITLAB_GPRD_ADMIN_API_PRIVATE_TOKEN-}" ]]; then
+if [[ -z ${GITLAB_GPRD_ADMIN_API_PRIVATE_TOKEN-} ]]; then
   echo 'ERROR: Missing GITLAB_GPRD_ADMIN_API_PRIVATE_TOKEN env var'
   exit 1
 fi
@@ -41,7 +41,7 @@ get_project_json() {
 is_move_finished() {
   local state
   state="$(curl_project_api "$1" | jq '.state')"
-  if [[ "${state}" == "finished" ]]; then
+  if [[ ${state} == "finished" ]]; then
     return 0
   fi
   return 1
@@ -49,21 +49,21 @@ is_move_finished() {
 
 project_json=$(get_project_json "${project}")
 
-if [[ -z "${project_json}" ]]; then
+if [[ -z ${project_json} ]]; then
   echo "ERROR: Unable to get project json for '${project}'"
   exit 1
 fi
 
 project_id="$(echo -n "${project_json}" | jq -r '.id')"
 
-if [[ ! "${project_id}" -gt 0 ]]; then
+if [[ ! ${project_id} -gt 0 ]]; then
   echo "ERROR: Unable to get project ID for '${project}'"
   exit 1
 fi
 
 original_storage_target="$(curl_project_api "${project_id}" | jq -r '.repository_storage')"
 
-if [[ "${original_storage_target}" == "${storage_target}" ]]; then
+if [[ ${original_storage_target} == "${storage_target}" ]]; then
   echo "INFO: Project already on ${original_storage_target}"
   exit 0
 fi
@@ -75,7 +75,7 @@ move_json="$(curl_project_api "${project_id}/repository_storage_moves" --request
 
 move_id="$(echo -n "${move_json}" | jq -r '.id')"
 
-if [[ ! "${move_id}" -gt 0 ]]; then
+if [[ ! ${move_id} -gt 0 ]]; then
   echo "ERROR: Unable to start move '${move_json}'"
   exit 1
 fi
@@ -93,7 +93,7 @@ done
 
 new_storage_target="$(get_project_json "${project}" | jq -r '.repository_storage')"
 
-if [[ "${storage_target}" == "${new_storage_target}" ]]; then
+if [[ ${storage_target} == "${new_storage_target}" ]]; then
   echo "INFO: Completed move to ${new_storage_target}"
 else
   echo "INFO: Error moving, still on ${new_storage_target}"

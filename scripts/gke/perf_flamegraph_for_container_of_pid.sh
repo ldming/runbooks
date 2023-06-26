@@ -5,7 +5,7 @@ set -o errexit
 
 function usage() {
   ERROR_MESSAGE=$1
-  [[ -n "$ERROR_MESSAGE" ]] && echo "Error: $ERROR_MESSAGE" && echo
+  [[ -n $ERROR_MESSAGE ]] && echo "Error: $ERROR_MESSAGE" && echo
 
   cat <<HERE
 Usage: perf_flamegraph_for_container_of_pid.sh [pid]
@@ -21,7 +21,7 @@ function is_gke() {
     return 1
   fi
   . /etc/os-release
-  [[ "$ID" = "cos" ]]
+  [[ $ID == "cos" ]]
 }
 
 function gke_install_flamegraph_pl() {
@@ -42,13 +42,13 @@ function main() {
 
   [[ $1 =~ ^-h|--help$ ]] && usage
   [[ $# -eq 1 ]] || usage "Wrong number of arguments"
-  [[ "$CHOSEN_PID" =~ ^[0-9,]+$ ]] || usage "Invalid PID: '$CHOSEN_PID'"
+  [[ $CHOSEN_PID =~ ^[0-9,]+$ ]] || usage "Invalid PID: '$CHOSEN_PID'"
 
   is_gke && gke_install_flamegraph_pl
 
   # Find the given PID's container CPU cgroup.
   CONTAINER_CGROUP=$(awk -F':' '$2 == "cpu,cpuacct" { print $3 }' "/proc/$CHOSEN_PID/cgroup")
-  [[ -z "$CONTAINER_CGROUP" ]] && echo "ERROR: PID $CHOSEN_PID does not appear to have a cgroup" && exit 1
+  [[ -z $CONTAINER_CGROUP ]] && echo "ERROR: PID $CHOSEN_PID does not appear to have a cgroup" && exit 1
   echo "Target PID $CHOSEN_PID belongs to cgroup: $CONTAINER_CGROUP"
 
   # Use a temp dir.  This avoids polluting current dir and supports concurrent runs of this script.

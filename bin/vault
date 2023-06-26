@@ -23,13 +23,13 @@ usage() {
 }
 
 init() {
-  if [ "$1" = '-' ];then
-      cat <<EOF
+  if [ "$1" = '-' ]; then
+    cat <<EOF
 VAULT_ADDR="${VAULT_ADDR}"; export VAULT_ADDR
 vault-proxy() { eval "\$(glsh vault proxy "\$@")"; }
 EOF
   else
-      cat >&2 <<'EOF'
+    cat >&2 <<'EOF'
 # Initialize your Vault environment automatically by appending the following
 # to ~/.bashrc or ~/.zshrc:
 
@@ -66,7 +66,7 @@ proxy() {
   fi
 }
 
-cleanup () {
+cleanup() {
   rm -f "$tmpfile"
 }
 
@@ -74,7 +74,7 @@ get_secret() {
   mount=$1
   path=$2
   tmpfile=$3
-  vault kv get -format=json -mount="$mount" "$path" |jq '.data.data' > "$tmpfile"
+  vault kv get -format=json -mount="$mount" "$path" | jq '.data.data' >"$tmpfile"
 }
 
 show_secret() {
@@ -89,7 +89,7 @@ show_secret() {
   cleanup
 }
 
-edit_secret(){
+edit_secret() {
   mount=$1
   path=$2
   tmpfile=$(mktemp /tmp/vault-secret.XXXXXX)
@@ -102,13 +102,13 @@ edit_secret(){
     export EDITOR
   fi
 
-  BEFORE_SUM=$(sha256sum "$tmpfile" | cut -d" " -f1 )
+  BEFORE_SUM=$(sha256sum "$tmpfile" | cut -d" " -f1)
   $EDITOR "$tmpfile"
   AFTER_SUM=$(sha256sum "$tmpfile" | cut -d" " -f1)
 
   if [ "$BEFORE_SUM" = "$AFTER_SUM" ]; then
-  echo "No changes; not uploading to Vault" 1>&2
-  exit
+    echo "No changes; not uploading to Vault" 1>&2
+    exit
   fi
 
   echo "Checking file is valid json"
@@ -124,40 +124,41 @@ edit_secret(){
 }
 
 check_json() {
-    local tempfile="$(mktemp)"
-    if ! jq . "$1" > "$tempfile"; then
-        echo "Aborting, invalid json." 1>&2
-        rm -f "${tempfile}"
-        cleanup
-        exit 1
-    else
-        mv "${tempfile}" "$1"
-        rm -f "${tempfile}"
-    fi
+  local tempfile="$(mktemp)"
+  if ! jq . "$1" >"$tempfile"; then
+    echo "Aborting, invalid json." 1>&2
+    rm -f "${tempfile}"
+    cleanup
+    exit 1
+  else
+    mv "${tempfile}" "$1"
+    rm -f "${tempfile}"
+  fi
 }
 
 case $1 in
-    init)
-        shift
-        init "$@"
-        ;;
-    login)
-        shift
-        login "$@"
-        ;;
-    proxy)
-        shift
-        proxy "$@"
-        ;;
-    show-secret)
-        shift
-        show_secret "$@"
-        ;;
-    edit-secret)
-        shift
-        edit_secret "$@"
-        ;;
-    *)
-        usage
-        exit 2
+init)
+  shift
+  init "$@"
+  ;;
+login)
+  shift
+  login "$@"
+  ;;
+proxy)
+  shift
+  proxy "$@"
+  ;;
+show-secret)
+  shift
+  show_secret "$@"
+  ;;
+edit-secret)
+  shift
+  edit_secret "$@"
+  ;;
+*)
+  usage
+  exit 2
+  ;;
 esac

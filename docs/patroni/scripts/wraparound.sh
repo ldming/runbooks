@@ -22,10 +22,10 @@ percent=95
 while getopts m:s:p:h option; do
   case "${option}" in
 
-    m) mode=${OPTARG} ;;    #mode check/generate
-    s) size=${OPTARG} ;;    #size threshold of tables
-    p) percent=${OPTARG} ;; #% of age
-    h) help ;;
+  m) mode=${OPTARG} ;;    #mode check/generate
+  s) size=${OPTARG} ;;    #size threshold of tables
+  p) percent=${OPTARG} ;; #% of age
+  h) help ;;
   esac
 done
 

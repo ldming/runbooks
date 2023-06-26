@@ -100,32 +100,32 @@ list_dups() {
 }
 
 case $1 in
-  get-repos)
-    get_repos
-    ;;
+get-repos)
+  get_repos
+  ;;
 
-  dup-dirs)
-    sort_files
-    find_dups 'file-[0-9][0-9].txt.sorted'
-    list_dups 'dups_*_*.sorted.txt' | sort | tee -a $DATADIR/dup_repos.txt
-    ;;
+dup-dirs)
+  sort_files
+  find_dups 'file-[0-9][0-9].txt.sorted'
+  list_dups 'dups_*_*.sorted.txt' | sort | tee -a $DATADIR/dup_repos.txt
+  ;;
 
-  dup-hashes)
-    sort_files
-    get_unique_hashes
-    find_dups 'file-[0-9][0-9].txt.sorted_hashes'
-    list_dups 'dups_*_*.sorted_hashes.txt' | sort | tee -a $DATADIR/dup_hashes.txt
-    ;;
+dup-hashes)
+  sort_files
+  get_unique_hashes
+  find_dups 'file-[0-9][0-9].txt.sorted_hashes'
+  list_dups 'dups_*_*.sorted_hashes.txt' | sort | tee -a $DATADIR/dup_hashes.txt
+  ;;
 
-  list-dup-dirs)
-    list_dups 'dups_*_*.sorted.txt' | sort | tee $DATADIR/dup_repos.txt
-    ;;
+list-dup-dirs)
+  list_dups 'dups_*_*.sorted.txt' | sort | tee $DATADIR/dup_repos.txt
+  ;;
 
-  list-dup-hashes)
-    list_dups 'dups_*_*.sorted_hashes.txt' | sort | tee $DATADIR/dup_hashes.txt
-    ;;
+list-dup-hashes)
+  list_dups 'dups_*_*.sorted_hashes.txt' | sort | tee $DATADIR/dup_hashes.txt
+  ;;
 
-  *)
-    usage
-    ;;
+*)
+  usage
+  ;;
 esac

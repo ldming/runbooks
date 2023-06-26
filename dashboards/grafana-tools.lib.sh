@@ -98,14 +98,14 @@ function generate_dashboards_for_file() {
   folder=${GRAFANA_FOLDER:-$(dirname "$relative")}
   uid="${folder}-${basename%%.*}"
 
-  if [[ "$file" == *".shared.jsonnet" ]]; then
+  if [[ $file == *".shared.jsonnet" ]]; then
     compiled_json=$(jsonnet_compile "${file}")
     if [[ $(echo "${compiled_json}" | jq 'length') -eq '0' ]]; then
       echo ''
     else
       echo "${compiled_json}" | augment_shared_dashboards "${folder}"
     fi
-  elif [[ "$file" == *".jsonnet" ]]; then
+  elif [[ $file == *".jsonnet" ]]; then
     compiled_json=$(jsonnet_compile "${file}")
     if [[ $(echo "${compiled_json}" | jq 'length') -eq '0' ]]; then
       echo ''

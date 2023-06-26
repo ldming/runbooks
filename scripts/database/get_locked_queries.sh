@@ -1,6 +1,6 @@
 #!/bin/bash
-su - gitlab-psql -c "/opt/gitlab/embedded/bin/psql -h /var/opt/gitlab/postgresql template1 <<EOF
-\\x on
+su - gitlab-psql -c '/opt/gitlab/embedded/bin/psql -h /var/opt/gitlab/postgresql template1 <<EOF
+\x on
 SELECT blockingl.relation::regclass,
   blockeda.pid AS blocked_pid, blockeda.query as blocked_query,
   blockedl.mode as blocked_mode,
@@ -14,4 +14,4 @@ JOIN pg_catalog.pg_locks blockingl ON(blockingl.relation=blockedl.relation
   AND blockingl.locktype=blockedl.locktype AND blockedl.pid != blockingl.pid)
 JOIN pg_stat_activity blockinga ON blockingl.pid = blockinga.pid
 WHERE NOT blockedl.granted;
-EOF"
+EOF'

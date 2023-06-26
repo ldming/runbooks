@@ -82,7 +82,7 @@ function psql_command() {
 
 function add_user() {
   echo "Adding new user: ${new_username}"
-  if [[ "${run_mode}" == "--wet-run" ]]; then
+  if [[ ${run_mode} == "--wet-run" ]]; then
     echo "Executing psql command: ${create_user_redacted_command}"
     # Ensure that the following command invocation is not displayed
     set +x
@@ -106,7 +106,7 @@ function exit_unless_running_on_patroni_leader() {
   is_patroni_leader
   local is_leader=$?
   set -e
-  if [[ "${is_leader}" != '0' ]]; then
+  if [[ ${is_leader} != '0' ]]; then
     echo "FATAL: The current host ${current_host} is NOT the patroni leader; aborting"
     exit
   fi
@@ -127,7 +127,7 @@ function find_new_role() {
   show_new_user
   new_user_tuple=$?
   set -e
-  if [[ "${new_user_tuple}" == '1' ]]; then
+  if [[ ${new_user_tuple} == '1' ]]; then
     echo "The new ${new_username} role has not yet been added to the database"
   else
     echo "A new role has been added to the database: ${new_username}"
@@ -136,7 +136,7 @@ function find_new_role() {
 
 function grant_all_privileges() {
   echo "Granting all privileges to: ${new_username}"
-  if [[ "${run_mode}" == "--wet-run" ]]; then
+  if [[ ${run_mode} == "--wet-run" ]]; then
     echo "Executing psql command: ${grant_all_command}"
     set -x
     psql_command "${grant_all_command}"
@@ -159,7 +159,7 @@ function list_owned_tables() {
 # documentation of how to accomplish this.
 function reassign_owned_objects() {
   echo "Re-assigning ownership settings for ${old_username} to ${new_username}"
-  if [[ "${run_mode}" == "--wet-run" ]]; then
+  if [[ ${run_mode} == "--wet-run" ]]; then
     echo "Executing psql command: ${reassigned_owned_command}"
     set -x
     psql_command "${reassigned_owned_command};"
@@ -172,7 +172,7 @@ function reassign_owned_objects() {
 
 function set_statement_timeout_for_role() {
   echo "Setting statement_timeout to 0 for role: ${new_username} "
-  if [[ "${run_mode}" == "--wet-run" ]]; then
+  if [[ ${run_mode} == "--wet-run" ]]; then
     echo "Executing psql command: ${alter_role_statement_timeout_command}"
     set -x
     psql_command "${alter_role_statement_timeout_command};"

@@ -15,7 +15,7 @@ function main() {
 
 function usage() {
   local ERROR_MESSAGE=$1
-  [[ -n "$ERROR_MESSAGE" ]] && echo "Error: $ERROR_MESSAGE" && echo
+  [[ -n $ERROR_MESSAGE ]] && echo "Error: $ERROR_MESSAGE" && echo
 
   cat <<'HERE'
 Usage: container_id_for_pid.sh [pid]

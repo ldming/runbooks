@@ -31,7 +31,7 @@ install_plugin() {
     } >&2
   fi
 
-  [[ "${plugin}" == 'ruby' ]] && update_ruby_build
+  [[ ${plugin} == 'ruby' ]] && update_ruby_build
   echo "# Installing ${plugin} version"
   asdf install "${plugin}" || {
     echo "Failed to install plugin version: ${plugin}"
@@ -71,7 +71,7 @@ check_global_golang_install() {
 # Install golang first as some of the other plugins require it.
 install_plugin golang
 
-if [[ -z "${CI:-}" ]]; then
+if [[ -z ${CI:-} ]]; then
   # The go-jsonnet plugin requires a global golang version to be configured
   # and will otherwise fail to install.
   #

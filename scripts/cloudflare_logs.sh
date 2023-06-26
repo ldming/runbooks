@@ -37,65 +37,65 @@ VERSION=2
 
 while getopts "e:b:d:t:h12" OPTION; do
   case $OPTION in
-    e)
-      case $OPTARG in
-        gprd)
-          ENVIRONMENT="${OPTARG}"
-          PROJECT="gitlab-production"
-          ;;
-        gstg)
-          ENVIRONMENT="${OPTARG}"
-          PROJECT="gitlab-staging-1"
-          ;;
-        ops)
-          ENVIRONMENT="${OPTARG}"
-          PROJECT="gitlab-ops"
-          ;;
-        *)
-          echo "Invalid environment. Valid: gprd, gstg, ops" 1>&2
-          exit 1
-          ;;
-      esac
+  e)
+    case $OPTARG in
+    gprd)
+      ENVIRONMENT="${OPTARG}"
+      PROJECT="gitlab-production"
       ;;
-    1)
-      VERSION=1
+    gstg)
+      ENVIRONMENT="${OPTARG}"
+      PROJECT="gitlab-staging-1"
       ;;
-    2)
-      VERSION=2
-      ;;
-    d)
-      if $DATE_CMD --date "${OPTARG}" &>/dev/null; then
-        DATE="${OPTARG}"
-      else
-        echo "Invalid time. Valid: HH:MM (24h time)" 1>&2
-      fi
-      ;;
-    t)
-      case $OPTARG in
-        http)
-          TYPE="http"
-          ;;
-        spectrum)
-          TYPE="spectrum"
-          ;;
-      esac
-      ;;
-    b)
-      if [ -n "${OPTARG}" ] && [ "${OPTARG}" -eq "${OPTARG}" ] 2>/dev/null; then
-        LOOKBACK=$(echo "${OPTARG} - ${OPTARG}%5" | bc)
-      else
-        echo "Invalid lookback. Valid: time in minutes (5 minute increments)" 1>&2
-      fi
-      ;;
-    h)
-      help
-      exit 0
+    ops)
+      ENVIRONMENT="${OPTARG}"
+      PROJECT="gitlab-ops"
       ;;
     *)
-      echo "Incorrect options provided" 1>&2
-      help
+      echo "Invalid environment. Valid: gprd, gstg, ops" 1>&2
       exit 1
       ;;
+    esac
+    ;;
+  1)
+    VERSION=1
+    ;;
+  2)
+    VERSION=2
+    ;;
+  d)
+    if $DATE_CMD --date "${OPTARG}" &>/dev/null; then
+      DATE="${OPTARG}"
+    else
+      echo "Invalid time. Valid: HH:MM (24h time)" 1>&2
+    fi
+    ;;
+  t)
+    case $OPTARG in
+    http)
+      TYPE="http"
+      ;;
+    spectrum)
+      TYPE="spectrum"
+      ;;
+    esac
+    ;;
+  b)
+    if [ -n "${OPTARG}" ] && [ "${OPTARG}" -eq "${OPTARG}" ] 2>/dev/null; then
+      LOOKBACK=$(echo "${OPTARG} - ${OPTARG}%5" | bc)
+    else
+      echo "Invalid lookback. Valid: time in minutes (5 minute increments)" 1>&2
+    fi
+    ;;
+  h)
+    help
+    exit 0
+    ;;
+  *)
+    echo "Incorrect options provided" 1>&2
+    help
+    exit 1
+    ;;
   esac
 done
 

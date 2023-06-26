@@ -23,25 +23,25 @@ else
 fi
 
 case $gitlab_env in
-  pre)
-    export gitlab_project=gitlab-pre
-    ;;
-  gstg)
-    export gitlab_project=gitlab-staging-1
-    ;;
-  gprd)
-    export gitlab_project=gitlab-production
-    ;;
-  *)
-    echo >&2 "error: unknown environment: $gitlab_env"
-    exit 1
-    ;;
+pre)
+  export gitlab_project=gitlab-pre
+  ;;
+gstg)
+  export gitlab_project=gitlab-staging-1
+  ;;
+gprd)
+  export gitlab_project=gitlab-production
+  ;;
+*)
+  echo >&2 "error: unknown environment: $gitlab_env"
+  exit 1
+  ;;
 esac
 
 export redis_cli='REDISCLI_AUTH="$(sudo grep ^requirepass /var/opt/gitlab/redis/redis.conf|cut -d" " -f2|tr -d \")" /opt/gitlab/embedded/bin/redis-cli'
 
 export hosts=$(seq -f "${gitlab_redis_cluster}-%02g-db-${gitlab_env}" 1 3)
-if [[ "$gitlab_redis_cluster" = "redis-cache" ]]; then
+if [[ $gitlab_redis_cluster == "redis-cache" ]]; then
   export sentinel="${gitlab_redis_cluster}-sentinel-01-db-${gitlab_env}.c.${gitlab_project}.internal"
 else
   export sentinel="${gitlab_redis_cluster}-01-db-${gitlab_env}.c.${gitlab_project}.internal"
@@ -70,24 +70,24 @@ failover_if_master() {
   echo $role
 
   # if role is master, perform failover
-  if [[ "$role" = "master" ]]; then
+  if [[ $role == "master" ]]; then
     echo failing over
     wait_for_input
     ssh "$sentinel" "/opt/gitlab/embedded/bin/redis-cli -p 26379 sentinel failover ${gitlab_env}-${gitlab_redis_cluster}"
   fi
 
   # wait for master to step down and sync (expect "slave" [sic] and "connected")
-  while ! [[ "$(ssh "$fqdn" "$redis_cli role" | head -n1)" = "slave" ]]; do
+  while ! [[ "$(ssh "$fqdn" "$redis_cli role" | head -n1)" == "slave" ]]; do
     echo waiting for stepdown
     sleep 30
   done
-  while ! [[ "$(ssh "$fqdn" "$redis_cli --raw role" | tail -n +4 | head -n1)" = "connected" ]]; do
+  while ! [[ "$(ssh "$fqdn" "$redis_cli --raw role" | tail -n +4 | head -n1)" == "connected" ]]; do
     echo waiting for sync
     sleep 30
   done
 
   # wait for sentinel to ack the master change
-  while [[ "$(ssh "$sentinel" "/opt/gitlab/embedded/bin/redis-cli -p 26379 --raw sentinel master ${gitlab_env}-${gitlab_redis_cluster}" | grep -A1 ^ip$ | tail -n +2 | awk '{ print substr($0, length($0)-1) }')" = "$i" ]]; do
+  while [[ "$(ssh "$sentinel" "/opt/gitlab/embedded/bin/redis-cli -p 26379 --raw sentinel master ${gitlab_env}-${gitlab_redis_cluster}" | grep -A1 ^ip$ | tail -n +2 | awk '{ print substr($0, length($0)-1) }')" == "$i" ]]; do
     echo waiting for sentinel
     sleep 1
   done
@@ -102,7 +102,7 @@ check_sentinel_quorum() {
   quorum=$(ssh "$sentinel" "/opt/gitlab/embedded/bin/redis-cli -p 26379 sentinel ckquorum ${gitlab_env}-${gitlab_redis_cluster}")
   echo $quorum
 
-  if [[ "$quorum" != "OK 3 usable Sentinels. Quorum and failover authorization can be reached" ]]; then
+  if [[ $quorum != "OK 3 usable Sentinels. Quorum and failover authorization can be reached" ]]; then
     echo >&2 "error: sentinel quorum to be ok"
     exit 1
   fi
@@ -137,7 +137,7 @@ reconfigure() {
   echo checking role
   ssh "$fqdn" "$redis_cli --no-raw role"
 
-  if [[ "$(ssh "$fqdn" "$redis_cli role | head -n1")" = "master" ]]; then
+  if [[ "$(ssh "$fqdn" "$redis_cli role | head -n1")" == "master" ]]; then
     echo >&2 "error: expected $fqdn to be replica, but it was a master"
     exit 1
   fi
@@ -161,11 +161,11 @@ reconfigure() {
   gitlab_ctl_reconfigure
 
   # wait for master to step down and sync (expect "slave" [sic] and "connected")
-  while ! [[ "$(ssh "$fqdn" "$redis_cli role" | head -n1)" = "slave" ]]; do
+  while ! [[ "$(ssh "$fqdn" "$redis_cli role" | head -n1)" == "slave" ]]; do
     echo waiting for stepdown
     sleep 30
   done
-  while ! [[ "$(ssh "$fqdn" "$redis_cli --raw role" | tail -n +4 | head -n1)" = "connected" ]]; do
+  while ! [[ "$(ssh "$fqdn" "$redis_cli --raw role" | tail -n +4 | head -n1)" == "connected" ]]; do
     echo waiting for sync
     sleep 30
   done
@@ -235,7 +235,7 @@ for i in 01 02 03; do
     failover_if_master $i
     reconfigure $i
 
-    if [[ "$gitlab_redis_cluster" = "redis-cache" ]]; then
+    if [[ $gitlab_redis_cluster == "redis-cache" ]]; then
       reconfigure_sentinel $i
     fi
 
