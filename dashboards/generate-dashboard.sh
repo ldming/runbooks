@@ -28,14 +28,14 @@ EOF
 
 while getopts ":Dh" o; do
   case "${o}" in
-    D)
-      dry_run="true"
-      ;;
-    h)
-      usage
-      exit 0
-      ;;
-    *) ;;
+  D)
+    dry_run="true"
+    ;;
+  h)
+    usage
+    exit 0
+    ;;
+  *) ;;
 
   esac
 done

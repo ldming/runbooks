@@ -16,7 +16,7 @@ notify_shell() {
 }
 
 print_help() {
-  echo >&2 "\"kube\" is used to help you setup and interect with our kubernetes clusters"
+  echo >&2 '"kube" is used to help you setup and interect with our kubernetes clusters'
   echo >&2 "USAGE: "
   echo >&2 "    glsh kube [SUBCOMMAND]"
   echo >&2
@@ -45,7 +45,7 @@ setup() {
     context="$(get_kube_context "${cluster}")"
 
     proxy_set=$(jq -r .[\""${cluster}\""].ssh_proxy "${CLUSTERS_JSON}")
-    if [[ "${proxy_set}" == "null" ]]; then
+    if [[ ${proxy_set} == "null" ]]; then
       echo "WARNING: Proxy is not configured for ${cluster}, skipping..."
       kubectl config unset "clusters.${context}.proxy-url"
       continue
@@ -66,7 +66,7 @@ use_cluster() {
   proxy_set=$(jq -r .[\""${cluster}\""].ssh_proxy "${CLUSTERS_JSON}")
   proxy_url="$(kubectl config view -o jsonpath="{.clusters[?(@.name == \"${context}\")].cluster.proxy-url}")"
   if [ -z "$proxy_url" ] && [ "${proxy_set}" != "null" ]; then
-    echo >&2 "glsh: proxy-url not set in \$KUBECONFIG, run glsh kube setup"
+    echo >&2 'glsh: proxy-url not set in $KUBECONFIG, run glsh kube setup'
     exit 1
   fi
 
@@ -130,19 +130,19 @@ if [[ $# -eq 0 ]]; then
 fi
 
 case $1 in
-  setup)
-    setup
-    ;;
-  use-cluster)
-    if [[ $# -ne 2 ]] || ! has_cluster "$2"; then
-      print_use_cluster_help
-      exit 1
-    fi
-
-    use_cluster "$2"
-    ;;
-  *)
-    print_help
+setup)
+  setup
+  ;;
+use-cluster)
+  if [[ $# -ne 2 ]] || ! has_cluster "$2"; then
+    print_use_cluster_help
     exit 1
-    ;;
+  fi
+
+  use_cluster "$2"
+  ;;
+*)
+  print_help
+  exit 1
+  ;;
 esac

@@ -16,7 +16,7 @@ function main() {
 
 function usage() {
   local ERROR_MESSAGE=$1
-  [[ -n "$ERROR_MESSAGE" ]] && echo "Error: $ERROR_MESSAGE" && echo
+  [[ -n $ERROR_MESSAGE ]] && echo "Error: $ERROR_MESSAGE" && echo
 
   cat <<HERE
 Usage: tcpdump_on_gke_node.sh [max_duration_seconds] [tcpdump_options]
@@ -54,7 +54,7 @@ function handle_args() {
 
   MAX_DURATION_SECONDS=$1
   shift
-  [[ "$MAX_DURATION_SECONDS" =~ ^[0-9]+$ ]] || usage "Must specify max duration in seconds."
+  [[ $MAX_DURATION_SECONDS =~ ^[0-9]+$ ]] || usage "Must specify max duration in seconds."
 
   # shellcheck disable=SC2034
   EXTRA_TCPDUMP_ARGS=("$@")

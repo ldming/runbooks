@@ -50,7 +50,7 @@ function check_if_running_on_patroni_leader() {
   is_patroni_leader
   local is_leader=$?
   set -e
-  if [[ "${is_leader}" == '0' ]]; then
+  if [[ ${is_leader} == '0' ]]; then
     echo "INFO: The current host ${current_host} IS the patroni leader"
   else
     echo "WARNING: The current host ${current_host} is NOT the patroni leader"
@@ -79,7 +79,7 @@ function list_all_connections_except_my_session() {
 
 function terminate_database_connection_session() {
   echo "Terminating database session connection(s) for user role ${username}"
-  if [[ "${run_mode}" == "--wet-run" ]]; then
+  if [[ ${run_mode} == "--wet-run" ]]; then
     echo "Executing psql command: ${terminate_database_connection_session_command}"
     set -x
     psql_command "${terminate_database_connection_session_command}"

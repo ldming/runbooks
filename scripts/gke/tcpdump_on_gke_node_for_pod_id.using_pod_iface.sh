@@ -16,7 +16,7 @@ function main() {
 
 function usage() {
   local ERROR_MESSAGE=$1
-  [[ -n "$ERROR_MESSAGE" ]] && echo "ERROR: $ERROR_MESSAGE" && echo
+  [[ -n $ERROR_MESSAGE ]] && echo "ERROR: $ERROR_MESSAGE" && echo
 
   cat <<HERE
 Usage: tcpdump_on_gke_node_for_pod_id.sh [pod_id] [max_duration_seconds] [tcpdump_options]
@@ -61,11 +61,11 @@ function handle_args() {
 
   POD_ID=$1
   shift
-  [[ "$POD_ID" =~ ^[0-9a-f]{10,64}$ ]] || usage "Invalid pod id: '$POD_ID'"
+  [[ $POD_ID =~ ^[0-9a-f]{10,64}$ ]] || usage "Invalid pod id: '$POD_ID'"
 
   MAX_DURATION_SECONDS=$1
   shift
-  [[ "$MAX_DURATION_SECONDS" =~ ^[0-9]+$ ]] || usage "Must specify max duration in seconds."
+  [[ $MAX_DURATION_SECONDS =~ ^[0-9]+$ ]] || usage "Must specify max duration in seconds."
 
   # shellcheck disable=SC2034
   EXTRA_TCPDUMP_ARGS=("$@")

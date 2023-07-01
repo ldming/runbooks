@@ -44,7 +44,7 @@ move_repository() {
     exit 1
   fi
 
-  if [[ "$3" == "gprd" ]]; then
+  if [[ $3 == "gprd" ]]; then
     GITLAB_API="https://gitlab.com"
   fi
 
@@ -58,7 +58,7 @@ move_repository() {
   REPOSITORY_MOVE_SRC=$(jq --argjson resp "${REPOSITORY_MOVE_RESP}" -nr '$resp.source_storage_name')
   REPOSITORY_MOVE_DEST=$(jq --argjson resp "${REPOSITORY_MOVE_RESP}" -nr '$resp.destination_storage_name')
 
-  if [[ "${REPOSITORY_MOVE_ID}" == "null" ]]; then
+  if [[ ${REPOSITORY_MOVE_ID} == "null" ]]; then
     echo >&2 "env=${GITLAB_ENV} project_id=${GITLAB_PROJECT_ID} msg=failed to schedule repository for a storage move"
     echo "${REPOSITORY_MOVE_RESP}"
     exit 1
@@ -75,13 +75,13 @@ move_repository() {
     REPOSITROY_MOVE_STATE=$(jq --argjson resp "${REPOSITORY_MOVE_STATUS_RESP}" -nr '$resp.state')
     echo "env=${GITLAB_ENV} project_id=${GITLAB_PROJECT_ID} src=${REPOSITORY_MOVE_SRC} dest=${REPOSITORY_MOVE_DEST} status=${REPOSITROY_MOVE_STATE} msg=repository storage move status"
 
-    if [[ "${REPOSITROY_MOVE_STATE}" == "null" ]]; then
+    if [[ ${REPOSITROY_MOVE_STATE} == "null" ]]; then
       echo >&2 "env=${GITLAB_ENV} project_id=${GITLAB_PROJECT_ID} msg=failed to get repository storage move status"
       echo "${REPOSITORY_MOVE_STATUS_RESP}"
       exit 1
     fi
 
-    if [[ "${REPOSITROY_MOVE_STATE}" == "finished" ]]; then
+    if [[ ${REPOSITROY_MOVE_STATE} == "finished" ]]; then
       break
     fi
     sleep 5
@@ -89,24 +89,24 @@ move_repository() {
 }
 
 case $1 in
-  repository)
-    case $2 in
-      move)
-        if [[ $# -lt 4 ]]; then
-          usage_move_repository
-          exit 2
-        fi
-        move_repository "$@"
-        ;;
-      *)
-        usage_repository
-        exit 2
-        ;;
-    esac
-
+repository)
+  case $2 in
+  move)
+    if [[ $# -lt 4 ]]; then
+      usage_move_repository
+      exit 2
+    fi
+    move_repository "$@"
     ;;
   *)
-    usage
+    usage_repository
     exit 2
     ;;
+  esac
+
+  ;;
+*)
+  usage
+  exit 2
+  ;;
 esac

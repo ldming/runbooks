@@ -19,7 +19,7 @@ function is_gke() {
     return 1
   fi
   . /etc/os-release
-  [[ "$ID" = "cos" ]]
+  [[ $ID == "cos" ]]
 }
 
 function gke_install_flamegraph_pl() {

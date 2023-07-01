@@ -10,7 +10,7 @@ cd "${SCRIPT_DIR}"
 
 VENDOR_DIR="${SCRIPT_DIR}/../vendor"
 
-if [[ ! -d "${VENDOR_DIR}" ]]; then
+if [[ ! -d ${VENDOR_DIR} ]]; then
   echo >&2 "${VENDOR_DIR} directory not found, running scripts/bundler.sh to install dependencies..."
   "${SCRIPT_DIR}/../scripts/bundler.sh"
 fi

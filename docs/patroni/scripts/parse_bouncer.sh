@@ -17,8 +17,8 @@ help() {
 while getopts f:h option; do
   case "${option}" in
 
-    f) log_file=${OPTARG} ;; #mode check/generate
-    h) help ;;
+  f) log_file=${OPTARG} ;; #mode check/generate
+  h) help ;;
   esac
 done
 

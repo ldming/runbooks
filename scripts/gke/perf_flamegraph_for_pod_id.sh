@@ -7,7 +7,7 @@ source "$(dirname "$0")/container_inspection_library.sh"
 
 function usage() {
   ERROR_MESSAGE=$1
-  [[ -n "$ERROR_MESSAGE" ]] && echo "Error: $ERROR_MESSAGE" && echo
+  [[ -n $ERROR_MESSAGE ]] && echo "Error: $ERROR_MESSAGE" && echo
 
   cat <<HERE
 Usage: perf_flamegraph_for_pod_id.sh [pod id]
@@ -24,7 +24,7 @@ function is_gke() {
     return 1
   fi
   . /etc/os-release
-  [[ "$ID" = "cos" ]]
+  [[ $ID == "cos" ]]
 }
 
 function gke_install_flamegraph_pl() {
@@ -45,13 +45,13 @@ function main() {
 
   [[ $1 =~ ^-h|--help$ ]] && usage
   [[ $# -eq 1 ]] || usage "Wrong number of arguments"
-  [[ "$TARGET_POD_ID" =~ ^[0-9a-f]+$ ]] || usage "Invalid pod id: '$TARGET_POD_ID'"
+  [[ $TARGET_POD_ID =~ ^[0-9a-f]+$ ]] || usage "Invalid pod id: '$TARGET_POD_ID'"
 
   is_gke && gke_install_flamegraph_pl
 
   # Find the given pod's CPU cgroup.
   CONTAINER_CGROUP=$(parent_cgroup_for_pod_id "$TARGET_POD_ID")
-  [[ -z "$CONTAINER_CGROUP" ]] && echo "ERROR: Cannot find pod $TARGET_POD_ID" && exit 1
+  [[ -z $CONTAINER_CGROUP ]] && echo "ERROR: Cannot find pod $TARGET_POD_ID" && exit 1
   echo "Target pod $TARGET_POD_ID uses cgroup: $CONTAINER_CGROUP"
 
   # Use a temp dir.  This avoids polluting current dir and supports concurrent runs of this script.

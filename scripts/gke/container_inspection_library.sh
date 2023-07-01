@@ -16,13 +16,13 @@ function cgroup_path_for_pid() {
   assert_is_pid "$TARGET_PID"
   local CPU_CGROUP
   CPU_CGROUP=$(awk -F':' '$2 == "cpu,cpuacct" { print $3 }' "/proc/$TARGET_PID/cgroup")
-  [[ -n "$CPU_CGROUP" ]] || die "Could not find the CPU cgroup for PID $TARGET_PID"
+  [[ -n $CPU_CGROUP ]] || die "Could not find the CPU cgroup for PID $TARGET_PID"
   echo "$CPU_CGROUP"
 }
 
 function assert_is_pid() {
   local TARGET_PID=$1
-  [[ "$TARGET_PID" =~ ^[0-9,]+$ ]] || die "Invalid PID: '$TARGET_PID'"
+  [[ $TARGET_PID =~ ^[0-9,]+$ ]] || die "Invalid PID: '$TARGET_PID'"
   [[ -d "/proc/$TARGET_PID" ]] || die "PID $TARGET_PID does not exist in this PID namespace"
 }
 
@@ -50,7 +50,7 @@ function container_id_for_cpu_cgroup() {
   for CONTAINER_ID in $(all_container_ids); do
     local CONTAINER_CGROUP
     CONTAINER_CGROUP=$(cgroup_for_container_id "$CONTAINER_ID")
-    if [[ "$CONTAINER_CGROUP" == "$TARGET_CGROUP" ]]; then
+    if [[ $CONTAINER_CGROUP == "$TARGET_CGROUP" ]]; then
       echo "$CONTAINER_ID"
       return
     fi
@@ -64,7 +64,7 @@ function pod_id_for_cpu_cgroup() {
   for POD_ID in $(all_pod_ids); do
     local POD_CGROUP
     POD_CGROUP=$(parent_cgroup_for_pod_id "$POD_ID")
-    if [[ "$TARGET_CGROUP" =~ ^${POD_CGROUP} ]]; then
+    if [[ $TARGET_CGROUP =~ ^${POD_CGROUP} ]]; then
       echo "$POD_ID"
       return
     fi
@@ -75,7 +75,7 @@ function pod_id_for_cpu_cgroup() {
 function assert_is_cpu_cgroup() {
   local TARGET_CGROUP=$1
   assert_cpu_cgroup_mountpoint_exists
-  [[ -n "$TARGET_CGROUP" ]] || die "Must specify a non-blank cgroup path."
+  [[ -n $TARGET_CGROUP ]] || die "Must specify a non-blank cgroup path."
   [[ -d "$CPU_CGROUP_MOUNTPOINT/$TARGET_CGROUP" ]] || die "Could not find CPU cgroup: $TARGET_CGROUP"
 }
 

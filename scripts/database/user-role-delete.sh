@@ -22,7 +22,7 @@ set -o pipefail
 username_of_role_to_delete="${1}"
 run_mode="${2:---dry-run}"
 
-if [[ -z "${username_of_role_to_delete}" ]]; then
+if [[ -z ${username_of_role_to_delete} ]]; then
   echo "Usage: database-user-role-delete <username> --[dry|wet]-run"
 fi
 
@@ -68,7 +68,7 @@ function exit_unless_running_on_patroni_leader() {
   is_patroni_leader
   local is_leader=$?
   set -e
-  if [[ "${is_leader}" != '0' ]]; then
+  if [[ ${is_leader} != '0' ]]; then
     echo "FATAL: The current host ${current_host} is NOT the patroni leader; aborting"
     exit
   fi
@@ -104,7 +104,7 @@ function find_user_role() {
   show_user
   user_tuple=$?
   set -e
-  if [[ "${user_tuple}" == '0' ]]; then
+  if [[ ${user_tuple} == '0' ]]; then
     echo "The user ${username_of_role_to_delete} role exists in the database"
   else
     echo "The user role does not exist in the database: ${username_of_role_to_delete}"
@@ -117,7 +117,7 @@ function exit_unless_user_role_exists() {
   show_user
   user_tuple=$?
   set -e
-  if [[ "${user_tuple}" != '0' ]]; then
+  if [[ ${user_tuple} != '0' ]]; then
     echo "FATAL: Role '${username_of_role_to_delete}' does not exist in the database; aborting"
     exit
   fi
@@ -133,7 +133,7 @@ function list_owned_tables() {
 
 function drop_owned_objects() {
   echo "Dropping objects (privilege settings) owned by user ${username_of_role_to_delete}"
-  if [[ "${run_mode}" == "--wet-run" ]]; then
+  if [[ ${run_mode} == "--wet-run" ]]; then
     echo "Executing psql command: ${drop_owned_command}"
     set -x
     psql_command "${drop_owned_command}"
@@ -146,7 +146,7 @@ function drop_owned_objects() {
 
 function terminate_database_connection_session() {
   echo "Terminating database session connection(s) for user role ${username_of_role_to_delete}"
-  if [[ "${run_mode}" == "--wet-run" ]]; then
+  if [[ ${run_mode} == "--wet-run" ]]; then
     echo "Executing psql command: ${terminate_database_connection_session_command}"
     set -x
     psql_command "${terminate_database_connection_session_command}"
@@ -159,7 +159,7 @@ function terminate_database_connection_session() {
 
 function delete_user_role() {
   echo "Deleting user ${username_of_role_to_delete} role"
-  if [[ "${run_mode}" == "--wet-run" ]]; then
+  if [[ ${run_mode} == "--wet-run" ]]; then
     echo "Executing psql command: ${drop_role_command}"
     set -x
     psql_command "${drop_role_command}"

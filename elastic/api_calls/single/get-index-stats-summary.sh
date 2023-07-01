@@ -54,42 +54,42 @@ summarize_index_stats() {
     if [ "$old_name" == "none" ]; then old_name=$index_name; fi
 
     case $opt in
-      -id) # summarize for each index alias and day
-        if [ "$old_date" != "$index_date" ] || [ "$old_name" != "$index_name" ]; then
+    -id) # summarize for each index alias and day
+      if [ "$old_date" != "$index_date" ] || [ "$old_name" != "$index_name" ]; then
 
-          # print out the sum and start counting from 0
-          echo "$old_name,$old_date,$doc_count_sum,$primary_size_sum"
+        # print out the sum and start counting from 0
+        echo "$old_name,$old_date,$doc_count_sum,$primary_size_sum"
 
-          old_date="$index_date"
-          old_name="$index_name"
-          doc_count_sum=0
-          primary_size_sum=0
+        old_date="$index_date"
+        old_name="$index_name"
+        doc_count_sum=0
+        primary_size_sum=0
 
-        fi
+      fi
 
-        doc_count_sum=$((doc_count_sum + doc_count))
-        primary_size_sum=$((primary_size_sum + primary_size))
-        ;;
+      doc_count_sum=$((doc_count_sum + doc_count))
+      primary_size_sum=$((primary_size_sum + primary_size))
+      ;;
 
-      -i) # summarize for each index alias
-        if [ "$old_name" != "$index_name" ]; then
+    -i) # summarize for each index alias
+      if [ "$old_name" != "$index_name" ]; then
 
-          # print out the sum and start counting from 0
-          echo "$old_name,$old_date,$doc_count_sum,$primary_size_sum"
+        # print out the sum and start counting from 0
+        echo "$old_name,$old_date,$doc_count_sum,$primary_size_sum"
 
-          old_date="$index_date"
-          old_name="$index_name"
-          doc_count_sum=0
-          primary_size_sum=0
+        old_date="$index_date"
+        old_name="$index_name"
+        doc_count_sum=0
+        primary_size_sum=0
 
-        fi
+      fi
 
-        doc_count_sum=$((doc_count_sum + doc_count))
-        primary_size_sum=$((primary_size_sum + primary_size))
-        ;;
-      *)
-        usage
-        ;;
+      doc_count_sum=$((doc_count_sum + doc_count))
+      primary_size_sum=$((primary_size_sum + primary_size))
+      ;;
+    *)
+      usage
+      ;;
     esac
 
   done <<<"$(echo "$INDEX_RESPONSE" | grep pubsub | grep gprd)"

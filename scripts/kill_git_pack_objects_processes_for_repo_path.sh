@@ -23,11 +23,11 @@
 TARGET_GIT_DIR=$1
 
 # Validate input.
-[[ -z "$TARGET_GIT_DIR" ]] && {
+[[ -z $TARGET_GIT_DIR ]] && {
   echo "Usage: $0 [git_dir]"
   exit 1
 }
-[[ "$TARGET_GIT_DIR" =~ \.git$ ]] || {
+[[ $TARGET_GIT_DIR =~ \.git$ ]] || {
   echo "ERROR: Please check the git repo path (it should end in .git): $TARGET_GIT_DIR"
   exit 1
 }
@@ -51,11 +51,11 @@ for PACK_PID in $(pgrep -f 'git .*pack-objects .*--stdout'); do
   ps -p "$PARENT_PID" -ww -o args= | grep -q -e 'git .*upload-pack' -e 'gitaly ' || continue
 
   # Show the matching process to kill.
-  echo "Found a \"git pack-objects\" process that appears to support an upload-pack either directly or via a gitaly-hooks callback to gitaly:"
+  echo 'Found a "git pack-objects" process that appears to support an upload-pack either directly or via a gitaly-hooks callback to gitaly:'
   ps uwwf -p "$PACK_PID"
   sudo cat "/proc/$PACK_PID/environ" | tr '\0' '\n' | grep 'CORRELATION_ID'
 
-  if [[ -n "$DRY_RUN" ]]; then
+  if [[ -n $DRY_RUN ]]; then
     echo "Would kill git pack-objects PID: $PACK_PID"
   else
     echo "Killing git pack-objects PID: $PACK_PID"

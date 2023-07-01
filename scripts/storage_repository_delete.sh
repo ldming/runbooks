@@ -38,25 +38,25 @@ function storage_repository_delete() {
   fi
 
   git_path="${REPOSITORIES_DIR_PATH}/${disk_path}.git"
-  if [[ ! -d "${git_path}" ]]; then
+  if [[ ! -d ${git_path} ]]; then
     echo "Error: No git repository found at given disk path: ${git_path}"
     exit 1
   fi
 
   wiki_git_path="${REPOSITORIES_DIR_PATH}/${disk_path}.wiki.git"
-  if [[ ! -d "${wiki_git_path}" ]]; then
+  if [[ ! -d ${wiki_git_path} ]]; then
     echo "Warning: No wiki repository found at given disk path: ${wiki_git_path}"
   fi
 
   design_git_path="${REPOSITORIES_DIR_PATH}/${disk_path}.design.git"
-  if [[ ! -d "${design_git_path}" ]]; then
+  if [[ ! -d ${design_git_path} ]]; then
     echo "Warning: No design repository found at given disk path: ${design_git_path}"
   fi
 
   cmd="rm -rf \"${git_path}\" \"${wiki_git_path}\" \"${design_git_path}\""
   dry_run_cmd="ls -ld \"${git_path}\" \"${wiki_git_path}\" \"${design_git_path}\""
 
-  if [[ "${dry_run}" == "no" ]]; then
+  if [[ ${dry_run} == "no" ]]; then
     echo "Executing command: ${cmd}"
 
     set -x
@@ -77,20 +77,20 @@ function main() {
 
 while [ $# -gt 0 ]; do
   case "$1" in
-    --dry-run*)
-      if [[ "$1" != *=* ]]; then
-        shift
-      fi
-      dry_run="${1#*=}"
-      ;;
-    --help | -h | -?)
-      usage
-      ;;
-    *)
-      # >&2 printf "Error: Invalid argument\n"
-      # exit 1
-      disk_path=${1}
-      ;;
+  --dry-run*)
+    if [[ $1 != *=* ]]; then
+      shift
+    fi
+    dry_run="${1#*=}"
+    ;;
+  --help | -h | -?)
+    usage
+    ;;
+  *)
+    # >&2 printf "Error: Invalid argument\n"
+    # exit 1
+    disk_path=${1}
+    ;;
   esac
   shift
 done
