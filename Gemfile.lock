@@ -264,7 +264,7 @@ DEPENDENCIES
   json
   pry (~> 0.13)
   rake
-  redis (~> 5.0.0)
+  redis (= 5.0.6)
   rspec
   rspec-parameterized (>= 1.0.0)
   rubocop
