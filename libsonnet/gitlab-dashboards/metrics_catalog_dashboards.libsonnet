@@ -4,6 +4,7 @@ local basic = import 'grafana/basic.libsonnet';
 local layout = import 'grafana/layout.libsonnet';
 local seriesOverrides = import 'grafana/series_overrides.libsonnet';
 local singleMetricRow = import 'key-metric-panels/single-metric-row.libsonnet';
+local aggregationSets = (import 'gitlab-metrics-config.libsonnet').aggregationSets;
 local selectors = import 'promql/selectors.libsonnet';
 local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
 local toolingLinks = import 'toolinglinks/toolinglinks.libsonnet';
@@ -65,7 +66,12 @@ local sliOverviewMatrixRow(
   expectMultipleSeries,
       ) =
   local typeSelector = if serviceType == null then {} else { type: serviceType };
-  local selectorHashWithExtras = selectorHash { component: sli.name } + typeSelector;
+  local shardSelector = if sli.shardLevelMonitoring then
+    { shard: '$shard' }
+  else
+    {};
+  local selectorHashWithExtras = selectorHash { component: sli.name } + typeSelector + shardSelector;
+
   local formatConfig = {
     serviceType: serviceType,
     sliName: sli.name,
@@ -75,7 +81,7 @@ local sliOverviewMatrixRow(
   local columns =
     singleMetricRow.row(
       serviceType=serviceType,
-      aggregationSet=aggregationSet,
+      aggregationSet=if sli.shardLevelMonitoring then aggregationSets.shardComponentSLIs else aggregationSet,
       selectorHash=selectorHashWithExtras,
       titlePrefix='%(sliName)s SLI' % formatConfig,
       stableIdPrefix='sli-%(sliName)s' % formatConfig,
@@ -280,10 +286,15 @@ local sliDetailErrorRatePanel(
 
     local staticLabelNames = if std.objectHas(sli, 'staticLabels') then std.objectFields(sli.staticLabels) else [];
 
+    local shardSelector = if sli.shardLevelMonitoring then
+      { shard: '$shard' }
+    else
+      {};
+
     // Note that we always want to ignore `type` filters, since the metricsCatalog selectors will
     // already have correctly filtered labels to ensure the right values, and if we inject the type
     // we may lose metrics 'proxied' from nodes with other types
-    local filteredSelectorHash = selectors.without(selectorHash, [
+    local filteredSelectorHash = selectors.without(selectorHash + shardSelector, [
       'type',
     ] + staticLabelNames);
 

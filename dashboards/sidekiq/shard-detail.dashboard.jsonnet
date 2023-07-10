@@ -64,17 +64,7 @@ basic.dashboard(
   tags=['type:sidekiq', 'detail'],
 )
 .addTemplate(templates.stage)
-.addTemplate(template.new(
-  'shard',
-  '$PROMETHEUS_DS',
-  'label_values(up{environment="$environment", type="sidekiq"}, shard)',
-  current='catchall',
-  refresh='load',
-  sort=1,
-  multi=true,
-  includeAll=true,
-  allValues='.*',
-))
+.addTemplate(templates.sidekiqShards)
 .addPanels(
   layout.rowGrid('Queue Lengths - number of jobs queued', [
     basic.queueLengthTimeseries(

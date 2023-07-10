@@ -242,4 +242,17 @@ local library = import 'gitlab-slis/library.libsonnet';
       sort=1,
       current=current
     ),
+  sidekiqShards::
+    template.new(
+      'shard',
+      '$PROMETHEUS_DS',
+      'label_values(up{environment="$environment", type="sidekiq"}, shard)',
+      current='catchall',
+      refresh='load',
+      sort=1,
+      multi=true,
+      includeAll=true,
+      allValues='.*',
+    ),
+
 }

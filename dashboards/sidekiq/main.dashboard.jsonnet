@@ -5,6 +5,7 @@ local layout = import 'grafana/layout.libsonnet';
 local row = grafana.row;
 local sidekiq = import 'sidekiq.libsonnet';
 local serviceDashboard = import 'gitlab-dashboards/service_dashboard.libsonnet';
+local templates = import 'grafana/templates.libsonnet';
 
 local shardDetailDataLink = {
   url: '/d/sidekiq-shard-detail?${__url_time_range}&${__all_variables}&var-shard=${__field.label.shard}&var-shard=${__field.label.shard}',
@@ -12,6 +13,7 @@ local shardDetailDataLink = {
 };
 
 serviceDashboard.overview('sidekiq')
+.addTemplate(templates.sidekiqShards)
 .addPanel(
   row.new(title='Sidekiq Queues'),
   gridPos={

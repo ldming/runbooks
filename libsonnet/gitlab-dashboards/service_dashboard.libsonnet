@@ -44,7 +44,12 @@ local headlineMetricsRow(
   local hasApdex = metricsCatalogServiceInfo.hasApdex();
   local hasErrorRate = metricsCatalogServiceInfo.hasErrorRate();
   local hasRequestRate = metricsCatalogServiceInfo.hasRequestRate();
-  local selectorHashWithExtras = selectorHash { type: serviceType };
+  local shardLabels =
+    if metricsCatalogServiceInfo.shardLevelMonitoring then
+      { shard: '$shard' }
+    else
+      {};
+  local selectorHashWithExtras = selectorHash { type: serviceType } + shardLabels;
 
   keyMetrics.headlineMetricsRow(
     serviceType=serviceType,
@@ -91,7 +96,7 @@ local overviewDashboard(
       title,
       uid=uid,
       tags=['gitlab', 'type:' + type, type, 'service overview'],
-      includeEnvironmentTemplate=std.objectHas(environmentStageSelectorHash, 'environment'),
+      includeEnvironmentTemplate=std.objectHas(selectorHash, 'environment'),
     )
     .addPanels(
       headlineMetricsRow(
