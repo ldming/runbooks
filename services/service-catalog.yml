@@ -1973,6 +1973,32 @@ services:
       monitors:
         primary_grafana_dashboard: websockets/websockets
 
+  - name: ai-assisted
+    tier: sv
+    friendly_name: AI-Assisted
+    label: AI-Assisted
+    owner: reliability_general
+    technical:
+      project:
+        - https://gitlab.com/gitlab-org/gitlab
+        - https://gitlab.com/gitlab-org/gitlab-workhorse
+      documents:
+        design:
+        architecture: TBD
+        readiness_review: TBD
+        sre_guide: https://gitlab.com/gitlab-com/runbooks/-/tree/master/docs/ai-assisted
+        developer_guide: https://docs.gitlab.com/ee/development/workhorse/channel.html
+        service:
+          - TBD
+        security:
+      dependencies:
+      logging:
+        - name: ai-assisted
+          permalink: TBD
+    observability:
+      monitors:
+        primary_grafana_dashboard: ai-assisted/ai-assisted
+
   - name: cloud-sql
     tier: inf
     friendly_name: Google Cloud SQL
