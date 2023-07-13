@@ -2409,6 +2409,18 @@ groups:
       tier: sv
       type: sidekiq
     expr: "0.005000"
+  - record: slo:min:events:gitlab_service_apdex:ratio
+    labels:
+      component: sidekiq_queueing
+      tier: sv
+      type: sidekiq
+    expr: "0.995000"
+  - record: slo:max:events:gitlab_service_errors:ratio
+    labels:
+      component: sidekiq_queueing
+      tier: sv
+      type: sidekiq
+    expr: "0.005000"
   - record: slo:min:deployment:gitlab_service_apdex:ratio
     labels:
       tier: sv
@@ -4318,6 +4330,15 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: sidekiq_execution
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "no"
+      tier: sv
+      type: sidekiq
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: sidekiq_queueing
       global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "no"

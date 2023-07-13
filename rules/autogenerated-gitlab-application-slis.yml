@@ -153,3 +153,46 @@ groups:
       sum by (document_type,environment,stage,tier,type) (
         rate(gitlab_sli_global_search_indexing_apdex_success_total{monitor!="global"}[1h])
       )
+- name: 'Application Defined SLI Rules: sidekiq_queueing'
+  interval: 1m
+  rules:
+  - record: application_sli_aggregation:sidekiq_queueing:apdex:weight:score_5m
+    expr: |
+      sum by (environment,external_dependencies,feature_category,stage,tier,type,urgency,worker) (
+        rate(gitlab_sli_sidekiq_queueing_apdex_total{monitor!="global"}[5m])
+      )
+  - record: application_sli_aggregation:sidekiq_queueing:apdex:success:rate_5m
+    expr: |
+      sum by (environment,external_dependencies,feature_category,stage,tier,type,urgency,worker) (
+        rate(gitlab_sli_sidekiq_queueing_apdex_success_total{monitor!="global"}[5m])
+      )
+  - record: application_sli_aggregation:sidekiq_queueing:ops:rate_5m
+    expr: |
+      sum by (environment,external_dependencies,feature_category,stage,tier,type,urgency,worker) (
+        rate(gitlab_sli_sidekiq_queueing_total{monitor!="global"}[5m])
+      )
+  - record: application_sli_aggregation:sidekiq_queueing:error:rate_5m
+    expr: |
+      sum by (environment,external_dependencies,feature_category,stage,tier,type,urgency,worker) (
+        rate(gitlab_sli_sidekiq_queueing_error_total{monitor!="global"}[5m])
+      )
+  - record: application_sli_aggregation:sidekiq_queueing:apdex:weight:score_1h
+    expr: |
+      sum by (environment,external_dependencies,feature_category,stage,tier,type,urgency,worker) (
+        rate(gitlab_sli_sidekiq_queueing_apdex_total{monitor!="global"}[1h])
+      )
+  - record: application_sli_aggregation:sidekiq_queueing:apdex:success:rate_1h
+    expr: |
+      sum by (environment,external_dependencies,feature_category,stage,tier,type,urgency,worker) (
+        rate(gitlab_sli_sidekiq_queueing_apdex_success_total{monitor!="global"}[1h])
+      )
+  - record: application_sli_aggregation:sidekiq_queueing:ops:rate_1h
+    expr: |
+      sum by (environment,external_dependencies,feature_category,stage,tier,type,urgency,worker) (
+        rate(gitlab_sli_sidekiq_queueing_total{monitor!="global"}[1h])
+      )
+  - record: application_sli_aggregation:sidekiq_queueing:error:rate_1h
+    expr: |
+      sum by (environment,external_dependencies,feature_category,stage,tier,type,urgency,worker) (
+        rate(gitlab_sli_sidekiq_queueing_error_total{monitor!="global"}[1h])
+      )

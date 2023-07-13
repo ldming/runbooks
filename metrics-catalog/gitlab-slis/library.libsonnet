@@ -89,6 +89,16 @@ local list = [
       urgency of the worker.
     |||,
   }),
+  sliDefinition.new({
+    name: 'sidekiq_queueing',
+    significantLabels: ['worker', 'feature_category', 'urgency', 'external_dependencies'],
+    kinds: [sliDefinition.apdexKind, sliDefinition.errorRateKind],
+    description: |||
+      The number of Sidekiq jobs meeting their queueing duration target based on the urgency of the worker.
+      By default, queueing of a job should take no more than 60 seconds. But this can be adjusted by the
+      urgency of the worker.
+    |||,
+  }),
 ];
 
 local definitionsByName = std.foldl(

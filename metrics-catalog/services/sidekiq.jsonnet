@@ -275,6 +275,9 @@ metricsCatalog.serviceDefinition({
     // TODO: change serviceAggregation to true and increase severity to s2 once the SLI per shard has been removed
     serviceAggregation: false,  // Don't add this to the request rate of the service
     severity: 's4',  // Don't page SREs for this SLI
+  }) + sliLibrary.get('sidekiq_queueing').generateServiceLevelIndicator(baseSelector { external_dependencies: { ne: 'yes' } }, {
+    serviceAggregation: false,  // Don't add this to the request rate of the service
+    severity: 's4',  // Don't page SREs for this SLI
   }),
 
   // Special per-worker recording rules

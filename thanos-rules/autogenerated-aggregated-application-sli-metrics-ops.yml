@@ -270,3 +270,47 @@ groups:
       sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies) (
         (sli_aggregations:gitlab_sli_sidekiq_execution_apdex_success_total_rate1h{env="ops",monitor!="global"} >= 0)
       )
+- name: 'Application Defined SLI Global metrics: sidekiq_queueing (fast burn)'
+  interval: 1m
+  partial_response_strategy: warn
+  rules:
+  - record: application_sli_aggregation:sidekiq_queueing:error:rate_5m
+    expr: |
+      sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies) (
+        (application_sli_aggregation:sidekiq_queueing:error:rate_5m{env="ops",monitor!="global"} >= 0)
+      )
+  - record: application_sli_aggregation:sidekiq_queueing:ops:rate_5m
+    expr: |
+      sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies) (
+        (application_sli_aggregation:sidekiq_queueing:ops:rate_5m{env="ops",monitor!="global"} >= 0)
+      )
+  - record: application_sli_aggregation:sidekiq_queueing:apdex:weight:score_5m
+    expr: |
+      sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies) (
+        (application_sli_aggregation:sidekiq_queueing:apdex:weight:score_5m{env="ops",monitor!="global"} >= 0)
+      )
+  - record: application_sli_aggregation:sidekiq_queueing:apdex:success:rate_5m
+    expr: |
+      sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies) (
+        (application_sli_aggregation:sidekiq_queueing:apdex:success:rate_5m{env="ops",monitor!="global"} >= 0)
+      )
+  - record: application_sli_aggregation:sidekiq_queueing:error:rate_1h
+    expr: |
+      sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies) (
+        (application_sli_aggregation:sidekiq_queueing:error:rate_1h{env="ops",monitor!="global"} >= 0)
+      )
+  - record: application_sli_aggregation:sidekiq_queueing:ops:rate_1h
+    expr: |
+      sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies) (
+        (application_sli_aggregation:sidekiq_queueing:ops:rate_1h{env="ops",monitor!="global"} >= 0)
+      )
+  - record: application_sli_aggregation:sidekiq_queueing:apdex:weight:score_1h
+    expr: |
+      sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies) (
+        (application_sli_aggregation:sidekiq_queueing:apdex:weight:score_1h{env="ops",monitor!="global"} >= 0)
+      )
+  - record: application_sli_aggregation:sidekiq_queueing:apdex:success:rate_1h
+    expr: |
+      sum by (env,environment,tier,type,stage,worker,feature_category,urgency,external_dependencies) (
+        (application_sli_aggregation:sidekiq_queueing:apdex:success:rate_1h{env="ops",monitor!="global"} >= 0)
+      )

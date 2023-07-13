@@ -1126,6 +1126,50 @@ groups:
           gitlab_component_ops:rate{component="sidekiq_execution",tier="sv",type="sidekiq"}
         )
       )
+  - record: gitlab_component_apdex:success:rate
+    labels:
+      component: sidekiq_queueing
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        rate(gitlab_sli_sidekiq_queueing_apdex_success_total{external_dependencies!="yes",type="sidekiq"}[1m])
+      )
+  - record: gitlab_component_apdex:weight:score
+    labels:
+      component: sidekiq_queueing
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        rate(gitlab_sli_sidekiq_queueing_apdex_total{external_dependencies!="yes",type="sidekiq"}[1m])
+      )
+  - record: gitlab_component_ops:rate
+    labels:
+      component: sidekiq_queueing
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        rate(gitlab_sli_sidekiq_queueing_total{external_dependencies!="yes",type="sidekiq"}[1m])
+      )
+  - record: gitlab_component_errors:rate
+    labels:
+      component: sidekiq_queueing
+      tier: sv
+      type: sidekiq
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          rate(gitlab_sli_sidekiq_queueing_error_total{external_dependencies!="yes",type="sidekiq"}[1m])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab_component_ops:rate{component="sidekiq_queueing",tier="sv",type="sidekiq"}
+        )
+      )
 - name: 'Component-Level SLIs: sidekiq - 5m burn-rate'
   interval: 1m
   rules:
@@ -2251,6 +2295,50 @@ groups:
           gitlab_component_ops:rate_5m{component="sidekiq_execution",tier="sv",type="sidekiq"}
         )
       )
+  - record: gitlab_component_apdex:success:rate_5m
+    labels:
+      component: sidekiq_queueing
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        rate(gitlab_sli_sidekiq_queueing_apdex_success_total{external_dependencies!="yes",type="sidekiq"}[5m])
+      )
+  - record: gitlab_component_apdex:weight:score_5m
+    labels:
+      component: sidekiq_queueing
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        rate(gitlab_sli_sidekiq_queueing_apdex_total{external_dependencies!="yes",type="sidekiq"}[5m])
+      )
+  - record: gitlab_component_ops:rate_5m
+    labels:
+      component: sidekiq_queueing
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        rate(gitlab_sli_sidekiq_queueing_total{external_dependencies!="yes",type="sidekiq"}[5m])
+      )
+  - record: gitlab_component_errors:rate_5m
+    labels:
+      component: sidekiq_queueing
+      tier: sv
+      type: sidekiq
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          rate(gitlab_sli_sidekiq_queueing_error_total{external_dependencies!="yes",type="sidekiq"}[5m])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab_component_ops:rate_5m{component="sidekiq_queueing",tier="sv",type="sidekiq"}
+        )
+      )
   - record: gitlab_background_jobs:queue:apdex:success:rate_5m
     expr: |
       sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
@@ -2376,6 +2464,50 @@ groups:
       (
         0 * group by(environment,stage,shard) (
           gitlab_component_shard_ops:rate_5m{component="sidekiq_execution",tier="sv",type="sidekiq"}
+        )
+      )
+  - record: gitlab_component_shard_apdex:success:rate_5m
+    labels:
+      component: sidekiq_queueing
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (environment,stage,shard) (
+        rate(gitlab_sli_sidekiq_queueing_apdex_success_total{external_dependencies!="yes",type="sidekiq"}[5m])
+      )
+  - record: gitlab_component_shard_apdex:weight:score_5m
+    labels:
+      component: sidekiq_queueing
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (environment,stage,shard) (
+        rate(gitlab_sli_sidekiq_queueing_apdex_total{external_dependencies!="yes",type="sidekiq"}[5m])
+      )
+  - record: gitlab_component_shard_ops:rate_5m
+    labels:
+      component: sidekiq_queueing
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (environment,stage,shard) (
+        rate(gitlab_sli_sidekiq_queueing_total{external_dependencies!="yes",type="sidekiq"}[5m])
+      )
+  - record: gitlab_component_shard_errors:rate_5m
+    labels:
+      component: sidekiq_queueing
+      tier: sv
+      type: sidekiq
+    expr: |
+      (
+        sum by (environment,stage,shard) (
+          rate(gitlab_sli_sidekiq_queueing_error_total{external_dependencies!="yes",type="sidekiq"}[5m])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage,shard) (
+          gitlab_component_shard_ops:rate_5m{component="sidekiq_queueing",tier="sv",type="sidekiq"}
         )
       )
 - name: 'Component-Level SLIs: sidekiq - 30m burn-rate'
@@ -3503,6 +3635,50 @@ groups:
           gitlab_component_ops:rate_30m{component="sidekiq_execution",tier="sv",type="sidekiq"}
         )
       )
+  - record: gitlab_component_apdex:success:rate_30m
+    labels:
+      component: sidekiq_queueing
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        rate(gitlab_sli_sidekiq_queueing_apdex_success_total{external_dependencies!="yes",type="sidekiq"}[30m])
+      )
+  - record: gitlab_component_apdex:weight:score_30m
+    labels:
+      component: sidekiq_queueing
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        rate(gitlab_sli_sidekiq_queueing_apdex_total{external_dependencies!="yes",type="sidekiq"}[30m])
+      )
+  - record: gitlab_component_ops:rate_30m
+    labels:
+      component: sidekiq_queueing
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        rate(gitlab_sli_sidekiq_queueing_total{external_dependencies!="yes",type="sidekiq"}[30m])
+      )
+  - record: gitlab_component_errors:rate_30m
+    labels:
+      component: sidekiq_queueing
+      tier: sv
+      type: sidekiq
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          rate(gitlab_sli_sidekiq_queueing_error_total{external_dependencies!="yes",type="sidekiq"}[30m])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab_component_ops:rate_30m{component="sidekiq_queueing",tier="sv",type="sidekiq"}
+        )
+      )
   - record: gitlab_background_jobs:queue:apdex:success:rate_30m
     expr: |
       sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
@@ -3628,6 +3804,50 @@ groups:
       (
         0 * group by(environment,stage,shard) (
           gitlab_component_shard_ops:rate_30m{component="sidekiq_execution",tier="sv",type="sidekiq"}
+        )
+      )
+  - record: gitlab_component_shard_apdex:success:rate_30m
+    labels:
+      component: sidekiq_queueing
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (environment,stage,shard) (
+        rate(gitlab_sli_sidekiq_queueing_apdex_success_total{external_dependencies!="yes",type="sidekiq"}[30m])
+      )
+  - record: gitlab_component_shard_apdex:weight:score_30m
+    labels:
+      component: sidekiq_queueing
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (environment,stage,shard) (
+        rate(gitlab_sli_sidekiq_queueing_apdex_total{external_dependencies!="yes",type="sidekiq"}[30m])
+      )
+  - record: gitlab_component_shard_ops:rate_30m
+    labels:
+      component: sidekiq_queueing
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (environment,stage,shard) (
+        rate(gitlab_sli_sidekiq_queueing_total{external_dependencies!="yes",type="sidekiq"}[30m])
+      )
+  - record: gitlab_component_shard_errors:rate_30m
+    labels:
+      component: sidekiq_queueing
+      tier: sv
+      type: sidekiq
+    expr: |
+      (
+        sum by (environment,stage,shard) (
+          rate(gitlab_sli_sidekiq_queueing_error_total{external_dependencies!="yes",type="sidekiq"}[30m])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage,shard) (
+          gitlab_component_shard_ops:rate_30m{component="sidekiq_queueing",tier="sv",type="sidekiq"}
         )
       )
 - name: 'Component-Level SLIs: sidekiq - 1h burn-rate'
@@ -4795,6 +5015,50 @@ groups:
           gitlab_component_ops:rate_1h{component="sidekiq_execution",tier="sv",type="sidekiq"}
         )
       )
+  - record: gitlab_component_apdex:success:rate_1h
+    labels:
+      component: sidekiq_queueing
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        rate(gitlab_sli_sidekiq_queueing_apdex_success_total{external_dependencies!="yes",type="sidekiq"}[1h])
+      )
+  - record: gitlab_component_apdex:weight:score_1h
+    labels:
+      component: sidekiq_queueing
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        rate(gitlab_sli_sidekiq_queueing_apdex_total{external_dependencies!="yes",type="sidekiq"}[1h])
+      )
+  - record: gitlab_component_ops:rate_1h
+    labels:
+      component: sidekiq_queueing
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        rate(gitlab_sli_sidekiq_queueing_total{external_dependencies!="yes",type="sidekiq"}[1h])
+      )
+  - record: gitlab_component_errors:rate_1h
+    labels:
+      component: sidekiq_queueing
+      tier: sv
+      type: sidekiq
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          rate(gitlab_sli_sidekiq_queueing_error_total{external_dependencies!="yes",type="sidekiq"}[1h])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab_component_ops:rate_1h{component="sidekiq_queueing",tier="sv",type="sidekiq"}
+        )
+      )
   - record: gitlab_background_jobs:queue:apdex:success:rate_1h
     expr: |
       sum by (environment,tier,type,stage,shard,queue,feature_category,urgency,worker) (
@@ -4920,6 +5184,50 @@ groups:
       (
         0 * group by(environment,stage,shard) (
           gitlab_component_shard_ops:rate_1h{component="sidekiq_execution",tier="sv",type="sidekiq"}
+        )
+      )
+  - record: gitlab_component_shard_apdex:success:rate_1h
+    labels:
+      component: sidekiq_queueing
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (environment,stage,shard) (
+        rate(gitlab_sli_sidekiq_queueing_apdex_success_total{external_dependencies!="yes",type="sidekiq"}[1h])
+      )
+  - record: gitlab_component_shard_apdex:weight:score_1h
+    labels:
+      component: sidekiq_queueing
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (environment,stage,shard) (
+        rate(gitlab_sli_sidekiq_queueing_apdex_total{external_dependencies!="yes",type="sidekiq"}[1h])
+      )
+  - record: gitlab_component_shard_ops:rate_1h
+    labels:
+      component: sidekiq_queueing
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (environment,stage,shard) (
+        rate(gitlab_sli_sidekiq_queueing_total{external_dependencies!="yes",type="sidekiq"}[1h])
+      )
+  - record: gitlab_component_shard_errors:rate_1h
+    labels:
+      component: sidekiq_queueing
+      tier: sv
+      type: sidekiq
+    expr: |
+      (
+        sum by (environment,stage,shard) (
+          rate(gitlab_sli_sidekiq_queueing_error_total{external_dependencies!="yes",type="sidekiq"}[1h])
+        )
+      )
+      or
+      (
+        0 * group by(environment,stage,shard) (
+          gitlab_component_shard_ops:rate_1h{component="sidekiq_queueing",tier="sv",type="sidekiq"}
         )
       )
 - name: 'Component-Level SLIs: sidekiq - 6h burn-rate'
@@ -5147,6 +5455,50 @@ groups:
           gitlab_component_ops:rate_6h{component="sidekiq_execution",tier="sv",type="sidekiq"}
         )
       )
+  - record: gitlab_component_apdex:success:rate_6h
+    labels:
+      component: sidekiq_queueing
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        rate(gitlab_sli_sidekiq_queueing_apdex_success_total{external_dependencies!="yes",type="sidekiq"}[6h])
+      )
+  - record: gitlab_component_apdex:weight:score_6h
+    labels:
+      component: sidekiq_queueing
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        rate(gitlab_sli_sidekiq_queueing_apdex_total{external_dependencies!="yes",type="sidekiq"}[6h])
+      )
+  - record: gitlab_component_ops:rate_6h
+    labels:
+      component: sidekiq_queueing
+      tier: sv
+      type: sidekiq
+    expr: |
+      sum by (env,environment,stage) (
+        rate(gitlab_sli_sidekiq_queueing_total{external_dependencies!="yes",type="sidekiq"}[6h])
+      )
+  - record: gitlab_component_errors:rate_6h
+    labels:
+      component: sidekiq_queueing
+      tier: sv
+      type: sidekiq
+    expr: |
+      (
+        sum by (env,environment,stage) (
+          rate(gitlab_sli_sidekiq_queueing_error_total{external_dependencies!="yes",type="sidekiq"}[6h])
+        )
+      )
+      or
+      (
+        0 * group by(env,environment,stage) (
+          gitlab_component_ops:rate_6h{component="sidekiq_queueing",tier="sv",type="sidekiq"}
+        )
+      )
 - name: 'Component mapping: sidekiq'
   interval: 1m
   rules:
@@ -5270,6 +5622,15 @@ groups:
   - record: gitlab_component_service:mapping
     labels:
       component: sidekiq_execution
+      global_aggregation: "no"
+      regional_aggregation: "no"
+      service_aggregation: "no"
+      tier: sv
+      type: sidekiq
+    expr: "1"
+  - record: gitlab_component_service:mapping
+    labels:
+      component: sidekiq_queueing
       global_aggregation: "no"
       regional_aggregation: "no"
       service_aggregation: "no"
