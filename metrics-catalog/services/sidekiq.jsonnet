@@ -275,6 +275,9 @@ metricsCatalog.serviceDefinition({
     // TODO: change serviceAggregation to true and increase severity to s2 once the SLI per shard has been removed
     serviceAggregation: false,  // Don't add this to the request rate of the service
     severity: 's4',  // Don't page SREs for this SLI
+    toolingLinks: [
+      toolingLinks.kibana(title='Sidekiq execution', index='sidekiq', type='sidekiq'),
+    ],
   }),
 
   // Special per-worker recording rules

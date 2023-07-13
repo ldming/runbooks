@@ -234,9 +234,6 @@ local indexDefaults = {
       matching.matchers({ anyScript: ["doc['json.duration_s'].value > doc['json.target_duration_s'].value"] }),
     ],
 
-    // TODO: include this for Sidekiq when we implement add remove the hardcoded
-    // recordings for Sidekiq-feature category aggregations.
-    // https://gitlab.com/gitlab-com/gl-infra/scalability/-/issues/1313
     prometheusLabelMappings+: {
       stage_group: 'json.meta.feature_category',
       feature_category: 'json.meta.feature_category',
@@ -334,11 +331,31 @@ local indexDefaults = {
   sidekiq: indexDefaults {
     timestamp: 'json.time',
     indexPattern: 'AWNABDRwNDuQHTm2tH6l',
-    defaultColumns: ['json.class', 'json.queue', 'json.meta.project', 'json.job_status', 'json.scheduling_latency_s', 'json.duration_s'],
+    defaultColumns: [
+      'json.class',
+      'json.queue',
+      'json.meta.project',
+      'json.job_status',
+      'json.scheduling_latency_s',
+      'json.duration_s',
+      'json.target_duration_s',
+      'json.urgency',
+    ],
     defaultSeriesSplitField: 'json.meta.project.keyword',
     failureFilter: [matchFilter('json.job_status', 'fail')],
     defaultLatencyField: 'json.duration_s',
     latencyFieldUnitMultiplier: 1,
+    prometheusLabelMappings+: {
+      stage_group: 'json.meta.feature_category',
+      feature_category: 'json.meta.feature_category',
+    },
+    slowRequestFilter: [
+      // These need to be present for the script to work.
+      // Only job completion logs have target_duration_s and duration_s
+      existsFilter('json.target_duration_s'),
+      existsFilter('json.duration_s'),
+      matching.matchers({ anyScript: ["doc['json.duration_s'].value > doc['json.target_duration_s'].value"] }),
+    ],
   },
 
   sidekiq_ops: self.sidekiq {
