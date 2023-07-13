@@ -189,66 +189,71 @@ scan_params[:match] = options[:match] if options[:match]
 
 ignore_regexp = /#{options[:ignore_pattern]}/ if options[:ignore_pattern]
 
-loop do
-  it, keys = src_db.with { |r| r.scan(it, **scan_params) }
+begin
+  loop do
+    it, keys = src_db.with { |r| r.scan(it, **scan_params) }
 
-  puts "Scanned #{keys.size}"
+    puts "Scanned #{keys.size}"
 
-  start = Time.now
-  keys_to_recheck = []
+    start = Time.now
+    keys_to_recheck = []
 
-  threads = []
-  # first pass to compare and migrate keys if not identical
-  keys.each_with_index do |key, idx|
-    if ignore_regexp && key.match?(ignore_regexp)
-      ignored_count += 1
-      next
-    end
-
-    threads << Thread.new do
-      result = compare_and_migrate(key, src_db, dest_db, options[:migrate])
-
-      unsupported_count += 1 if result.nil?
-
-      if result
-        diffcount += 1
-        keys_to_recheck << idx
-      end
-    end
-  end
-  threads.each(&:join)
-
-  threads = []
-  # perform a 2nd iteraation to recheck keys to confirm convergence
-  # instead of immediately checking in the above loop
-  if options[:migrate]
+    threads = []
+    # first pass to compare and migrate keys if not identical
     keys.each_with_index do |key, idx|
-      next unless keys_to_recheck.include?(idx)
+      if ignore_regexp && key.match?(ignore_regexp)
+        ignored_count += 1
+        next
+      end
 
       threads << Thread.new do
-        if !compare_and_migrate(key, src_db, dest_db, false)
-          migrated_count += 1
-        else
-          # TODO write persistent mismatches into a tmp file?
-          puts "Failed to migrate #{key}"
+        result = compare_and_migrate(key, src_db, dest_db, options[:migrate])
+
+        unsupported_count += 1 if result.nil?
+
+        if result
+          diffcount += 1
+          keys_to_recheck << idx
         end
       end
     end
     threads.each(&:join)
+
+    threads = []
+    # perform a 2nd iteraation to recheck keys to confirm convergence
+    # instead of immediately checking in the above loop
+    if options[:migrate]
+      keys.each_with_index do |key, idx|
+        next unless keys_to_recheck.include?(idx)
+
+        threads << Thread.new do
+          if !compare_and_migrate(key, src_db, dest_db, false)
+            migrated_count += 1
+          else
+            # TODO write persistent mismatches into a tmp file?
+            puts "Failed to migrate #{key}"
+          end
+        end
+      end
+      threads.each(&:join)
+    end
+
+    checked += keys.size
+    duration = Time.now - start
+    wait = (keys.size / max_allowed_rate) - duration
+    if wait.positive?
+      puts "Processing at #{keys.size / duration} ops per second. Sleeping for #{wait} to maintain max of #{max_allowed_rate}"
+      sleep(wait)
+    end
+
+    puts "Checked #{keys.size} keys from cursor #{it}"
+
+    break if options[:keys] && checked > options[:keys].to_i
+    break if it == "0"
   end
-
-  checked += keys.size
-  duration = Time.now - start
-  wait = (keys.size / max_allowed_rate) - duration
-  if wait.positive?
-    puts "Processing at #{keys.size / duration} ops per second. Sleeping for #{wait} to maintain max of #{max_allowed_rate}"
-    sleep(wait)
-  end
-
-  puts "Checked #{keys.size} keys from cursor #{it}"
-
-  break if options[:keys] && checked > options[:keys].to_i
-  break if it == "0"
+rescue StandardError => e
+  puts "Error: #{e.message}"
+  puts "#{e.backtrace}"
 end
 
 puts "Checked #{checked}"
