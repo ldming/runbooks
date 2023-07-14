@@ -76,7 +76,12 @@ def compare_string(src, dst, key)
 end
 
 def migrate_string(src, dst, key)
-  dst.with { |c| c.set(key, src.with { |c| c.get(key) }) }
+  string_details = src.with { |c| c.get(key) }
+
+  # the hash could be expired/deleted between comparison and migration
+  return if string_details.nil?
+
+  dst.with { |c| c.set(key, string_details) }
   migrate_ttl(src, dst, key)
 end
 
@@ -87,6 +92,10 @@ end
 
 def migrate_hash(src, dst, key)
   hash_details = src.with { |c| c.hgetall(key) }
+
+  # the hash could be expired/deleted between comparison and migration
+  return if hash_details.empty?
+
   dst.with { |c| c.hset(key, hash_details) }
   migrate_ttl(src, dst, key)
 end
@@ -101,6 +110,10 @@ end
 
 def migrate_set(src, dst, key)
   members = src.with { |c| c.smembers(key) }
+
+  # the hash could be expired/deleted between comparison and migration
+  return if members.empty?
+
   dst.with { |c| c.sadd(key, members) }
   migrate_ttl(src, dst, key)
 end
@@ -253,7 +266,7 @@ begin
   end
 rescue StandardError => e
   puts "Error: #{e.message}"
-  puts "#{e.backtrace}"
+  puts e.backtrace.to_s
 end
 
 puts "Checked #{checked}"
