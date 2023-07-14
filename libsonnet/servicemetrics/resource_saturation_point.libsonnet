@@ -44,6 +44,7 @@ local definitionValidor = validator.new({
     strategy: validator.setMember(capacityPlanningStrategies),
     forecast_days: positiveNumber,
     historical_days: positiveNumber,
+    changepoints_count: positiveNumber,
   },
   slos: {
     soft: sloValidator,
@@ -60,6 +61,7 @@ local defaults = {
     strategy: 'quantile95_1h',
     forecast_days: 90,
     historical_days: 365,
+    changepoints_count: 25,
   },
 };
 

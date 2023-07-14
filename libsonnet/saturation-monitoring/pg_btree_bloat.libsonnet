@@ -28,5 +28,8 @@ local metricsCatalog = import 'servicemetrics/metrics-catalog.libsonnet';
       soft: 0.50,
       hard: 0.70,
     },
+    capacityPlanning: {
+      changepoints_count: 5,
+    },
   }),
 }
