@@ -20,6 +20,7 @@
 * [../ci-runners/ci-apdex-violating-slo.md](../ci-runners/ci-apdex-violating-slo.md)
 * [../ci-runners/service-ci-runners.md](../ci-runners/service-ci-runners.md)
 * [Interacting with Consul](../consul/interaction.md)
+* [Google Cloud Snapshots](../disaster-recovery/gcp-snapshots.md)
 * [Alerting](../monitoring/alerts_manual.md)
 * [../monitoring/prometheus-failing-rule-evaluations.md](../monitoring/prometheus-failing-rule-evaluations.md)
 * [Diagnosis with Kibana](../onboarding/kibana-diagnosis.md)

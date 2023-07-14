@@ -14,7 +14,7 @@ groups:
       alert_type: cause
     annotations:
       description: Recent GCP scheduled snapshot are missing for {{ $labels.env }}. Please follow the runbook to review the problem.
-      runbook: docs/uncategorized/gcp-snapshots.md
+      runbook: docs/disaster-recovery/gcp-snapshots.md
       title: GCP scheduled snapshots are delayed
   - alert: GCPScheduledSnapshotsFailed
     expr: |
@@ -26,5 +26,17 @@ groups:
       alert_type: cause
     annotations:
       description: GCP scheduled snapshots are reporting failures for {{ $labels.env }}. Please follow the runbook to review the problem.
-      runbook: docs/uncategorized/gcp-snapshots.md
+      runbook: docs/disaster-recovery/gcp-snapshots.md
       title: GCP scheduled snapshots are failing
+  - alert: GCPScheduledSnapshotMissingForGitaly
+    expr: |
+      count(present_over_time(stackdriver_gce_disk_logging_googleapis_com_user_scheduled_snapshots{env="gprd", disk_name=~"(file|gitaly).*stor.*"}[2h])) >= count(up{type="gitaly", job="gitaly", env="gprd", shard!="praefect"})
+    for: 1h
+    labels:
+      pager: pagerduty
+      severity: s1
+      alert_type: cause
+    annotations:
+      description: Recent GCP scheduled snapshot are missing for {{ $labels.disk_name }}. Please follow the runbook to review the problem.
+      runbook: docs/disaster-recovery/gcp-snapshots.md
+      title: GCP scheduled snapshots are missing for at least one Gitaly data disk in Production

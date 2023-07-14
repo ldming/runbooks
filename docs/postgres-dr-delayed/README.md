@@ -19,7 +19,6 @@
 * [Patroni Cluster Management](../patroni/patroni-management.md)
 * [Postgres archive replicas](../postgres-archive/postgres-dr-replicas.md)
 * [Postgres Replicas](postgres-dr-replicas.md)
-* [Google Cloud Snapshots](../uncategorized/gcp-snapshots.md)
 <!-- END_MARKER -->
 
 <!-- ## Summary -->

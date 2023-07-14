@@ -23,6 +23,7 @@
 * [How to detect CI Abuse](../ci-runners/ci-abuse-handling.md)
 * [../ci-runners/ci-apdex-violating-slo.md](../ci-runners/ci-apdex-violating-slo.md)
 * [Chef troubleshooting](../config_management/chef-troubleshooting.md)
+* [Google Cloud Snapshots](../disaster-recovery/gcp-snapshots.md)
 * [ErrorTracking main troubleshooting document](../errortracking/overview.md)
 * [Gitaly token rotation](../gitaly/gitaly-token-rotation.md)
 * [GitLab.com on Kubernetes](../kube/k8s-new-cluster.md)

@@ -6,8 +6,8 @@ This contains the relevant information for Disaster Recovery on GitLab.com as it
 
 The [DR strategy](https://internal-handbook.gitlab.io/handbook/engineering/disaster-recovery/) for SaaS is based on our current backup strategy:
 
-- [Postgresql backups using WAL-G](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/patroni/postgresql-backups-wale-walg.md)
-- [GCP disk snapshots](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/uncategorized/gcp-snapshots.md)
+- [Postgresql backups using WAL-G](/docs/patroni/postgresql-backups-wale-walg.md)
+- [GCP disk snapshots](/docs/disaster-recovery/gcp-snapshots.md)
 
 Validation of restores happen in CI pipelines for both the Postgresql database and disk snapshots:
 
@@ -27,7 +27,7 @@ The Reliability team validates the ability of recovery from a disaster that impa
 
 The following steps should be completed in the following order in the unlikely scenario of a zonal outage on GitLab.com:
 
-- [ ] Drain the corresponding zonal Kubernetes cluster using [`set-server-state`](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/frontend/haproxy.md#set-server-state) for the failed zone, and evaluate recovery of the other zonal clusters.
+- [ ] Drain the corresponding zonal Kubernetes cluster using [`set-server-state`](/docs/frontend/haproxy.md#set-server-state) for the failed zone, and evaluate recovery of the other zonal clusters.
 - [ ] Drain the canary environment with [GitLab Chatops](https://gitlab.com/gitlab-org/release/docs/blob/master/general/deploy/canary.md#how-to-stop-all-production-traffic-to-canary).
 - [ ] Reconfigure the regional cluster to exclude the affected zone by setting `regional_cluster_zones` in Terraform to a list of zones that are not impacted ([example MR](https://ops.gitlab.net/gitlab-com/gl-infra/config-mgmt/-/merge_requests/4862)).
 - [ ] Provision new database replicas in the affected zone.
@@ -41,7 +41,7 @@ The following steps should be completed in the following order in the unlikely s
 Frontend traffic is divided into multiple Kubernetes clusters by zone.
 Services like `web`, `api`, `registry`, `pages` run in these clusters and do not require any data recovery since they are stateless.
 In the case of a zonal outage, it is expected that checks will fail on the corresponding cluster and traffic will be routed to the unaffected zones which will trigger a scaling event.
-To ensure that traffic does not reach the failed zone, it is recommended to divert traffic away from it using the [`set-server-state`](https://gitlab.com/gitlab-com/runbooks/-/blob/master/docs/frontend/haproxy.md#set-server-state) HAProxy script.
+To ensure that traffic does not reach the failed zone, it is recommended to divert traffic away from it using the [`set-server-state`](/docs/frontend/haproxy.md#set-server-state) HAProxy script.
 
 #### Drain canary and reconfigure regional node pools to exclude the affected zone
 
