@@ -204,9 +204,10 @@ ignore_regexp = /#{options[:ignore_pattern]}/ if options[:ignore_pattern]
 
 begin
   loop do
+    current_cursor = it
     it, keys = src_db.with { |r| r.scan(it, **scan_params) }
 
-    puts "Scanned #{keys.size}"
+    puts "Scanned #{keys.size} for #{current_cursor}"
 
     start = Time.now
     keys_to_recheck = []
@@ -259,7 +260,7 @@ begin
       sleep(wait)
     end
 
-    puts "Checked #{keys.size} keys from cursor #{it}"
+    puts "Checked #{keys.size} keys from cursor #{current_cursor}"
 
     break if options[:keys] && checked > options[:keys].to_i
     break if it == "0"
